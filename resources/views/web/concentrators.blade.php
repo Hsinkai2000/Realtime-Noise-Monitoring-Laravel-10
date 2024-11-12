@@ -21,7 +21,10 @@
         integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    @vite(['resources/scss/concentrator.scss', 'resources/js/app.js', 'resources/js/concentrator.js'])
+    <link href="{{ asset('css/concentrator.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    {{-- @vite(['resources/scss/concentrator.scss', 'resources/js/app.js', 'resources/js/concentrator.js']) --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
@@ -55,6 +58,8 @@
 
     <x-concentrator.concentrator-modal />
     <x-delete-confirmation-modal type='concentrator' />
+
+    <script src="{{ asset('js/concentrator.js') }}" async defer></script>
 </body>
 
 <script>

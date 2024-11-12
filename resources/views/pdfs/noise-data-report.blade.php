@@ -8,7 +8,10 @@
         Report_{{ $measurementPoint->noiseMeter->serial_number }}_{{ $start_date->format('dmY') }}-{{ $end_date->format('dmY') }}
     </title>
 
-    @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resources/js/app.js'])
+    <link href="{{ asset('css/pdf.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    {{-- @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resources/js/app.js']) --}}
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -93,6 +96,7 @@
             </div>
         </div>
     @endfor
+    <script src="{{ asset('js/pdf.js') }}" async defer></script>
 </body>
 
 </html>

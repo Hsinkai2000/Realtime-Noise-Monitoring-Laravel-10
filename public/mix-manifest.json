@@ -1,0 +1,19 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/js/project-admin.js": "/js/project-admin.js",
+    "/js/project.js": "/js/project.js",
+    "/js/measurement_point.js": "/js/measurement_point.js",
+    "/js/pdf.js": "/js/pdf.js",
+    "/js/noise_meters.js": "/js/noise_meters.js",
+    "/js/concentrator.js": "/js/concentrator.js",
+    "/css/project.css": "/css/project.css",
+    "/css/project-admin.css": "/css/project-admin.css",
+    "/css/base.css": "/css/base.css",
+    "/css/home.css": "/css/home.css",
+    "/css/login.css": "/css/login.css",
+    "/css/app.css": "/css/app.css",
+    "/css/concentrator.css": "/css/concentrator.css",
+    "/css/noise_meters.css": "/css/noise_meters.css",
+    "/css/pdf.css": "/css/pdf.css",
+    "/css/measurement_point.css": "/css/measurement_point.css"
+}

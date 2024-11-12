@@ -1,0 +1,15 @@
+table .w-5 {
+  width: 5%;
+}
+
+table .w-10 {
+  width: 10%;
+}
+
+table .w-45 {
+  width: 45%;
+}
+
+body {
+  font-family: "Verdana" !important;
+}

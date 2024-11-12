@@ -9,7 +9,13 @@
     <link href="https://unpkg.com/tabulator-tables@5.4.3/dist/css/tabulator.min.css" rel="stylesheet" />
     <!-- Include Tabulator JS from CDN -->
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.3/dist/js/tabulator.min.js"></script>
-    @vite(['resources/scss/home.scss', 'resources/scss/base.scss'])
+
+
+    <link href="{{ asset('css/home.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
+
+
+    {{-- @vite(['resources/scss/home.scss', 'resources/scss/base.scss']) --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 

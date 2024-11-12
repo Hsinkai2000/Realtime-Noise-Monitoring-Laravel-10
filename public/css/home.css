@@ -1,0 +1,25 @@
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.button-container a {
+  text-decoration: none;
+  color: #9f553a;
+  margin: 10px;
+  width: 100vw;
+  padding: 20px;
+  background-color: #f5e99d;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+}
+.button-container a:hover {
+  background-color: #ded38a;
+}
+
+@media only screen and (min-width: 768px) {
+  .button-container a {
+    width: 35vw;
+  }
+}

@@ -22,7 +22,10 @@
         integrity="sha512-4MvcHwcbqXKUHB6Lx3Zb5CEAVoE9u84qN+ZSMM6s7z8IeJriExrV3ND5zRze9mxNlABJ6k864P/Vl8m0Sd3DtQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    @vite(['resources/scss/project.scss', 'resources/js/app.js', 'resources/js/project.js'])
+    <link href="{{ asset('css/project.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    {{-- @vite(['resources/scss/project.scss', 'resources/js/app.js', 'resources/js/project.js']) --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
@@ -120,6 +123,10 @@
         <x-measurementPoint.measurement-point-modal :project="$project" />
         <input hidden id="inputprojectId" value="{{ $project['id'] }}">
     </div>
+
+
+    <script src="{{ asset('js/project.js') }}" async defer></script>
+
 </body>
 
 <script>

@@ -21,7 +21,12 @@
         integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    @vite(['resources/scss/noise_meters.scss', 'resources/js/app.js', 'resources/js/noise_meters.js'])
+
+    <link href="{{ asset('css/noise_meters.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
+
+
+    {{-- @vite(['resources/scss/noise_meters.scss', 'resources/js/app.js', 'resources/js/noise_meters.js']) --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
@@ -54,6 +59,8 @@
 
     <x-noise-meter.noise-meter-modal />
     <x-delete-confirmation-modal type='noise meter' />
+
+    <script src="{{ asset('js/noise_meters.js') }}" async defer></script>
 </body>
 
 <script>

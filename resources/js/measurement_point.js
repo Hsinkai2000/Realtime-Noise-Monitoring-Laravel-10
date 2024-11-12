@@ -1,5 +1,5 @@
 import AirDatepicker from "air-datepicker";
-import localeEn from "air-datepicker/locale/en";
+import localeEn from "air-datepicker/locale/en.js";
 import "air-datepicker/air-datepicker.css";
 
 var baseUri = `${window.location.protocol}//${window.location.hostname}`;

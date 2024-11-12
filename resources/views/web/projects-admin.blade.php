@@ -9,7 +9,11 @@
     <link href="https://unpkg.com/tabulator-tables@5.4.3/dist/css/tabulator.min.css" rel="stylesheet" />
     <!-- Include Tabulator JS from CDN -->
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.3/dist/js/tabulator.min.js"></script>
-    @vite(['resources/scss/project-admin.scss', 'resources/js/app.js', 'resources/js/project-admin.js'])
+
+    <link href="{{ asset('css/project-admin.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    {{-- @vite(['resources/scss/project-admin.scss', 'resources/js/app.js', 'resources/js/project-admin.js']) --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -57,6 +61,7 @@
     <x-delete-modal type='user' />
     <x-user.user-create-modal />
 
+    <script src="{{ asset('js/project-admin.js') }}" async defer></script>
 
 
 </body>
