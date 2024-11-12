@@ -1,0 +1,93 @@
+// Default variable overrides
+
+@import "./base.scss";
+
+#deleteButton {
+    &:hover {
+        color: $white !important;
+        background-color: $danger;
+    }
+}
+
+#example-table {
+    background-color: $light;
+    height: 55vh;
+    border-top: none;
+    border-color: $border-color;
+    padding: 10px;
+    border-radius: 0 10px 10px 10px;
+    .tabulator-header {
+        background-color: $light;
+        color: $dark;
+        border-bottom: 3px solid $primary;
+        margin-bottom: 5px;
+        .tabulator-col,
+        .tabulator-row-handle {
+            white-space: normal;
+            background-color: $light;
+            .tabulator-col-content {
+                text-overflow: clip;
+            }
+        }
+    }
+
+    .tabulator-tableholder {
+        .tabulator-table {
+            .tabulator-row {
+                color: $dark;
+                background-color: $light;
+                margin-bottom: 2px;
+                &:hover {
+                    background-color: $hover;
+                }
+
+                .tabulator-cell {
+                    white-space: normal;
+                }
+
+                &:nth-child(even) {
+                    background-color: $white;
+                    &:hover {
+                        background-color: $hover;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Basic styling for the list container */
+#userUpdateSelectList {
+    max-height: 300px;
+    padding: 0;
+    list-style: none; /* Ensure no default list styling */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Basic styling for each list item */
+.list-item {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+/* Styling for the selected item */
+.list-item.selected {
+    background-color: $hover;
+}
+
+.modal:nth-of-type(even) {
+    z-index: 1052 !important;
+}
+.modal-backdrop.show:nth-of-type(even) {
+    z-index: 1051 !important;
+}
+
+@media only screen and (min-width: 768px) {
+    #example-table {
+        height: 65vh;
+    }
+}
+
+@import "../../node_modules/bootstrap/scss/bootstrap";

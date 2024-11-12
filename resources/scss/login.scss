@@ -1,0 +1,32 @@
+// @import "~/tabulator-tables/dist/css/tabulator.min.css";
+
+@import "./base.scss";
+
+label,
+h2 {
+    color: $dark;
+}
+
+#geoscan_logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 40px;
+}
+
+#maincard {
+    background: $light;
+    // opacity: 1;
+}
+
+.gradient-custom {
+    /* fallback for old browsers */
+    background: $dark;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to top, $dark, $secondary);
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to top, $dark, $secondary);
+}
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
