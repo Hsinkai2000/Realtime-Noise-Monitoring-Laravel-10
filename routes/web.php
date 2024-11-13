@@ -15,7 +15,10 @@ use App\Http\Controllers\AuthController;
 */
 
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/', [AuthController::class, 'login'])->name('login');
+    // Route::get('/', [AuthController::class, 'login'])->name('login');
+    Route::get('/test', function () {
+        return view('test');
+    });
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 });
