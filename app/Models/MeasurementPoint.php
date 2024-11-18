@@ -146,11 +146,11 @@ class MeasurementPoint extends Model
 
         if ($decision == '12h') {
 
-            [$leq_12_should_alert, $leq12hlimit, $calculated12hLeq, $num_blanks] = $this->leq_12_hours_exceed_and_alert($last_noise_data, $last_data_datetime);
+            [$leq_12_should_alert, $leq12hlimit, $calculated12hLeq, $num_blanks] = $this->leq_12_hours_exceed_and_alert($last_data_datetime, $last_noise_data);
 
             $calculated_dose_percentage = $soundLimit->calculate_dose_perc($calculated12hLeq, $leq12hlimit, $num_blanks, 144);
         } else {
-            [$leq_1_should_alert, $leq1hlimit, $calculated1hLeq, $num_blanks] = $this->leq_1_hour_exceed_and_alert($last_noise_data, $last_data_datetime);
+            [$leq_1_should_alert, $leq1hlimit, $calculated1hLeq, $num_blanks] = $this->leq_1_hour_exceed_and_alert($last_data_datetime, $last_noise_data);
             $calculated_dose_percentage = $soundLimit->calculate_dose_perc($calculated1hLeq, $leq1hlimit, $num_blanks, 12);
         }
 
