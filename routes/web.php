@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Models\Project;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ use App\Http\Controllers\AuthController;
 Route::group(['middleware' => 'guest'], function () {
     // Route::get('/', [AuthController::class, 'login'])->name('login');
     Route::get('/test', function () {
-        return view('test');
+        return Project::first();
     });
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');

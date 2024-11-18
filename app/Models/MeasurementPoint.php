@@ -284,7 +284,7 @@ class MeasurementPoint extends Model
         return [$should_alert, $limit];
     }
 
-    private function leq_12_hours_exceed_and_alert($last_noise_data = null, $last_data_datetime)
+    private function leq_12_hours_exceed_and_alert($last_data_datetime, $last_noise_data = null)
     {
 
         [$twelve_hr_leq, $num_blanks] = $this->calc_12_hour_leq($last_noise_data->received_at);
@@ -293,7 +293,7 @@ class MeasurementPoint extends Model
         return [$should_alert, $limit, $twelve_hr_leq, $num_blanks];
     }
 
-    private function leq_1_hour_exceed_and_alert($last_noise_data = null, $last_data_datetime)
+    private function leq_1_hour_exceed_and_alert($last_data_datetime, $last_noise_data = null)
     {
         [$one_hr_leq, $num_blanks] = $this->calc_1_hour_leq($last_noise_data->received_at);
 
