@@ -1,4 +1,5 @@
 var baseUri = `${window.location.protocol}//${window.location.hostname}`;
+var selectedNoiseMeter = [];
 if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
@@ -59,14 +60,10 @@ function set_tables(data) {
 }
 
 function table_row_changed(data) {
+    window.noiseMeter = data[0];
     if (data && data.length > 0) {
         document.getElementById("editButton").disabled = false;
         document.getElementById("deleteButton").disabled = false;
-        window.noiseMeters.forEach((noiseMeter) => {
-            if (noiseMeter.id == data[0].id) {
-                window.noiseMeter = noiseMeter;
-            }
-        });
     } else {
         document.getElementById("editButton").disabled = true;
         document.getElementById("deleteButton").disabled = true;
@@ -84,7 +81,8 @@ function fill_data() {
     document.getElementById("error_message").innerHTML = "";
 
     if (window.modalType == "update") {
-        console.log(window.noise_meter_id);
+        console.log("here");
+        console.log(window.noiseMeter);
         serial.value = window.noiseMeter.serial_number;
         label.value = window.noiseMeter.noise_meter_label;
         last_calibration_date.value = window.noiseMeter.last_calibration_date;
@@ -131,7 +129,10 @@ function handle_update() {
                         errorData["Unprocessable Entity"];
                 });
             } else {
-                closeModal("noiseMeterModal");
+                response.json().then((json) => {
+                    resetTable(json);
+                    closeModal("noiseMeterModal");
+                });
             }
         })
         .catch((error) => {
@@ -161,7 +162,10 @@ function handle_create() {
                         errorData["Unprocessable Entity"];
                 });
             } else {
-                closeModal("noiseMeterModal");
+                response.json().then((json) => {
+                    resetTable(json);
+                    closeModal("noiseMeterModal");
+                });
             }
         })
         .catch((error) => {
@@ -205,6 +209,7 @@ function handleDelete(event) {
                 return response.json();
             })
             .then((data) => {
+                resetTable(data);
                 closeModal("deleteConfirmationModal");
             })
             .catch((error) => {
@@ -214,6 +219,11 @@ function handleDelete(event) {
         var error = document.getElementById("deleteConfirmationError");
         error.hidden = false;
     }
+}
+
+function resetTable(json) {
+    window.noise_meters = json.noise_meters;
+    set_tables(window.noise_meters);
 }
 
 function openModal(modalName, type) {
@@ -264,8 +274,9 @@ function closeModal(modal) {
     const modalElement = document.getElementById(modal);
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     modalInstance.hide();
-    location.reload();
 }
+
+set_tables(window.noiseMeters);
 
 window.set_tables = set_tables;
 window.openModal = openModal;

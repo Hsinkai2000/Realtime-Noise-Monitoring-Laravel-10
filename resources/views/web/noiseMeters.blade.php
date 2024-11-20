@@ -60,14 +60,11 @@
     <x-noise-meter.noise-meter-modal />
     <x-delete-confirmation-modal type='noise meter' />
 
-    <script src="{{ asset('js/noise_meters.js') }}" async defer></script>
 </body>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        window.noiseMeters = @json($noise_meters);
-        set_tables(window.noiseMeters);
-    });
+    window.noiseMeters = @json($noise_meters);
 </script>
+<script src="{{ asset('js/noise_meters.js') }}" async defer></script>
 
 </html>

@@ -20,9 +20,9 @@ class NoiseMeterController extends Controller
                 $noise_meter_id = NoiseMeter::insertGetId($noise_meter_params);
                 $noise_meter = NoiseMeter::find($noise_meter_id);
             } catch (Exception $e) {
-                return render_unprocessable_entity('Noise meter serial number already in use');
+                return render_unprocessable_entity('Noise meter serial number already in use:');
             }
-            return render_ok(["noise_meter" => $noise_meter]);
+            return render_ok(["noise_meter" => $noise_meter, "noise_meters" => NoiseMeter::all()]);
         } catch (Exception $e) {
             return render_error($e);
         }
@@ -73,7 +73,7 @@ class NoiseMeterController extends Controller
 
             try {
                 $noise_meter->update($noise_meter_params);
-                return render_ok(["noise_meter" => $noise_meter]);
+                return render_ok(["noise_meter" => $noise_meter, "noise_meters" => NoiseMeter::all()]);
             } catch (Exception $e) {
                 debug_log('here2');
                 return render_unprocessable_entity("Unable to update noise meter");
@@ -94,7 +94,7 @@ class NoiseMeterController extends Controller
             if (!$noise_meter->delete()) {
                 throw new Exception("Unable to delete noise meter");
             }
-            return render_ok(["noise_meter" => $noise_meter]);
+            return render_ok(["noise_meter" => $noise_meter, "noise_meters" => NoiseMeter::all()]);
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }
