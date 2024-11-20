@@ -23,8 +23,8 @@
 
 
     <link href="{{ asset('css/measurement_point.css') }}" rel="stylesheet">
+    <link href="{{ asset('js/air-datepicker/air-datepicker.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/air-datepicker/air-datepicker.css') }}"></script>
 
     {{-- @vite(['resources/scss/measurement_point.scss', 'resources/js/app.js', 'resources/js/measurement_point.js']) --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -92,8 +92,8 @@
     window.measurementPointData.concentrator = @json($measurementPoint->concentrator);
     window.admin = @json(Auth::user()->isAdmin());
 </script>
-<script src="{{ asset('js/measurement_point.js') }}" async defer></script>
 <script src="{{ asset('js/air-datepicker/air-datepicker.js') }}"></script>
 <script src="{{ asset('js/air-datepicker/locale/en.js') }}"></script>
+<script src="{{ asset('js/measurement_point.js') }}" async defer></script>
 
 </html>
