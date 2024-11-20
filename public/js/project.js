@@ -1058,6 +1058,8 @@ function closeModal(modal) {
 function check_contact_max() {
     if (window.contacts.length >= window.project.sms_count) {
         document.getElementById("createContactButton").disabled = true;
+    } else {
+        document.getElementById("createContactButton").disabled = false;
     }
 }
 
@@ -1121,6 +1123,10 @@ function openSecondModal(initialModal, newModal) {
 
 function resetContactTable(json) {
     window.contacts = json.contacts;
+
+    document.getElementById("contact_counter").textContent =
+        window.contacts.length + " / " + window.project.sms_count;
+    check_contact_max();
     set_contact_table();
 }
 

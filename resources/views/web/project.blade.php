@@ -81,7 +81,7 @@
         <div class="bg-light p-2 mb-3 shadow rounded">
             <div>
                 <h5 class="d-inline">Contacts | </h5>
-                <h6 class="d-inline @if (count($project->contact) == $project['sms_count']) text-danger  s @endif">
+                <h6 id="contact_counter" class="d-inline @if (count($project->contact) == $project['sms_count']) text-danger  s @endif">
                     {{ count($project->contact) }} / {{ $project['sms_count'] }}</h6>
             </div>
             <div class="mt-2 mb-3 ">
