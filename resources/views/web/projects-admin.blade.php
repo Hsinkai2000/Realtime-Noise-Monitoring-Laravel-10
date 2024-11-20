@@ -65,8 +65,9 @@
 
 </body>
 <script>
-    window.projects = @json($projects);
-    console.log(window.projects);
+    window.rental_projects = @json($rental_projects);
+    window.sales_projects = @json($sales_projects);
+    console.log(window.rental_projects);
 </script>
 <script src="{{ asset('js/project-admin.js') }}" async defer></script>
 

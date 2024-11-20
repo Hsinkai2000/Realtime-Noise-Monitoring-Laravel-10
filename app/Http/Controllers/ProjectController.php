@@ -13,7 +13,10 @@ class ProjectController extends Controller
 
     public function show_admin()
     {
-        return view('web.projects-admin', ['projects' => Project::all()]);
+        $rental_projects  = Project::where('project_type', 'rental')->get();
+        $sales_projects  = Project::where('project_type', 'sales')->get();
+        $sales_projects = $this->format_projects($sales_projects);
+        return view('web.projects-admin')->with(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
     }
 
     public function show_project($id)
@@ -31,7 +34,10 @@ class ProjectController extends Controller
             try {
 
                 $project_id = Project::insertGetId($project_params);
-                return render_ok(['project_id' => $project_id]);
+                $rental_projects  = Project::where('project_type', 'rental')->get();
+                $sales_projects  = Project::where('project_type', 'sales')->get();
+                $sales_projects = $this->format_projects($sales_projects);
+                return render_ok(['project_id' => $project_id, 'rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
             } catch (Exception $e) {
                 return render_unprocessable_entity('PJO Number already in use');
             }
@@ -128,7 +134,10 @@ class ProjectController extends Controller
                 throw new Exception("Unable to update project");
             }
 
-            return render_ok(["project" => $project]);
+            $rental_projects  = Project::where('project_type', 'rental')->get();
+            $sales_projects  = Project::where('project_type', 'sales')->get();
+            $sales_projects = $this->format_projects($sales_projects);
+            return render_ok(["project" => $project, 'rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
         } catch (Exception $e) {
             render_error($e->getMessage());
         }
@@ -146,7 +155,11 @@ class ProjectController extends Controller
             if (!$project->delete()) {
                 throw new Exception("Unable to delete project");
             }
-            return render_ok(["delete successful"]);
+
+            $rental_projects  = Project::where('project_type', 'rental')->get();
+            $sales_projects  = Project::where('project_type', 'sales')->get();
+            $sales_projects = $this->format_projects($sales_projects);
+            return render_ok(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }

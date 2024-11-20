@@ -8,16 +8,15 @@ var inputprojectId = null;
 var modalType = "";
 var inputUserId = null;
 var tab = "rental";
-var selectedProject = [];
 
-function settable(tabledata) {
+function settable(tabledata, project_type) {
     document.getElementById("table_pages").innerHTML = "";
 
+    // If a table already exists, destroy it
     if (window.table) {
         window.table.destroy();
     }
-    if (tab == "rental") {
-        console.log("in rental");
+    if (project_type == "rental") {
         var table = new Tabulator("#example-table", {
             pagination: "local",
             layout: "fitColumns",
@@ -158,8 +157,8 @@ function settable(tabledata) {
         window.location.href = "/project/" + row.getIndex();
     });
     table.on("rowSelectionChanged", function (data, rows) {
-        selectedProject = data[0];
-        table_row_changed(selectedProject);
+        console.log(data);
+        table_row_changed(data);
     });
     window.table = table;
 }
@@ -167,11 +166,11 @@ function settable(tabledata) {
 function table_row_changed(data) {
     const editButton = document.getElementById("editButton");
     const deleteButton = document.getElementById("deleteButton");
-    console.log(data);
-    if (data) {
+
+    if (data && data.length > 0) {
         editButton.disabled = false;
         deleteButton.disabled = false;
-        inputprojectId = data.id;
+        inputprojectId = data[0].id;
     } else {
         editButton.disabled = true;
         deleteButton.disabled = true;
@@ -185,18 +184,94 @@ function changeTab(event, project_type) {
     });
 
     event.currentTarget.classList.add("active");
-    console.log(window.sales_projects);
     switch (project_type) {
         case "rental":
-            tab = "rental";
-            settable(window.rental_projects);
+            settable(window.rental_projects, "rental");
             break;
 
         default:
-            tab = "sales";
-            settable(window.sales_projects);
+            settable(window.rental_projects, "rental");
             break;
     }
+
+    // fetch_data(project_type);
+}
+
+function fetch_data(project_type) {
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
+    fetch(`${baseUri}/projects`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        body: JSON.stringify({ project_type }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("User not Authorised");
+            }
+            return response.json();
+        })
+        .then((json) => {
+            const tabledata = json.projects || [];
+            settable(tabledata, project_type);
+        })
+        .catch((error) => {
+            console.error(error);
+            settable([], project_type);
+        });
+}
+
+function create_users(projectId, csrfToken) {
+    userList.forEach((user) => {
+        user.project_id = projectId;
+        fetch(`${baseUri}/user/`, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                Accept: "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+            },
+            body: JSON.stringify(user),
+        }).then((response) => {
+            return response.json();
+        });
+    });
+    return true;
+}
+
+function handleCreate() {
+    const form = document.getElementById("projectForm");
+    const csrfToken = document.querySelector('input[name="_token"]').value;
+    const formData = new FormData(form);
+
+    fetch(`${baseUri}/project`, {
+        method: form.method,
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+    })
+        .then((response) => {
+            if (response.status == 422) {
+                response.json().then((errorData) => {
+                    document.getElementById("error_message").innerHTML =
+                        errorData["Unprocessable Entity"];
+                });
+            }
+            return response.json();
+        })
+        .then((json) => {
+            create_users(json.project_id, csrfToken);
+            fetch_data(tab);
+            closeModal("projectModal");
+        });
 }
 
 function toggleEndUserName() {
@@ -209,7 +284,75 @@ function toggleEndUserName() {
     }
 }
 
-function fetch_project_data(data = null) {
+function deleteUser(event) {
+    if (event) {
+        event.preventDefault();
+    }
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
+    fetch(`${baseUri}/users/${inputUserId}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            populateUser("userselectList", inputprojectId);
+            // Close the modal
+            closeModal("deleteModal");
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
+function handleDelete(event) {
+    if (event) {
+        event.preventDefault();
+    }
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    var confirmation = document.getElementById("inputDeleteConfirmation").value;
+
+    if (confirmation == "DELETE") {
+        fetch(`${baseUri}/project/${inputprojectId}`, {
+            method: "DELETE",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                Accept: "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                closeModal("deleteConfirmationModal");
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    } else {
+        var error = document.getElementById("deleteConfirmationError");
+        error.hidden = false;
+    }
+}
+
+function fetch_project_data(data) {
     var updatejobNumber = document.getElementById("inputJobNumber");
     var clientName = document.getElementById("inputClientName");
     var projectDescription = document.getElementById("inputProjectDescription");
@@ -248,72 +391,56 @@ function fetch_project_data(data = null) {
     }
 }
 
-function handleDelete(event) {
-    if (event) {
-        event.preventDefault();
-    }
+function handleUpdate() {
     var csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
-    var confirmation = document.getElementById("inputDeleteConfirmation").value;
+    var form = document.getElementById("projectForm");
 
-    if (confirmation == "DELETE") {
-        fetch(`${baseUri}/project/${inputprojectId}`, {
-            method: "DELETE",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-                Accept: "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                resetTable(data);
-                closeModal("deleteConfirmationModal");
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    } else {
-        var error = document.getElementById("deleteConfirmationError");
-        error.hidden = false;
-    }
-}
+    var formData = new FormData(form);
 
-function deleteUser(event) {
-    if (event) {
-        event.preventDefault();
-    }
-    var csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
+    var formDataJson = {};
+    formData.forEach((value, key) => {
+        formDataJson[key] = value;
+    });
 
-    fetch(`${baseUri}/users/${inputUserId}`, {
-        method: "DELETE",
+    fetch(`${baseUri}/project/${inputprojectId}`, {
+        method: "PATCH",
         headers: {
             "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json",
             Accept: "application/json",
             "X-Requested-With": "XMLHttpRequest",
         },
+        body: JSON.stringify(formDataJson),
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                throw new Error(
+                    "Network response was not ok " + response.statusText
+                );
             }
             return response.json();
         })
-        .then((data) => {
-            populateUser("userselectList", inputprojectId);
-            closeModal("deleteModal");
+        .then((json) => {
+            create_users(inputprojectId, csrfToken);
+            fetch_data(tab);
+            closeModal("projectModal");
         })
         .catch((error) => {
             console.error("Error:", error);
+            alert("There was an error: " + error.message);
         });
+
+    return false;
+}
+
+function submitClicked() {
+    if (modalType == "update") {
+        handleUpdate();
+    } else {
+        handleCreate();
+    }
 }
 
 function handle_create_dummy_user() {
@@ -353,10 +480,6 @@ function populateUser(element, project_id = null) {
     }
 }
 
-function handleSelection(item) {
-    inputUserId = item.id;
-}
-
 function populateList(data) {
     window.userselectList.innerHTML = "";
 
@@ -388,121 +511,8 @@ function populateList(data) {
     });
 }
 
-function create_users(projectId, csrfToken) {
-    userList.forEach((user) => {
-        user.project_id = projectId;
-        fetch(`${baseUri}/user/`, {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-                Accept: "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-            },
-            body: JSON.stringify(user),
-        }).then((response) => {});
-    });
-    return true;
-}
-
-function handleCreate() {
-    const form = document.getElementById("projectForm");
-    const csrfToken = document.querySelector('input[name="_token"]').value;
-    const formData = new FormData(form);
-
-    fetch(`${baseUri}/project`, {
-        method: form.method,
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-            Accept: "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-        },
-        body: formData,
-    })
-        .then((response) => {
-            if (response.status == 422) {
-                response.json().then((errorData) => {
-                    document.getElementById("error_message").innerHTML =
-                        errorData["Unprocessable Entity"];
-                });
-            }
-            return response.json();
-        })
-        .then((json) => {
-            console.log(json);
-            create_users(json.project_id, csrfToken);
-            console.log(json);
-            resetTable(json);
-            closeModal("projectModal");
-        });
-}
-
-function handleUpdate() {
-    var csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-    var form = document.getElementById("projectForm");
-
-    var formData = new FormData(form);
-
-    var formDataJson = {};
-    formData.forEach((value, key) => {
-        formDataJson[key] = value;
-    });
-
-    fetch(`${baseUri}/project/${inputprojectId}`, {
-        method: "PATCH",
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-        },
-        body: JSON.stringify(formDataJson),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(
-                    "Network response was not ok " + response.statusText
-                );
-            }
-            return response.json();
-        })
-        .then((json) => {
-            console.log(json);
-            create_users(inputprojectId, csrfToken);
-            console.log(json);
-            resetTable(json);
-            closeModal("projectModal");
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-            alert("There was an error: " + error.message);
-        });
-
-    return false;
-}
-
-function submitClicked() {
-    if (modalType == "update") {
-        handleUpdate();
-    } else {
-        handleCreate();
-    }
-}
-
-function resetTable(json) {
-    window.rental_projects = json.rental_projects;
-    window.sales_projects = json.sales_projects;
-    switch (tab) {
-        case "rental":
-            console.log("here");
-            settable(window.rental_projects);
-            break;
-
-        default:
-            settable(window.sales_projects);
-            break;
-    }
+function handleSelection(item) {
+    inputUserId = item.id;
 }
 
 function openModal(modalName, type) {
@@ -519,15 +529,11 @@ function openModal(modalName, type) {
     if (type == "update") {
         userList = [];
         modalType = "update";
-        document.getElementById("projectcreateLabel").innerText =
-            "Edit Project";
-        fetch_project_data(selectedProject);
+        fetch_project_data(window.projects[inputprojectId - 1]);
     } else if (type == "create") {
         userList = [];
         modalType = "create";
-        document.getElementById("projectcreateLabel").innerText =
-            "Create Project";
-        fetch_project_data();
+        fetch_project_data(null);
     }
 }
 
@@ -569,12 +575,16 @@ function closeModal(modal) {
     modalInstance.hide();
 }
 
-settable(window.rental_projects);
-toggleEndUserName();
-
 window.deleteUser = deleteUser;
 window.openModal = openModal;
 window.openSecondModal = openSecondModal;
+window.populateUser = populateUser;
+window.handleDelete = handleDelete;
+window.handle_create_dummy_user = handle_create_dummy_user;
+window.changeTab = changeTab;
+window.fetch_data = fetch_data;
 window.toggleEndUserName = toggleEndUserName;
 window.submitClicked = submitClicked;
-window.handleDelete = handleDelete;
+
+fetch_data("rental");
+toggleEndUserName();
