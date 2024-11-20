@@ -947,6 +947,7 @@ async function handleContactDelete(csrfToken) {
             return response.json();
         })
         .then((data) => {
+            console.log(data);
             resetContactTable(data);
             closeModal("deleteConfirmationModal");
         })

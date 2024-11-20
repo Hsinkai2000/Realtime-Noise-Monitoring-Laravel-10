@@ -73,9 +73,8 @@ class ContactsController extends Controller
     {
         try {
             $id = $request->route('id');
-            $project_id = $request->get("project_id");
-            \Log::info($project_id);
             $contact = Contact::find($id);
+            $project_id = $contact->project_id;
             if (!$contact) {
                 return render_unprocessable_entity("Unable to find contact with id " . $id);
             }
