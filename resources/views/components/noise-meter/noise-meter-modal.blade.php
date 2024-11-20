@@ -16,7 +16,7 @@
                                 Number</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="number" class="form-control" id="inputSerialNumber" maxlength= "4"
-                                    name="serial_number" required>
+                                    name="serial_number" required min="0">
                             </div>
                         </div>
 
