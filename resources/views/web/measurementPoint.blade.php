@@ -92,8 +92,8 @@
     window.measurementPointData.concentrator = @json($measurementPoint->concentrator);
     window.admin = @json(Auth::user()->isAdmin());
 </script>
-<script src="{{ asset('js/air-datepicker/air-datepicker.js') }}"></script>
 <script src="{{ asset('js/air-datepicker/locale/en.js') }}"></script>
+<script src="{{ asset('js/air-datepicker/air-datepicker.js') }}"></script>
 <script src="{{ asset('js/measurement_point.js') }}" async defer></script>
 
 </html>
