@@ -1,7 +1,3 @@
-import AirDatepicker from "air-datepicker/air-datepicker";
-import localeEn from "air-datepicker/locale/en.js";
-import "air-datepicker/air-datepicker.css";
-
 var baseUri = `${window.location.protocol}//${window.location.hostname}`;
 if (window.location.port) {
     baseUri += `:${window.location.port}`;
