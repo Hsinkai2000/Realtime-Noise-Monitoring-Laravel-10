@@ -167,7 +167,7 @@ function settable(tabledata) {
 function table_row_changed(data) {
     const editButton = document.getElementById("editButton");
     const deleteButton = document.getElementById("deleteButton");
-    console.log(data);
+
     if (data) {
         editButton.disabled = false;
         deleteButton.disabled = false;

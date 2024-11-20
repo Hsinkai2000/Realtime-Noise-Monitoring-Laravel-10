@@ -55,13 +55,13 @@ function set_tables(data) {
         ],
     });
     noise_meter_table.on("rowSelectionChanged", function (data, rows) {
-        table_row_changed(data);
+        window.noiseMeter = data[0];
+        table_row_changed(window.noiseMeter);
     });
 }
 
 function table_row_changed(data) {
-    window.noiseMeter = data[0];
-    if (data && data.length > 0) {
+    if (data) {
         document.getElementById("editButton").disabled = false;
         document.getElementById("deleteButton").disabled = false;
     } else {

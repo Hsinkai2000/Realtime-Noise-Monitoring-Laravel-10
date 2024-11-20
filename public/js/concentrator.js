@@ -73,20 +73,15 @@ function set_tables(data) {
         ],
     });
     concentrator_table.on("rowSelectionChanged", function (data, rows) {
-        table_row_changed(data);
+        window.concentrator = data[0];
+        table_row_changed(window.concentrator);
     });
 }
 
 function table_row_changed(data) {
-    if (data && data.length > 0) {
+    if (data) {
         document.getElementById("editButton").disabled = false;
         document.getElementById("deleteButton").disabled = false;
-        window.concentrators.forEach((concentrator) => {
-            if (concentrator.id == data[0].id) {
-                window.concentrator = concentrator;
-            }
-        });
-        console.log(window.concentrator);
     } else {
         document.getElementById("editButton").disabled = true;
         document.getElementById("deleteButton").disabled = true;
