@@ -61,7 +61,6 @@
     <x-delete-modal type='user' />
     <x-user.user-create-modal />
 
-    <script src="{{ asset('js/project-admin.js') }}" async defer></script>
 
 
 </body>
@@ -69,5 +68,6 @@
     window.projects = @json($projects);
     console.log(window.projects);
 </script>
+<script src="{{ asset('js/project-admin.js') }}" async defer></script>
 
 </html>
