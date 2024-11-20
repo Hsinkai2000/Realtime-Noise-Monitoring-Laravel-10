@@ -61,8 +61,8 @@
                             <label for="sms_count" class="col-md-3 col-sm-12 text-align-center col-form-label">No. of
                                 Contacts</label>
                             <div class="col-sm-8 align-content-center">
-                                <input type="number" class="form-control" id="inputSmsCount" name='sms_count' value=0
-                                    max="20">
+                                <input type="number" class="form-control" id="inputSmsCount" name='sms_count'
+                                    value="0" min="0" max="20">
                             </div>
                         </div>
 
