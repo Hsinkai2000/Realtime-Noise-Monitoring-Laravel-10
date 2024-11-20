@@ -12,9 +12,11 @@ class ContactsController extends Controller
     {
         try {
             $contact_params = $request->only((new Contact)->getFillable());
+            $project_id = $request->get("project_id");
             $contact_id = Contact::insertGetId($contact_params);
             $contact = Contact::find($contact_id);
-            return render_ok(["contact" => $contact]);
+            $contacts = Contact::where('project_id', $project_id)->get();
+            return render_ok(["contact" => $contact, "contacts" => $contacts]);
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }
@@ -49,6 +51,7 @@ class ContactsController extends Controller
     {
         try {
             $id = $request->route('id');
+            $project_id = $request->get("project_id");
             $contact_params = $request->only((new Contact)->getFillable());
             $contact = Contact::find($id);
             if (!$contact) {
@@ -59,7 +62,8 @@ class ContactsController extends Controller
                 throw new Exception("Unable to update contact");
             }
 
-            return render_ok(["contact" => $contact]);
+            $contacts = Contact::where('project_id', $project_id)->get();
+            return render_ok(["contact" => $contact, "contacts" => $contacts]);
         } catch (Exception $e) {
             render_error($e->getMessage());
         }
@@ -69,6 +73,8 @@ class ContactsController extends Controller
     {
         try {
             $id = $request->route('id');
+            $project_id = $request->get("project_id");
+            \Log::info($project_id);
             $contact = Contact::find($id);
             if (!$contact) {
                 return render_unprocessable_entity("Unable to find contact with id " . $id);
@@ -76,7 +82,8 @@ class ContactsController extends Controller
             if (!$contact->delete()) {
                 throw new Exception("Unable to delete contact");
             }
-            return render_ok(["contact" => $contact]);
+            $contacts = Contact::where('project_id', $project_id)->get();
+            return render_ok(["contact" => $contact, "contacts" => $contacts]);
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }

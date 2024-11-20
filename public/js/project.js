@@ -851,8 +851,12 @@ function handleUpdateContact() {
                 throw new Error(
                     "Network response was not ok " + response.statusText
                 );
+            } else {
+                response.json().then((json) => {
+                    resetContactTable(json);
+                    closeModal("contactModal");
+                });
             }
-            closeModal("contactModal");
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -889,8 +893,12 @@ function handleCreateContact() {
                 throw new Error(
                     "Network response was not ok " + response.statusText
                 );
+            } else {
+                response.json().then((json) => {
+                    resetContactTable(json);
+                    closeModal("contactModal");
+                });
             }
-            closeModal("contactModal");
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -916,7 +924,6 @@ async function handleMeasurementPointDelete(csrfToken) {
             return response.json();
         })
         .then((data) => {
-            console.log("Success:", data);
             closeModal("deleteConfirmationModal");
         })
         .catch((error) => {
@@ -941,9 +948,8 @@ async function handleContactDelete(csrfToken) {
             return response.json();
         })
         .then((data) => {
-            console.log("Success:", data);
+            resetContactTable(data);
             closeModal("deleteConfirmationModal");
-            location.reload();
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -1110,6 +1116,11 @@ function openSecondModal(initialModal, newModal) {
         },
         { once: true }
     );
+}
+
+function resetContactTable(json) {
+    window.contacts = json.contacts;
+    set_contact_table();
 }
 
 window.handle_measurement_point_update = handle_measurement_point_update;
