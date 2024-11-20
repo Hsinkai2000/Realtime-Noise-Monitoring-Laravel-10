@@ -711,6 +711,7 @@ async function handle_create_measurement_point(confirmation) {
         .then((response) => {
             if (response.status == 422) {
                 response.json().then((errorData) => {
+                    message = "";
                     if (
                         errorData["Unprocessable Entity"]["concentrator"] ||
                         errorData["Unprocessable Entity"]["noise_meter"]
