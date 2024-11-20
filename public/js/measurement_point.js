@@ -118,7 +118,7 @@ function initDatePicker() {
         autoClose: true,
         dateFormat: "dd-MM-yyyy",
         container: "#viewPdfModal",
-        locale: localeEn,
+        locale: window.localeEn,
         onSelect({ date }) {
             dpMax.update({
                 minDate: date,
@@ -131,7 +131,7 @@ function initDatePicker() {
         autoClose: true,
         dateFormat: "dd-MM-yyyy",
         container: "#viewPdfModal",
-        locale: localeEn,
+        locale: window.localeEn,
         onSelect({ date }) {
             dpMin.update({
                 maxDate: date,
