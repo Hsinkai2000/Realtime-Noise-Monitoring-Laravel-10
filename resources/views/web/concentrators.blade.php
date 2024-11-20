@@ -59,15 +59,11 @@
     <x-concentrator.concentrator-modal />
     <x-delete-confirmation-modal type='concentrator' />
 
-    <script src="{{ asset('js/concentrator.js') }}" async defer></script>
 </body>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        window.concentrators = @json($concentrators);
-
-        set_tables(window.concentrators);
-    });
+    window.concentrators = @json($concentrators);
 </script>
+<script src="{{ asset('js/concentrator.js') }}" async defer></script>
 
 </html>

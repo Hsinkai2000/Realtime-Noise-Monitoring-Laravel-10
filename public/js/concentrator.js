@@ -160,7 +160,10 @@ function handle_update() {
                         errorData["Unprocessable Entity"];
                 });
             } else {
-                closeModal("concentratorModal");
+                response.json().then((json) => {
+                    resetTable(json);
+                    closeModal("concentratorModal");
+                });
             }
         })
         .catch((error) => {
@@ -189,7 +192,10 @@ function handle_create() {
                         errorData["Unprocessable Entity"];
                 });
             } else {
-                closeModal("concentratorModal");
+                response.json().then((json) => {
+                    resetTable(json);
+                    closeModal("concentratorModal");
+                });
             }
         })
         .catch((error) => {
@@ -233,6 +239,7 @@ function handleDelete(event) {
                 return response.json();
             })
             .then((data) => {
+                resetTable(data);
                 closeModal("deleteConfirmationModal");
             })
             .catch((error) => {
@@ -242,6 +249,11 @@ function handleDelete(event) {
         var error = document.getElementById("deleteConfirmationError");
         error.hidden = false;
     }
+}
+
+function resetTable(json) {
+    window.concentrators = json.concentrators;
+    set_tables(window.concentrators);
 }
 
 function openModal(modalName, type) {
@@ -292,9 +304,9 @@ function closeModal(modal) {
     const modalElement = document.getElementById(modal);
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     modalInstance.hide();
-    location.reload();
 }
 
+set_tables(window.concentrators);
 window.set_tables = set_tables;
 window.openModal = openModal;
 window.openSecondModal = openSecondModal;

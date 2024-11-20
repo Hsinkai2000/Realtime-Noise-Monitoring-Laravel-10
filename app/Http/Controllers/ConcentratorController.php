@@ -18,7 +18,8 @@ class ConcentratorController extends Controller
             try {
                 $concentrator_id = Concentrator::insertGetId($concentrator_params);
                 $concentrator = Concentrator::find($concentrator_id);
-                return render_ok(["concentrator" => $concentrator]);
+                $concentrators = Concentrator::all();
+                return render_ok(["concentrator" => $concentrator, 'concentrators' => $concentrators]);
             } catch (Exception $e) {
                 return render_unprocessable_entity("Concentrator Device ID already in use.");
             }
@@ -74,6 +75,8 @@ class ConcentratorController extends Controller
 
             try {
                 $concentrator->update($concentrator_params);
+                $concentrators = Concentrator::all();
+                return render_ok(["concentrator" => $concentrator, 'concentrators' => $concentrators]);
                 return render_ok(["concentrator" => $concentrator_params]);
             } catch (Exception $e) {
                 return render_unprocessable_entity("Unable to update concentrator");
@@ -94,7 +97,9 @@ class ConcentratorController extends Controller
             if (!$concentrator->delete()) {
                 throw new Exception("Unable to delete concentrator");
             }
-            return render_ok(["concentrator" => $concentrator]);
+
+            $concentrators = Concentrator::all();
+            return render_ok(["concentrator" => $concentrator, 'concentrators' => $concentrators]);
         } catch (Exception $e) {
             return render_error($e);
         }
