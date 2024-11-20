@@ -163,3 +163,4 @@ async function openPdf() {
 window.openPdf = openPdf;
 window.openModal = openModal;
 window.set_tables = set_tables;
+set_tables(window.measurementPointData);

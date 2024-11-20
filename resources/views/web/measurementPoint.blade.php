@@ -83,18 +83,14 @@
 
     <x-pdfs.view-pdf-component />
 
-    <script src="{{ asset('js/measurement_point.js') }}" async defer></script>
 </body>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        window.measurementPointData = @json($measurementPoint);
-
-        window.measurementPointData.noise_meter = @json($measurementPoint->noiseMeter);
-        window.measurementPointData.concentrator = @json($measurementPoint->concentrator);
-        set_tables(window.measurementPointData);
-        window.admin = @json(Auth::user()->isAdmin());
-    });
+    window.measurementPointData = @json($measurementPoint);
+    window.measurementPointData.noise_meter = @json($measurementPoint->noiseMeter);
+    window.measurementPointData.concentrator = @json($measurementPoint->concentrator);
+    window.admin = @json(Auth::user()->isAdmin());
 </script>
+<script src="{{ asset('js/measurement_point.js') }}" async defer></script>
 
 </html>
