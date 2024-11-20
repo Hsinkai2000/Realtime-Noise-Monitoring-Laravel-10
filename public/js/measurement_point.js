@@ -1,4 +1,4 @@
-import AirDatepicker from "air-datepicker";
+import AirDatepicker from "air-datepicker/air-datepicker";
 import localeEn from "air-datepicker/locale/en.js";
 import "air-datepicker/air-datepicker.css";
 
