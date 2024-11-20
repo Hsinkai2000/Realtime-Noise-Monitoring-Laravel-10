@@ -120,6 +120,7 @@ function settable(tabledata) {
                     frozen: true,
                     width: 30,
                 },
+
                 {
                     title: "Name",
                     field: "name",
@@ -152,6 +153,12 @@ function settable(tabledata) {
                     minWidth: 100,
                 },
             ],
+            rowFormatter: function (row) {
+                // Apply special formatting for parent rows
+                if (row.getTreeChildren().length) {
+                    row.getElement().style.pointerEvents = "none";
+                }
+            },
         });
     }
     table.on("rowClick", function (e, row) {
