@@ -58,16 +58,14 @@
                                 <div class="col">
                                     Existing Device Id:
                                 </div>
-                                <div class="col">
-                                    <span id="existing_device_id"></span>
+                                <div class="col" id="existing_device_id">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="col">
                                     Existing Noise Meter
                                 </div>
-                                <div class="col">
-                                    <span id="existing_serial"></span>
+                                <div class="col" id="existing_serial">
                                 </div>
                             </div>
                         </div>
@@ -106,8 +104,8 @@
                             <div class="col-md-6 col-sm-12">
                                 Existing Category
                             </div>
-                            <div class="col-md-6 col-sm-12">
-                                <span id="category"></span>
+                            <div class="col-md-6 col-sm-12" id="category">
+
                             </div>
                         </div>
                         <div class="mb-3 row">

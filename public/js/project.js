@@ -219,7 +219,7 @@ function populateConcentrator() {
     selectConcentrator.innerHTML = "";
     if (modalType === "update") {
         defaultConcentrator = concentrator_data[0];
-        document.getElementById("existing_device_id").textContent =
+        document.getElementById("existing_device_id").innerHTML =
             defaultConcentrator.device_id
                 ? `${defaultConcentrator.device_id} | ${defaultConcentrator.concentrator_label}`
                 : "None Linked";
@@ -274,7 +274,7 @@ function populateNoiseMeter() {
     selectNoiseMeter.innerHTML = "";
     if (modalType == "update") {
         defaultNoiseMeter = noise_meter_data[0];
-        document.getElementById("existing_serial").textContent =
+        document.getElementById("existing_serial").innerHTML =
             defaultNoiseMeter.serial_number
                 ? `${defaultNoiseMeter.serial_number} | ${defaultNoiseMeter.noise_meter_label}`
                 : "None linked";
