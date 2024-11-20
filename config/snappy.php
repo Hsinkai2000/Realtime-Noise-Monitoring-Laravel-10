@@ -6,10 +6,7 @@ return [
         'enabled' => true,
         'binary' => env('WKHTMLTOPDF_BINARY'),
         'timeout' => false,
-        'options' => [
-            'no-images' => true,
-            'no-display' => true,
-        ],
+        'options' => [],
         'env' => [],
     ],
 ];
