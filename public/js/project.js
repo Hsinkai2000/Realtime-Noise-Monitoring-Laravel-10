@@ -820,7 +820,6 @@ async function handle_measurement_point_update(confirmation) {
 
 function handleContactSubmit() {
     modalType == "create" ? handleCreateContact() : handleUpdateContact();
-    location.reload();
 }
 
 function handleUpdateContact() {
