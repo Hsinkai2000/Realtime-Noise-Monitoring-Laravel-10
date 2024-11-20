@@ -8,6 +8,7 @@ use App\Models\NoiseMeter;
 use App\Models\SoundLimit;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Exists;
 
 class MeasurementPointController extends Controller
 {
@@ -33,21 +34,28 @@ class MeasurementPointController extends Controller
         $point = MeasurementPoint::where([['project_id', $measurement_point_params['project_id']], ['point_name', $measurement_point_params['point_name']]])->get();
 
         if ($point->isNotEmpty()) {
+            \Log::info("1");
             return render_unprocessable_entity('Please ensure measurement point name is unique within project');
         }
-
+        \Log::info("3");
         try {
+            \Log::info("4");
             if (isset($measurement_point_params['concentrator_id']) || isset($measurement_point_params['noise_meter_id'])) {
 
                 $data = $this->check_device_availability($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
+                \Log::info($data);
                 if (!empty($data) && !$confirmation) {
                     return render_unprocessable_entity($data);
                 }
+
                 $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
             }
+            \Log::info("5");
 
             $measurement_point_id = MeasurementPoint::insertGetId($measurement_point_params);
+            \Log::info($measurement_point_id);
             $measurement_point = MeasurementPoint::find($measurement_point_id);
+            \Log::info($measurement_point);
             return render_ok(["measurement_point" => $measurement_point]);
         } catch (Exception $e) {
             return render_error($e);
@@ -169,26 +177,39 @@ class MeasurementPointController extends Controller
     public function check_device_availability($concentrator_id, $noise_meter_id, $id = null)
     {
         $data = [];
+        \log::info($data);
         if ($concentrator_id != null) {
-            $concentratorMP = MeasurementPoint::where('concentrator_id', $concentrator_id)->get();
+            $concentratorMP = MeasurementPoint::where('concentrator_id', $concentrator_id)->first();
 
-            if ($concentratorMP->isNotEmpty()) {
-                if ($concentratorMP[0]->id != $id) {
-                    $data['concentrator'] = $concentratorMP[0]->concentrator;
+            if ($concentratorMP != null) {
+                if ($id != null) {
+                    if ($concentratorMP[0]->id != $id) {
+                        $data['concentrator'] = $concentratorMP[0];
+                    }
+                } else {
+                    $data['concentrator'] = $concentratorMP[0];
                 }
             }
         }
 
+
+        \log::info($data);
         if ($noise_meter_id != null) {
-            $noise_meterMP = MeasurementPoint::where('noise_meter_id', $noise_meter_id)->get();
+            $noise_meterMP = MeasurementPoint::where('noise_meter_id', $noise_meter_id)->first();
 
-            if ($noise_meterMP->isNotEmpty()) {
-                if ($noise_meterMP[0]->id != $id) {
-                    $data['noise_meter'] = $noise_meterMP[0]->noiseMeter;
+            if ($noise_meterMP != null) {
+                if ($id != null) {
+                    if ($noise_meterMP[0]->id != $id) {
+                        $data['noise_meter'] = $noise_meterMP[0];
+                    }
+                } else {
+
+                    $data['noise_meter'] = $noise_meterMP[0];
                 }
             }
         }
 
+        \log::info($data);
         return $data;
     }
 
