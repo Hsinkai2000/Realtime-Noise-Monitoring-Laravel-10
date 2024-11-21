@@ -8,6 +8,7 @@ use Closure;
 use DateTime;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\Component;
 
 class ReportIndividualDataComponent extends Component
@@ -43,11 +44,16 @@ class ReportIndividualDataComponent extends Component
         $noiseData = $this->measurementPoint->noiseData()->where('received_at', $this->slotDate)->get();
 
         if ($this->type == '1hLeq') {
+            Log::info(Carbon::parse($this->slotDate));
+            Log::info($noiseData);
             [$one_hr_leq, $num_blanks] = $this->measurementPoint->calc_1_hour_leq($this->slotDate);
+            $limit = $this->measurementPoint->soundLimit->leq1h_limit($this->slotDate);
+            $one_hr_leq > $limit ? $leq_data['should_alert'] = true : '';
             $leq_data['leq_data'] = number_format(round($one_hr_leq, 1), 1);
         } else if ($this->type == '12hLeq') {
             [$twelve_hr_leq, $num_blanks] = $this->measurementPoint->calc_12_hour_leq($this->slotDate);
-
+            $limit = $this->measurementPoint->soundLimit->leq12h_limit($this->slotDate);
+            $twelve_hr_leq > $limit ? $leq_data['should_alert'] = true : '';
             $leq_data['leq_data'] = number_format(round($twelve_hr_leq, 1), 1);
         } else if ($this->type == 'dose') {
             if (!empty($noiseData)) {

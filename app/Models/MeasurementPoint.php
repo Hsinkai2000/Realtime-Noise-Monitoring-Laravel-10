@@ -395,7 +395,6 @@ class MeasurementPoint extends Model
         if ($type == 1) {
             $leqs = $this->get_timeslot_to_now_leq($time);
         } else if ($type == 2) {
-
             $leqs = $this->get_hour_to_now_leq($time);
         }
 
