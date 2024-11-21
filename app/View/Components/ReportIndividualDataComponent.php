@@ -44,8 +44,6 @@ class ReportIndividualDataComponent extends Component
         $noiseData = $this->measurementPoint->noiseData()->where('received_at', $this->slotDate)->get();
 
         if ($this->type == '1hLeq') {
-            Log::info(Carbon::parse($this->slotDate));
-            Log::info($noiseData);
             [$one_hr_leq, $num_blanks] = $this->measurementPoint->calc_1_hour_leq($this->slotDate);
             $limit = $this->measurementPoint->soundLimit->leq1h_limit($this->slotDate);
             $one_hr_leq > $limit ? $leq_data['should_alert'] = true : '';
@@ -69,11 +67,13 @@ class ReportIndividualDataComponent extends Component
                 $leq_data['should_alert'] = true;
             }
         } else if ($this->type == 'max') {
-            $datenow = Carbon::now('Asia/Singapore');
+            $datenow = Carbon::now()->addHours(8)->subDays(2);
             $date = new Carbon($this->slotDate);
+            // Log::info($date);
             if ($date->hour == 7) {
                 $date->hour = 18;
             }
+            Log::info($date);
             if (!empty($noiseData)) {
                 $noiseData = new NoiseData(['received_at' => $date]);
             } else {
@@ -83,7 +83,10 @@ class ReportIndividualDataComponent extends Component
             if ($datenow > $date || $num_blanks == 0) {
                 $leq_data['leq_data'] = 'FIN';
             } else {
-                if ($calculated_dose_percentage < 1 && $num_blanks != 12 && $num_blanks != 144) {
+
+                Log::info($calculated_dose_percentage);
+                Log::info($num_blanks);
+                if ($calculated_dose_percentage < 100 && $num_blanks != 12 && $num_blanks != 144) {
                     $missingVal = $decision == '12h' ? 144 : 12;
                     [$leq_5mins_should_alert, $leq5limit] = $this->measurementPoint->leq_5_mins_exceed_and_alert($noiseData);
 
