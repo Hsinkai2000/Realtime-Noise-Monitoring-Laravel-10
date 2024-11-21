@@ -22,6 +22,7 @@ class MeasurementPoint extends Model
 
     const LEQ_SMS_TEMPLATE = 'sms.sms_leq_limit_exceeded';
     const DOSE_SMS_TEMPLATE = 'sms.sms_dose_limit_exceeded';
+    const MISSING_DATA_TEMPLATE = 'sms.sms_missing_data_45_mins';
 
     protected $table = 'measurement_points';
 
@@ -263,6 +264,8 @@ class MeasurementPoint extends Model
                     $sms_response = $twilio_service->sendMessage($phone_number, self::LEQ_SMS_TEMPLATE, $data);
                 } else if ($data["type"] == 'dose') {
                     $sms_response = $twilio_service->sendMessage($phone_number, self::DOSE_SMS_TEMPLATE, $data);
+                } else if ($data['type'] == 'missing_data') {
+                    $sms_response = $twilio_service->sendMessage($phone_number, self::MISSING_DATA_TEMPLATE, $data);
                 }
                 if (isNull($sms_response->sid)) {
                     $sms_messageid = $sms_response->sid;
@@ -441,17 +444,14 @@ class MeasurementPoint extends Model
 
     public function check_data_status()
     {
-
-        if ($this->getLastLeqData()) {
-
-            $receivedAtCarbon = Carbon::parse($this->getLastLeqData()->received_at);
-
-            // Get the current time
+        $last_data = $this->noiseData()->orderBy('received_at', 'desc')->first();
+        if ($last_data) {
+            $receivedAtCarbon = Carbon::parse($last_data->received_at);
             $currentTime = Carbon::now();
+            $currentTime->addHours(8);
             $diffInMinutes = $currentTime->diffInMinutes($receivedAtCarbon);
-
-            return $diffInMinutes <= 45 ? true : false;
+            return $diffInMinutes <= 45;
         }
-        return true;
+        return false;
     }
 }
