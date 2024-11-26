@@ -32,7 +32,8 @@ class ProjectController extends Controller
             $project_params = $request->only((new Project)->getFillable());
             debug_log('project params', [$project_params]);
             try {
-
+                $project_params['created_at'] = now();
+                $project_params['updated_at'] = now();
                 $project_id = Project::insertGetId($project_params);
                 $rental_projects  = Project::where('project_type', 'rental')->get();
                 $sales_projects  = Project::where('project_type', 'sales')->get();
