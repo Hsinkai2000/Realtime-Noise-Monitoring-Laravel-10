@@ -67,7 +67,14 @@
     <div class="container d-flex flex-column justify-content-center text-center pt-5">
         <div>
             <h1>Noise Data</h1>
-            <h2>Noise Device ID: {{ $measurementPoint->noiseMeter->serial_number }}</h2>
+            <h2>{{ strtoupper(
+                $measurementPoint->point_name .
+                    ': ' .
+                    $measurementPoint->noiseMeter->brand .
+                    ' S/N ' .
+                    $measurementPoint->noiseMeter->serial_number,
+            ) }}
+            </h2>
             <h2>Date: {{ \Carbon\Carbon::parse($start_date)->format('d-m-Y') }} -
                 {{ \Carbon\Carbon::parse($end_date)->format('d-m-Y') }}</h2>
         </div>

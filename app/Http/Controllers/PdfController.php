@@ -27,14 +27,14 @@ class PdfController extends Controller
         ];
 
         $footerHtml = view('pdfs.footer');
-        // $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
-        // $pdf->setoptions([
-        //     'margin-bottom' => 8,
-        //     'footer-spacing' => 0,
-        //     'footer-html' => $footerHtml
-        // ]);
+        $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
+        $pdf->setoptions([
+            'margin-bottom' => 8,
+            'footer-spacing' => 0,
+            'footer-html' => $footerHtml
+        ]);
 
-        // return $pdf->inline();
-        return view('pdfs.noise-data-report', $data);
+        return $pdf->inline();
+        // return view('pdfs.noise-data-report', $data);
     }
 }
