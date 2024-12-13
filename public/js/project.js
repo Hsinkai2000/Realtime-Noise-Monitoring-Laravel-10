@@ -129,42 +129,7 @@ function populate_soundLimits(event, reset_defaults = false) {
     var inputsunph12am7amleq12 = document.getElementById(
         "inputsunph12am7amleq12"
     );
-    if (modalType == "create" || reset_defaults) {
-        var category = document.getElementById("selectCategory").value;
-        inputmonsat7am7pmleq5.value =
-            valueMap[category].mon_sat_7am_7pm_leq5min;
-        inputmonsat7pm10pmleq5.value =
-            valueMap[category].mon_sat_7pm_10pm_leq5min;
-        inputmonsat10pm12amleq5.value =
-            valueMap[category].mon_sat_10pm_12am_leq5min;
-        inputmonsat12am7amleq5.value =
-            valueMap[category].mon_sat_12am_7am_leq5min;
-
-        inputmonsat7am7pmleq12.value =
-            valueMap[category].mon_sat_7am_7pm_leq12hr;
-        inputmonsat7pm10pmleq12.value =
-            valueMap[category].mon_sat_7pm_10pm_leq12hr;
-        inputmonsat10pm12amleq12.value =
-            valueMap[category].mon_sat_10pm_12am_leq12hr;
-        inputmonsat12am7amleq12.value =
-            valueMap[category].mon_sat_12am_7am_leq12hr;
-
-        inputsunph7am7pmleq5.value = valueMap[category].sun_ph_7am_7pm_leq5min;
-        inputsunph7pm10pmleq5.value =
-            valueMap[category].sun_ph_7pm_10pm_leq5min;
-        inputsunph10pm12amleq5.value =
-            valueMap[category].sun_ph_10pm_12am_leq5min;
-        inputsunph12am7amleq5.value =
-            valueMap[category].sun_ph_12am_7am_leq5min;
-
-        inputsunph7am7pmleq12.value = valueMap[category].sun_ph_7am_7pm_leq12hr;
-        inputsunph7pm10pmleq12.value =
-            valueMap[category].sun_ph_7pm_10pm_leq12hr;
-        inputsunph10pm12amleq12.value =
-            valueMap[category].sun_ph_10pm_12am_leq12hr;
-        inputsunph12am7amleq12.value =
-            valueMap[category].sun_ph_12am_7am_leq12hr;
-    } else if (modalType == "update") {
+    if (modalType == "update") {
         inputmonsat7am7pmleq5.value =
             inputMeasurementPoint.soundLimit.mon_sat_7am_7pm_leq5min;
         inputmonsat7pm10pmleq5.value =
@@ -200,6 +165,51 @@ function populate_soundLimits(event, reset_defaults = false) {
             inputMeasurementPoint.soundLimit.sun_ph_10pm_12am_leq12hr;
         inputsunph12am7amleq12.value =
             inputMeasurementPoint.soundLimit.sun_ph_12am_7am_leq12hr;
+    }
+
+    var selectedCategory = document.getElementById("selectCategory").value;
+    var category = document.getElementById("category").innerHTML;
+
+    if (
+        category != selectedCategory ||
+        modalType == "create" ||
+        reset_defaults
+    ) {
+        inputmonsat7am7pmleq5.value =
+            valueMap[selectedCategory].mon_sat_7am_7pm_leq5min;
+        inputmonsat7pm10pmleq5.value =
+            valueMap[selectedCategory].mon_sat_7pm_10pm_leq5min;
+        inputmonsat10pm12amleq5.value =
+            valueMap[selectedCategory].mon_sat_10pm_12am_leq5min;
+        inputmonsat12am7amleq5.value =
+            valueMap[selectedCategory].mon_sat_12am_7am_leq5min;
+
+        inputmonsat7am7pmleq12.value =
+            valueMap[selectedCategory].mon_sat_7am_7pm_leq12hr;
+        inputmonsat7pm10pmleq12.value =
+            valueMap[selectedCategory].mon_sat_7pm_10pm_leq12hr;
+        inputmonsat10pm12amleq12.value =
+            valueMap[selectedCategory].mon_sat_10pm_12am_leq12hr;
+        inputmonsat12am7amleq12.value =
+            valueMap[selectedCategory].mon_sat_12am_7am_leq12hr;
+
+        inputsunph7am7pmleq5.value =
+            valueMap[selectedCategory].sun_ph_7am_7pm_leq5min;
+        inputsunph7pm10pmleq5.value =
+            valueMap[selectedCategory].sun_ph_7pm_10pm_leq5min;
+        inputsunph10pm12amleq5.value =
+            valueMap[selectedCategory].sun_ph_10pm_12am_leq5min;
+        inputsunph12am7amleq5.value =
+            valueMap[selectedCategory].sun_ph_12am_7am_leq5min;
+
+        inputsunph7am7pmleq12.value =
+            valueMap[selectedCategory].sun_ph_7am_7pm_leq12hr;
+        inputsunph7pm10pmleq12.value =
+            valueMap[selectedCategory].sun_ph_7pm_10pm_leq12hr;
+        inputsunph10pm12amleq12.value =
+            valueMap[selectedCategory].sun_ph_10pm_12am_leq12hr;
+        inputsunph12am7amleq12.value =
+            valueMap[selectedCategory].sun_ph_12am_7am_leq12hr;
     }
 }
 
