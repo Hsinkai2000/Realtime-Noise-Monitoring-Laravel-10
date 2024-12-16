@@ -24,6 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css">
 
+    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/measurement_point.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 

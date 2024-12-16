@@ -1,103 +1,56 @@
-@import url("base.css");
-
-table .w-5 {
-    width: 5%;
-}
-
-table .w-10 {
-    width: 10%;
-}
-
-table .w-45 {
-    width: 45%;
-}
-
-body {
-    font-family: "Verdana" !important;
-}
-
 #noise_meter_table,
 #concentrator_table {
-    margin-bottom: 20px;
-    background-color: #f5f5f5;
-    border-top: none;
-    border-color: #dee2e6;
-    padding: 10px;
-    border-radius: 0 10px 10px 10px;
+  margin-bottom: 20px;
+  background-color: #fffdfc;
+  border-top: none;
+  border-color: #dee2e6;
+  padding: 10px;
+  border-radius: 0 10px 10px 10px;
 }
 #noise_meter_table .tabulator-header,
 #concentrator_table .tabulator-header {
-    background-color: #f5f5f5;
-    color: #7b422d;
-    border-bottom: 3px solid #bd6747;
-    margin-bottom: 5px;
+  background-color: #fffdfc;
+  color: #2b1710;
+  border-bottom: 3px solid #bd6747;
+  margin-bottom: 5px;
 }
 #noise_meter_table .tabulator-header .tabulator-col,
 #noise_meter_table .tabulator-header .tabulator-row-handle,
 #concentrator_table .tabulator-header .tabulator-col,
 #concentrator_table .tabulator-header .tabulator-row-handle {
-    white-space: normal;
-    background-color: #f5f5f5;
+  white-space: normal;
+  background-color: #fffdfc;
 }
 #noise_meter_table .tabulator-header .tabulator-col .tabulator-col-content,
-#noise_meter_table
-    .tabulator-header
-    .tabulator-row-handle
-    .tabulator-col-content,
+#noise_meter_table .tabulator-header .tabulator-row-handle .tabulator-col-content,
 #concentrator_table .tabulator-header .tabulator-col .tabulator-col-content,
-#concentrator_table
-    .tabulator-header
-    .tabulator-row-handle
-    .tabulator-col-content {
-    text-overflow: clip;
+#concentrator_table .tabulator-header .tabulator-row-handle .tabulator-col-content {
+  text-overflow: clip;
 }
 #noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row,
 #concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row {
-    color: #7b422d;
-    background-color: #f5f5f5;
-    margin-bottom: 2px;
+  color: #2b1710;
+  background-color: #fffdfc;
+  margin-bottom: 2px;
 }
 #noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:hover,
-#concentrator_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:hover {
-    background-color: #eae7d0;
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
+  background-color: #e5dbd4;
 }
-#noise_meter_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row
-    .tabulator-cell,
-#concentrator_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row
-    .tabulator-cell {
-    white-space: normal;
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
+  white-space: normal;
 }
-#noise_meter_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:nth-child(even),
-#concentrator_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:nth-child(even) {
-    background-color: #f1f2f9;
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even),
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
+  background-color: #f7f5f1;
 }
-#noise_meter_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:nth-child(even):hover,
-#concentrator_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:nth-child(even):hover {
-    background-color: #eae7d0;
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
+  background-color: #e5dbd4;
 }
 
 .box,
 .datepicker {
-    z-index: 9999;
+  z-index: 9999;
 }

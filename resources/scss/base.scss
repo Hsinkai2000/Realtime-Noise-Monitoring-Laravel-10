@@ -1,37 +1,10 @@
-$black: #121111;
-$hover: #eae7d0;
-$white: #f1f2f9;
-$light: #f5f5f5;
-$dark: #7b422d;
-$primary: #bd6747;
-$secondary: #e1c409;
-$info: #ffc881;
-$success: #30c886;
-$warning: #fd6603;
-$danger: #cc2e0e;
-$border-color: #dee2e6;
+@import "./colors.scss";
+// Include Bootstrap after defining custom variables
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
-$box-shadow: 0.15rem 0.25rem 0.25rem rgba($black, 0.1);
-$box-shadow-sm: 0.15rem 0.2rem 0.25rem rgba($black, 0.2);
-
-$color: $dark;
-$navbar-padding-x: 2.5rem;
-$navbar-dark-color: $white;
-$navbar-dark-active-color: $secondary;
-
-$nav-tabs-link-active-color: $dark;
-$nav-tabs-link-active-bg: $light;
-
-$modal-inner-padding: 2rem;
-$modal-header-border-color: $primary;
-$modal-content-color: $dark;
-$modal-content-bg: $white;
-
-$modal-scale-transform: scale(1.2);
-$input-color: $dark;
-$input-bg: $light;
-
-$darkgray: #1d1b36;
+.table {
+    background-color: $white !important;
+}
 
 table .w-5 {
     width: 5%;
@@ -45,4 +18,6 @@ table .w-45 {
 
 body {
     font-family: "Verdana" !important;
+    color: $text !important;
+    background-color: $white;
 }

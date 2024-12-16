@@ -8,7 +8,9 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "compile-sass": "sass resources/scss:public/css --no-source-map -w"
+
     },
     "devDependencies": {
         "axios": "^1.6.4",

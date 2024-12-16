@@ -22,6 +22,7 @@
         integrity="sha512-4MvcHwcbqXKUHB6Lx3Zb5CEAVoE9u84qN+ZSMM6s7z8IeJriExrV3ND5zRze9mxNlABJ6k864P/Vl8m0Sd3DtQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/project.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 
@@ -78,7 +79,7 @@
             </tr>
         </table>
 
-        <div class="bg-light p-2 mb-3 shadow rounded">
+        <div class="p-2 mb-3 rounded">
             <div>
                 <h5 class="d-inline">Contacts | </h5>
                 <h6 id="contact_counter" class="d-inline @if (count($project->contact) == $project['sms_count']) text-danger  s @endif">
@@ -94,7 +95,7 @@
             </div>
             <div class="shadow" id="contacts_table"></div>
         </div>
-        <div class="rounded bg-light p-2 shadow">
+        <div class="">
             <h5>Measurement Points Information</h5>
             <div id="measurement_point_table"></div>
 

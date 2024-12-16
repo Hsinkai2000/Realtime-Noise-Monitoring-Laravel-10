@@ -7,6 +7,7 @@
     <title>Login</title>
 
 
+    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/login.css') }}" rel="stylesheet">
 
     {{-- @vite(['resources/scss/login.scss']) --}}

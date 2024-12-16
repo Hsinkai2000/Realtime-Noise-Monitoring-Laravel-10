@@ -10,6 +10,7 @@
     <!-- Include Tabulator JS from CDN -->
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.3/dist/js/tabulator.min.js"></script>
 
+    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/project-admin.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 

@@ -1,6 +1,4 @@
-// Default variable overrides
-
-@import "./base.scss";
+@import "./colors.scss";
 
 #deleteButton {
     &:hover {
@@ -10,15 +8,13 @@
 }
 
 #example-table {
-    background-color: $light;
     height: 55vh;
-    border-top: none;
-    border-color: $border-color;
+    background-color: $light;
+    border-color: $primary;
     padding: 10px;
-    border-radius: 0 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
     .tabulator-header {
         background-color: $light;
-        color: $dark;
         border-bottom: 3px solid $primary;
         margin-bottom: 5px;
         .tabulator-col,
@@ -34,9 +30,9 @@
     .tabulator-tableholder {
         .tabulator-table {
             .tabulator-row {
-                color: $dark;
                 background-color: $light;
                 margin-bottom: 2px;
+                padding: 20px 0;
                 &:hover {
                     background-color: $hover;
                 }
@@ -89,5 +85,3 @@
         height: 65vh;
     }
 }
-
-@import "../../node_modules/bootstrap/scss/bootstrap";

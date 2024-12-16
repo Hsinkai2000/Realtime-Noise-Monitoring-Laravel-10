@@ -1,4 +1,4 @@
-@import "./base.scss";
+@import "./colors.scss";
 
 #concentrator_table {
     margin-bottom: 20px;
@@ -10,7 +10,7 @@
     border-radius: 0 10px 10px 10px;
     .tabulator-header {
         background-color: $light;
-        color: $dark;
+        color: $text;
         border-bottom: 3px solid $primary;
         margin-bottom: 5px;
         .tabulator-col,
@@ -26,7 +26,7 @@
     .tabulator-tableholder {
         .tabulator-table {
             .tabulator-row {
-                color: $dark;
+                color: $text;
                 background-color: $light;
                 margin-bottom: 2px;
                 &:hover {
@@ -47,5 +47,3 @@
         }
     }
 }
-
-@import "../../node_modules/bootstrap/scss/bootstrap";

@@ -22,6 +22,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
+    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/noise_meters.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 

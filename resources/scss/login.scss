@@ -1,10 +1,8 @@
-// @import "~/tabulator-tables/dist/css/tabulator.min.css";
-
-@import "./base.scss";
+@import "./colors.scss";
 
 label,
 h2 {
-    color: $dark;
+    color: $text;
 }
 
 #geoscan_logo {
@@ -28,5 +26,3 @@ h2 {
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: linear-gradient(to top, $dark, $secondary);
 }
-
-@import "../../node_modules/bootstrap/scss/bootstrap";

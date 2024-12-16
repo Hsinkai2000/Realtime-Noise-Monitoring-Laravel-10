@@ -11,6 +11,7 @@
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.3/dist/js/tabulator.min.js"></script>
 
 
+    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/home.css') }}" rel="stylesheet">
 
     {{-- @vite(['resources/scss/home.scss', 'resources/scss/base.scss']) --}}

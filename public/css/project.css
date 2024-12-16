@@ -1,172 +1,116 @@
-@import url("base.css");
-
-table .w-5 {
-    width: 5%;
-}
-
-table .w-10 {
-    width: 10%;
-}
-
-table .w-45 {
-    width: 45%;
-}
-
-body {
-    font-family: "Verdana" !important;
-}
-
 #contacts_table {
-    margin-bottom: 20px;
-    background-color: #f5f5f5;
-    border-top: none;
-    border-color: #dee2e6;
-    padding: 10px;
-    border-radius: 0 10px 10px 10px;
+  background-color: #fffdfc;
+  border-color: #bd6747;
+  padding: 10px;
+  border-radius: 10px 10px 10px 10px;
 }
 #contacts_table .tabulator-header {
-    background-color: #f5f5f5;
-    color: #7b422d;
-    border-bottom: 3px solid #bd6747;
-    margin-bottom: 5px;
+  color: #2b1710;
+  border-bottom: 3px solid #bd6747;
+  margin-bottom: 5px;
 }
 #contacts_table .tabulator-header .tabulator-col,
 #contacts_table .tabulator-header .tabulator-row-handle {
-    white-space: normal;
-    background-color: #f5f5f5;
+  white-space: normal;
+  background-color: #fffdfc;
 }
 #contacts_table .tabulator-header .tabulator-col .tabulator-col-content,
 #contacts_table .tabulator-header .tabulator-row-handle .tabulator-col-content {
-    text-overflow: clip;
+  text-overflow: clip;
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row {
-    color: #7b422d;
-    background-color: #f5f5f5;
-    margin-bottom: 2px;
+  color: #2b1710;
+  background-color: #fffdfc;
+  margin-bottom: 2px;
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
-    background-color: #eae7d0;
+  background-color: #e5dbd4;
 }
-#contacts_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row
-    .tabulator-cell {
-    white-space: normal;
+#contacts_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
+  white-space: normal;
 }
-#contacts_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:nth-child(even) {
-    background-color: #f1f2f9;
+#contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
+  background-color: #f7f5f1;
 }
-#contacts_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:nth-child(even):hover {
-    background-color: #eae7d0;
+#contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
+  background-color: #e5dbd4;
 }
 
 #measurement_point_table {
-    background-color: #f5f5f5;
-    height: 33vh;
-    border-top: none;
-    border-color: #dee2e6;
-    padding: 10px;
-    border-radius: 0 10px 10px 10px;
+  background-color: #fffdfc;
+  height: 33vh;
+  border-color: #bd6747;
+  padding: 10px;
+  border-radius: 10px 10px 10px 10px;
 }
 #measurement_point_table .tabulator-header {
-    background-color: #f5f5f5;
-    color: #7b422d;
-    border-bottom: 3px solid #bd6747;
-    margin-bottom: 5px;
+  color: #2b1710;
+  border-bottom: 3px solid #bd6747;
+  margin-bottom: 5px;
 }
 #measurement_point_table .tabulator-header .tabulator-col,
 #measurement_point_table .tabulator-header .tabulator-row-handle {
-    white-space: normal;
-    background-color: #f5f5f5;
+  white-space: normal;
+  background-color: #fffdfc;
 }
-#measurement_point_table
-    .tabulator-header
-    .tabulator-col
-    .tabulator-col-content,
-#measurement_point_table
-    .tabulator-header
-    .tabulator-row-handle
-    .tabulator-col-content {
-    text-overflow: clip;
+#measurement_point_table .tabulator-header .tabulator-col .tabulator-col-content,
+#measurement_point_table .tabulator-header .tabulator-row-handle .tabulator-col-content {
+  text-overflow: clip;
 }
-#measurement_point_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row {
-    color: #7b422d;
-    background-color: #f5f5f5;
-    margin-bottom: 2px;
+#measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row {
+  color: #2b1710;
+  margin-bottom: 2px;
 }
-#measurement_point_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:hover {
-    background-color: #eae7d0;
+#measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
+  background-color: #e5dbd4;
 }
-#measurement_point_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row
-    .tabulator-cell {
-    white-space: normal;
+#measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
+  white-space: normal;
 }
-#measurement_point_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:nth-child(even) {
-    background-color: #f1f2f9;
+#measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
+  background-color: #f7f5f1;
 }
-#measurement_point_table
-    .tabulator-tableholder
-    .tabulator-table
-    .tabulator-row:nth-child(even):hover {
-    background-color: #eae7d0;
+#measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
+  background-color: #e5dbd4;
 }
 
 /* Basic styling for the list container */
 #userUpdateSelectList {
-    max-height: 300px;
-    padding: 0;
-    list-style: none; /* Ensure no default list styling */
-    overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 300px;
+  padding: 0;
+  list-style: none; /* Ensure no default list styling */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Basic styling for each list item */
 .list-item {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #ddd;
-    cursor: pointer;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  cursor: pointer;
 }
 
 /* Styling for the selected item */
 .list-item.selected {
-    background-color: #eae7d0;
+  background-color: #e5dbd4;
 }
 
 .modal:nth-of-type(even) {
-    z-index: 1052 !important;
+  z-index: 1052 !important;
 }
 
 .modal-backdrop.show:nth-of-type(even) {
-    z-index: 1051 !important;
+  z-index: 1051 !important;
 }
 
 span {
-    text-decoration: underline;
-    color: #bd6747;
-    cursor: pointer;
+  text-decoration: underline;
+  color: #bd6747;
+  cursor: pointer;
 }
 
 @media only screen and (min-width: 768px) {
-    #example-table {
-        height: 65vh;
-    }
+  #example-table {
+    height: 65vh;
+  }
 }
