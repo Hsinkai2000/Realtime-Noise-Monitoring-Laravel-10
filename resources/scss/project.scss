@@ -22,9 +22,9 @@
     .tabulator-tableholder {
         .tabulator-table {
             .tabulator-row {
-                color: $text;
                 background-color: $light;
                 margin-bottom: 2px;
+                padding: 10px 0;
                 &:hover {
                     background-color: $hover;
                 }
@@ -37,10 +37,36 @@
                     background-color: $white;
                     &:hover {
                         background-color: $hover;
+
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .tabulator-responsive-collapse {
+                        table tr {
+                            background-color: $light;
+                        }
+                    }
+
+                    &:hover {
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    .tabulator-footer-contents {
+        background-color: $light;
     }
 }
 
@@ -67,8 +93,9 @@
     .tabulator-tableholder {
         .tabulator-table {
             .tabulator-row {
-                color: $text;
+                background-color: $light;
                 margin-bottom: 2px;
+                padding: 10px 0;
                 &:hover {
                     background-color: $hover;
                 }
@@ -81,10 +108,36 @@
                     background-color: $white;
                     &:hover {
                         background-color: $hover;
+
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .tabulator-responsive-collapse {
+                        table tr {
+                            background-color: $light;
+                        }
+                    }
+
+                    &:hover {
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    .tabulator-footer-contents {
+        background-color: $light;
     }
 }
 

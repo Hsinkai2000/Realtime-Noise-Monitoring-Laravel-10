@@ -1,9 +1,9 @@
-<div class="modal fade shadow" id="projectModal" tabindex="-1" aria-labelledby="projectcreateLabel" aria-hidden="true">
+<div class="modal fade shadow" id="projectModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="projectcreateLabel">Create Project</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-secondary">
+                <h2 class="modal-title text-text" id="projectcreateLabel">Project</h2>
+                <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id='projectForm' method="POST">
@@ -13,7 +13,8 @@
                             <label for="job_number" class="col-md-3 col-sm-12 text-align-center col-form-label">Job
                                 Number</label>
                             <div class="col-sm-8 align-content-center">
-                                <input type="text" class="form-control" id="inputJobNumber" name="job_number">
+                                <input type="text" class="form-control" id="inputJobNumber" name="job_number"
+                                    value="{{ old('job_number', '') }}">
                             </div>
                         </div>
 
@@ -22,7 +23,8 @@
                                 name
                             </label>
                             <div class="col-sm-8 align-content-center">
-                                <input type="text" class="form-control" id="inputClientName" name="client_name">
+                                <input type="text" class="form-control" id="inputClientName" name="client_name"
+                                    value="{{ old('client_name', '') }}">
                             </div>
                         </div>
 
@@ -31,7 +33,7 @@
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Project
                                 Description</label>
                             <div class="col-sm-8 align-content-center">
-                                <textarea name='project_description' type="text" class="form-control" id="inputProjectDescription"></textarea>
+                                <textarea name='project_description' type="text" class="form-control" id="inputProjectDescription">{{ old('project_description', '') }}</textarea>
                             </div>
                         </div>
 
@@ -42,7 +44,7 @@
                                 Location</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputJobsiteLocation"
-                                    name='jobsite_location'>
+                                    name='jobsite_location' value="{{ old('jobsite_location', '') }}">
                             </div>
                         </div>
 
@@ -53,7 +55,7 @@
                                 Number</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputBcaReferenceNumber"
-                                    name='bca_reference_number'>
+                                    name='bca_reference_number' value="{{ old('bca_reference_number', '') }}">
                             </div>
                         </div>
 
@@ -62,7 +64,7 @@
                                 Contacts</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="number" class="form-control" id="inputSmsCount" name='sms_count'
-                                    value="0" min="0" max="20">
+                                    min="0" max="20" value="{{ old('sms_count', '0') }}">
                             </div>
                         </div>
 
@@ -86,7 +88,7 @@
                                 User Name</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputEndUserName" name='end_user_name'
-                                    value="">
+                                    value="{{ old('end_user_name', '') }}">
                             </div>
                         </div>
 
@@ -94,29 +96,119 @@
                             <label for="user_id"
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">User</label>
                             <div class="col-sm-8 align-content-center">
+                                <form id="userForm">
+                                    <!-- List of Users -->
+                                    <h6>Current Users</h6>
+                                    <ul id="curruserList" class="list-group mb-3">
+                                        <!-- Users will appear here -->
+                                    </ul>
 
-                                <button class="btn btn-primary text-white" type="button"
-                                    onclick="openSecondModal('projectModal','userCreateModal','create')">Add
-                                    User</button>
-                                <button class="btn btn-primary bg-white text-primary" type="button"
-                                    onclick="openSecondModal('projectModal','deleteModal')">Remove User</button>
+                                    <!-- Add User Section -->
+                                    <h6>Add New User</h6>
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <input type="text" id="username" class="form-control"
+                                                placeholder="Username">
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="password" id="password" class="form-control"
+                                                placeholder="Password">
+                                        </div>
+                                    </div>
+                                    <button type="button" id="addUserBtn" class="btn btn-primary btn-sm mt-3">Add
+                                        User</button>
 
-                                <ul id="userselectList">
-                                </ul>
+                                </form>
+
                             </div>
+
+
+                            <ul id="error-messages" class="mt-2">
+
+                            </ul>
                         </div>
-                    </div>
 
 
-                    <div class="modal-footer">
-                        <div id="error_message" class="text-danger me-auto"></div>
-                        <button type="button" class="btn btn-primary bg-white text-primary"
-                            data-bs-dismiss="modal">Discard</button>
-                        <button type='button' onclick="submitClicked()"
-                            class="btn btn-primary text-white">Submit</button>
-                    </div>
+                        <div class="modal-footer">
+                            <div id="error_message" class="text-danger me-auto"></div>
+                            <button type="button" class="btn btn-primary bg-white text-primary"
+                                data-bs-dismiss="modal">Discard</button>
+                            <button type='button' class="btn btn-primary text-white"
+                                onclick="create_project()">Submit</button>
+                        </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        window.userList = [];
+        const curruserList = document.getElementById('curruserList');
+        const addUserBtn = document.getElementById('addUserBtn');
+        const usernameField = document.getElementById('username');
+        const passwordField = document.getElementById('password');
+        var projectModal = document.getElementById('projectModal');
+
+
+        projectModal.addEventListener('hidden.bs.modal', function(event) {
+            window.userList = [];
+            var form = document.getElementById('projectForm');
+            form.reset();
+
+
+            var errorMessagesDiv = document.getElementById('error-messages');
+            if (errorMessagesDiv) {
+                errorMessagesDiv.innerHTML = '';
+            }
+        });
+        // Function to add a new user to the list
+        addUserBtn.addEventListener('click', () => {
+            const username = usernameField.value.trim();
+            const password = passwordField.value.trim();
+            if (!username || !password) {
+                alert('Both username and password are required.');
+                return;
+            }
+
+            fetch(`${baseUri}/user/${username}`, {
+                method: "GET",
+            }).then((response) => {
+                if (response.status == 200) {
+                    window.userList.push({
+                        username: username,
+                        password: password
+                    });
+
+                    // Create a new list item for the user
+                    const li = document.createElement('li');
+                    li.className =
+                        'list-group-item d-flex justify-content-between align-items-center';
+                    li.textContent = username;
+
+                    // Create a remove button
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'btn btn-danger btn-sm';
+                    removeBtn.textContent = 'Remove';
+
+                    // Add click event to remove the user
+                    removeBtn.addEventListener('click', () => {
+                        li.remove();
+                    });
+
+                    li.appendChild(removeBtn);
+                    curruserList.appendChild(li);
+
+                    // Clear input fields
+                    usernameField.value = '';
+                    passwordField.value = '';
+                } else {
+                    alert('username is already taken');
+                    return;
+                }
+            })
+
+        });
+    });
+</script>

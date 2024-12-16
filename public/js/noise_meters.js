@@ -12,9 +12,17 @@ function set_tables(data) {
         placeholder: "No linked Contacts",
         paginationSize: 20,
         paginationCounter: "rows",
-        paginationElement: document.getElementById("noise_meter_pages"),
         selectable: 1,
+        responsiveLayout: "collapse",
         columns: [
+            {
+                formatter: "responsiveCollapse",
+                width: 30,
+                minWidth: 30,
+                hozAlign: "center",
+                resizable: false,
+                headerSort: false,
+            },
             {
                 formatter: "rowSelection",
                 titleFormatter: "rowSelection",

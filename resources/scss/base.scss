@@ -1,3 +1,12 @@
+@font-face {
+    font-family: "PF Din Text Universal Light";
+    font-style: normal;
+    font-weight: normal;
+    src: local("PF Din Text Universal Light"),
+        url("../font/pf-din-text-universal-webfont/PF Din Text Universal Light.woff")
+            format("woff");
+}
+
 @import "./colors.scss";
 // Include Bootstrap after defining custom variables
 @import "../../node_modules/bootstrap/scss/bootstrap";
@@ -21,7 +30,8 @@ table .w-45 {
 }
 
 body {
-    font-family: "Verdana" !important;
+    // font-family: "Verdana" !important;
     color: $text !important;
     background-color: $white;
+    font-family: "PF Din Text Universal Light", Arial, sans-serif !important;
 }

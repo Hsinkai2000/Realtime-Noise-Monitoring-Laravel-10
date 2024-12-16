@@ -39,4 +39,10 @@ Route::group(['middleware' => 'auth'], function () {
     require __DIR__ . '/internal/concentrator.php';
     require __DIR__ . '/internal/noise_meter.php';
     require __DIR__ . '/internal/pdf.php';
+
+    // Clear session errors
+    Route::post('/clear-session-error', function () {
+        session()->forget('errors');
+        return response()->json(['success' => true]);
+    })->name('clear.session.error');
 });

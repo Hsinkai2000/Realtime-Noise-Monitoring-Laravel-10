@@ -11,8 +11,6 @@ var tab = "rental";
 var selectedProject = [];
 
 function settable(tabledata) {
-    document.getElementById("table_pages").innerHTML = "";
-
     if (window.table) {
         window.table.destroy();
     }
@@ -23,36 +21,36 @@ function settable(tabledata) {
             layout: "fitColumns",
             data: tabledata,
             placeholder: "Not authorised",
-            paginationSize: 20,
+            paginationSize: 10,
             paginationCounter: "rows",
-            paginationElement: document.getElementById("table_pages"),
             selectable: 1,
+            responsiveLayout: "collapse",
             columns: [
                 {
-                    formatter: "rowSelection",
-                    titleFormatter: "rowSelection",
-                    hozAlign: "center",
-                    headerSort: false,
-                    frozen: true,
+                    formatter: "responsiveCollapse",
                     width: 30,
+                    minWidth: 30,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerSort: false,
                 },
                 {
                     title: "PJO Number",
                     field: "job_number",
                     headerFilter: "input",
-                    minWidth: 100,
+                    minWidth: 150,
                     frozen: true,
                 },
                 {
                     title: "Client Name",
                     field: "client_name",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerFilter: "input",
                 },
                 {
                     title: "Jobsite Location",
                     field: "jobsite_location",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerFilter: "input",
                 },
                 {
@@ -64,13 +62,13 @@ function settable(tabledata) {
                 {
                     title: "BCA Reference Number",
                     field: "bca_reference_number",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerSort: false,
                 },
                 {
                     title: "SMS Contacts (Number of alerts)",
                     field: "sms_count",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerSort: false,
                 },
                 {
@@ -81,7 +79,7 @@ function settable(tabledata) {
                         values: ["", "Ongoing", "Completed"],
                         clearable: true,
                     },
-                    minWidth: 100,
+                    minWidth: 150,
                     headerFilter: true,
                     headerFilterParams: {
                         values: {
@@ -95,7 +93,7 @@ function settable(tabledata) {
                 {
                     title: "Created At",
                     field: "created_at",
-                    minWidth: 100,
+                    minWidth: 150,
                 },
             ],
         });
@@ -105,34 +103,33 @@ function settable(tabledata) {
             data: tabledata,
             layout: "fitColumns",
             placeholder: "Not authorised",
-            paginationElement: document.getElementById("table_pages"),
-            paginationSize: 20,
+            paginationSize: 10,
             paginationCounter: "rows",
             dataTree: true,
             dataTreeStartExpanded: true,
             selectable: 1,
+            responsiveLayout: "collapse",
             columns: [
                 {
-                    formatter: "rowSelection",
-                    titleFormatter: "rowSelection",
-                    hozAlign: "center",
-                    headerSort: false,
-                    frozen: true,
+                    formatter: "responsiveCollapse",
                     width: 30,
+                    minWidth: 30,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerSort: false,
                 },
-
                 {
                     title: "Name",
                     field: "name",
                     headerFilter: "input",
-                    minWidth: 100,
+                    minWidth: 150,
                     frozen: true,
                     responsive: 0,
                 },
                 {
                     title: "Jobsite Location",
                     field: "jobsite_location",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerFilter: "input",
                 },
                 {
@@ -145,12 +142,12 @@ function settable(tabledata) {
                     title: "BCA Reference Number",
                     field: "bca_reference_number",
                     headerSort: false,
-                    minWidth: 100,
+                    minWidth: 150,
                 },
                 {
                     title: "Created At",
                     field: "created_at",
-                    minWidth: 100,
+                    minWidth: 150,
                 },
             ],
             rowFormatter: function (row) {
@@ -166,24 +163,24 @@ function settable(tabledata) {
     });
     table.on("rowSelectionChanged", function (data, rows) {
         selectedProject = data[0];
-        table_row_changed(selectedProject);
+        // table_row_changed(selectedProject);
     });
     window.table = table;
 }
 
-function table_row_changed(data) {
-    const editButton = document.getElementById("editButton");
-    const deleteButton = document.getElementById("deleteButton");
+// function table_row_changed(data) {
+//     const editButton = document.getElementById("editButton");
+//     const deleteButton = document.getElementById("deleteButton");
 
-    if (data) {
-        editButton.disabled = false;
-        deleteButton.disabled = false;
-        inputprojectId = data.id;
-    } else {
-        editButton.disabled = true;
-        deleteButton.disabled = true;
-    }
-}
+//     if (data) {
+//         editButton.disabled = false;
+//         deleteButton.disabled = false;
+//         inputprojectId = data.id;
+//     } else {
+//         editButton.disabled = true;
+//         deleteButton.disabled = true;
+//     }
+// }
 
 function changeTab(event, project_type) {
     // Toggle active class on tabs
@@ -584,4 +581,4 @@ window.openModal = openModal;
 window.openSecondModal = openSecondModal;
 window.toggleEndUserName = toggleEndUserName;
 window.submitClicked = submitClicked;
-window.handleDelete = handleDelete;
+// window.handleDelete = handleDelete;

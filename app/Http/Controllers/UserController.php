@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function create(Request $request)
     {
-        Log::info("message");
+        Log::info("message in user");
         try {
             $user_params = $request->json()->all();
             debug_log('userparams: ', [$user_params]);
@@ -100,5 +100,14 @@ class UserController extends Controller
         } catch (Exception $e) {
             return render_error($e);
         }
+    }
+
+    public function existing_user(Request $request)
+    {
+        $username = $request->route('username');
+        if (User::where('username', $username)->first()) {
+            return render_unprocessable_entity('username is already taken');
+        }
+        return render_ok('user added');
     }
 }

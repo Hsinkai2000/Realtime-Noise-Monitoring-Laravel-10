@@ -29,20 +29,23 @@
                 </li>
             </ol>
         </nav>
-
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" onClick="changeTab(event,'rental')">Rental
-                    Projects</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" onClick="changeTab(event,'sales')">Sales Project</a>
-            </li>
-        </ul>
+        <div class="d-flex justify-content-between align-items-center">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" onClick="changeTab(event,'rental')">Rental
+                        Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onClick="changeTab(event,'sales')">Sales Project</a>
+                </li>
+            </ul>
+            <button class="btn btn-primary text-light shadow-sm m-2" id="createButton" data-bs-toggle="modal"
+                data-bs-target="#projectModal" {{-- onclick="openModal('projectModal','create')"> --}}> Create </button>
+        </div>
 
         <div class="shadow" id="example-table"></div>
 
-        <div class="d-flex flex-row mt-3 justify-content-between">
+        {{-- <div class="d-flex flex-row mt-3 justify-content-between">
             <button class="btn btn-light text-danger border shadow-sm" id="deleteButton"
                 onclick="openModal('deleteConfirmationModal')">Delete</button>
 
@@ -51,14 +54,13 @@
             <div>
                 <button class="btn btn-primary bg-light text-primary px-4 me-3 shadow-sm" id="editButton"
                     onclick="openModal('projectModal','update')">Edit</button>
-                <button class="btn btn-primary text-light  shadow-sm" id="createButton"
-                    onclick="openModal('projectModal','create')">Create</button>
+
             </div>
-        </div>
+        </div> --}}
     </div>
 
     <x-project.project-modal />
-    <x-delete-confirmation-modal />
+    {{-- <x-delete-confirmation-modal /> --}}
     <x-delete-modal type='user' />
     <x-user.user-create-modal />
 
@@ -70,6 +72,6 @@
     window.sales_projects = @json($sales_projects);
     console.log(window.rental_projects);
 </script>
-<script src="{{ asset('js/project-admin.js') }}" async defer></script>
+<script src="{{ asset('js/project-admin-test.js') }}" async defer></script>
 
 </html>

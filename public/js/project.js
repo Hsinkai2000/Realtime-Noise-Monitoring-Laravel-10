@@ -342,7 +342,16 @@ function set_contact_table() {
         data: window.contacts,
         placeholder: "No linked Contacts",
         selectable: 1,
+        responsiveLayout: "collapse",
         columns: [
+            {
+                formatter: "responsiveCollapse",
+                width: 30,
+                minWidth: 30,
+                hozAlign: "center",
+                resizable: false,
+                headerSort: false,
+            },
             {
                 formatter: "rowSelection",
                 titleFormatter: "rowSelection",
@@ -408,6 +417,14 @@ function fetch_contact_data() {
 function manage_measurement_point_columns() {
     if (window.admin) {
         return [
+            {
+                formatter: "responsiveCollapse",
+                width: 30,
+                minWidth: 30,
+                hozAlign: "center",
+                resizable: false,
+                headerSort: false,
+            },
             {
                 formatter: "rowSelection",
                 titleFormatter: "rowSelection",
@@ -475,6 +492,14 @@ function manage_measurement_point_columns() {
     } else {
         return [
             {
+                formatter: "responsiveCollapse",
+                width: 30,
+                minWidth: 30,
+                hozAlign: "center",
+                resizable: false,
+                headerSort: false,
+            },
+            {
                 formatter: "rowSelection",
                 titleFormatter: "rowSelection",
                 hozAlign: "center",
@@ -520,11 +545,11 @@ function set_measurement_point_table(measurementPoint_data) {
         layout: "fitColumns",
         data: measurementPoint_data,
         placeholder: "No Linked Measurement Points",
-        paginationSize: 20,
+        paginationSize: 8,
         pagination: "local",
         paginationCounter: "rows",
-        paginationElement: document.getElementById("measurement_point_pages"),
         selectable: 1,
+        responsiveLayout: "collapse",
         columns: manage_measurement_point_columns(),
     });
     measurementPointTable.on("rowClick", function (e, row) {

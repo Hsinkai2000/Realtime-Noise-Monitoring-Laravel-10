@@ -8,10 +8,11 @@
 }
 
 #example-table {
-    height: 55vh;
+    height: 75vh;
     background-color: $light;
     border-color: $primary;
     padding: 10px;
+    font-size: 1em;
     border-radius: 10px 10px 10px 10px;
     .tabulator-header {
         background-color: $light;
@@ -32,7 +33,7 @@
             .tabulator-row {
                 background-color: $light;
                 margin-bottom: 2px;
-                padding: 20px 0;
+                padding: 10px 0;
                 &:hover {
                     background-color: $hover;
                 }
@@ -45,10 +46,36 @@
                     background-color: $white;
                     &:hover {
                         background-color: $hover;
+
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .tabulator-responsive-collapse {
+                        table tr {
+                            background-color: $light;
+                        }
+                    }
+
+                    &:hover {
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    .tabulator-footer-contents {
+        background-color: $light;
     }
 }
 
@@ -82,6 +109,6 @@
 
 @media only screen and (min-width: 768px) {
     #example-table {
-        height: 65vh;
+        height: 78vh;
     }
 }

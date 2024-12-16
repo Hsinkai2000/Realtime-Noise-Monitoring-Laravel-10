@@ -12,9 +12,17 @@ function set_tables(data) {
         pagination: "local",
         paginationSize: 20,
         paginationCounter: "rows",
-        paginationElement: document.getElementById("concentrator_pages"),
         selectable: 1,
+        responsiveLayout: "collapse",
         columns: [
+            {
+                formatter: "responsiveCollapse",
+                width: 30,
+                minWidth: 30,
+                hozAlign: "center",
+                resizable: false,
+                headerSort: false,
+            },
             {
                 formatter: "rowSelection",
                 titleFormatter: "rowSelection",

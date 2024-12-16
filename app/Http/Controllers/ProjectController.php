@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller
@@ -28,23 +30,30 @@ class ProjectController extends Controller
 
     public function create(Request $request)
     {
-        try {
-            $project_params = $request->only((new Project)->getFillable());
-            debug_log('project params', [$project_params]);
-            try {
-                $project_params['created_at'] = now();
-                $project_params['updated_at'] = now();
-                $project_id = Project::insertGetId($project_params);
-                $rental_projects  = Project::where('project_type', 'rental')->get();
-                $sales_projects  = Project::where('project_type', 'sales')->get();
-                $sales_projects = $this->format_projects($sales_projects);
-                return render_ok(['project_id' => $project_id, 'rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
-            } catch (Exception $e) {
-                return render_unprocessable_entity('PJO Number already in use');
-            }
-        } catch (Exception $e) {
-            return render_error($e);
-        }
+        $this->handleCreateValidation($request);
+        $project_params = $request->only((new Project)->getFillable());
+        $project_id = Project::insertGetId($project_params);
+
+        // $users = json_decode($request->input('users'), true);
+        // if (is_array($users)) {
+        //     foreach ($users as $user) {
+        //         $user_params = [
+        //             'username' => $user['username'],
+        //             'password' => Hash::make($user['password']),
+        //             'project_id' => $project_id
+        //         ];
+
+        //         $newUser = new User($user_params);
+        //         $newUser->save();
+        //     }
+        // }
+
+
+        $rental_projects  = Project::where('project_type', 'rental')->get();
+        $sales_projects  = Project::where('project_type', 'sales')->get();
+        $sales_projects = $this->format_projects($sales_projects);
+
+        return render_ok(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects, 'project_id' => $project_id]);
     }
 
     private function format_projects($projects)
@@ -164,5 +173,15 @@ class ProjectController extends Controller
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }
+    }
+
+    public function handleCreateValidation(Request $request)
+    {
+        return $request->validate([
+            'job_number' => 'required|unique:App\Models\Project|string|max:255',
+            'client_name' => 'required|string|max:255',
+            'project_type' => 'required|string|max:255',
+            'jobsite_location' => 'required|string|max:255',
+        ]);
     }
 }

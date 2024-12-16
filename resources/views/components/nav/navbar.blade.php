@@ -5,7 +5,7 @@
         href="{{ route('project.show', $projectId) }}" @endif><img
             class="me-2" id="geoscan_logo" style="width: 50px;" src="{{ asset('image/geoscanlogo_yellow.png') }}"
             alt="geoscan-logo"></img>Geoscan NMS</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+    <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>

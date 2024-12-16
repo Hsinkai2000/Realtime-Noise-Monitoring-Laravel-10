@@ -19,9 +19,9 @@
   text-overflow: clip;
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row {
-  color: #2b1710;
   background-color: #fdfcfa;
   margin-bottom: 2px;
+  padding: 10px 0;
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
   background-color: #e9e2dc;
@@ -34,6 +34,18 @@
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
   background-color: #e9e2dc;
+}
+#contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd) .tabulator-responsive-collapse table tr {
+  background-color: #fdfcfa;
+}
+#contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#contacts_table .tabulator-footer-contents {
+  background-color: #fdfcfa;
 }
 
 #measurement_point_table {
@@ -58,8 +70,9 @@
   text-overflow: clip;
 }
 #measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row {
-  color: #2b1710;
+  background-color: #fdfcfa;
   margin-bottom: 2px;
+  padding: 10px 0;
 }
 #measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
   background-color: #e9e2dc;
@@ -72,6 +85,18 @@
 }
 #measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
   background-color: #e9e2dc;
+}
+#measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd) .tabulator-responsive-collapse table tr {
+  background-color: #fdfcfa;
+}
+#measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#measurement_point_table .tabulator-footer-contents {
+  background-color: #fdfcfa;
 }
 
 /* Basic styling for the list container */
