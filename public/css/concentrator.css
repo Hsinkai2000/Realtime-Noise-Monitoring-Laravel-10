@@ -1,6 +1,6 @@
 #concentrator_table {
   margin-bottom: 20px;
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
   border-top: none;
   border-color: #dee2e6;
   height: 55vh;
@@ -8,7 +8,7 @@
   border-radius: 0 10px 10px 10px;
 }
 #concentrator_table .tabulator-header {
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
   color: #2b1710;
   border-bottom: 3px solid #bd6747;
   margin-bottom: 5px;
@@ -16,7 +16,7 @@
 #concentrator_table .tabulator-header .tabulator-col,
 #concentrator_table .tabulator-header .tabulator-row-handle {
   white-space: normal;
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
 }
 #concentrator_table .tabulator-header .tabulator-col .tabulator-col-content,
 #concentrator_table .tabulator-header .tabulator-row-handle .tabulator-col-content {
@@ -24,18 +24,18 @@
 }
 #concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row {
   color: #2b1710;
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
   margin-bottom: 2px;
 }
 #concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
-  background-color: #e5dbd4;
+  background-color: #e9e2dc;
 }
 #concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
   white-space: normal;
 }
 #concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
-  background-color: #f7f5f1;
+  background-color: #f5f1ef;
 }
 #concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
-  background-color: #e5dbd4;
+  background-color: #e9e2dc;
 }

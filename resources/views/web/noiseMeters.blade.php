@@ -35,12 +35,12 @@
 <body>
     <x-nav.navbar type='noise_meter' />
 
-    <div class="container-fluid pt-3 p-5">
+    <div class="container-fluid p-3 p-md-4">
 
         <div class="mb-3">
-            <h3 class=" text-dark d-inline me-4">Noise Meters</h3>
-
+            <a href="#" class="href h3 text-decoration-none">Noise Meters</a>
         </div>
+
         <div class="mb-3">
 
             <div id='noise_meter_table'></div>

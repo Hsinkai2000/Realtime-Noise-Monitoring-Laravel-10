@@ -33,10 +33,10 @@
 <body>
     <x-nav.navbar type='concentrator' />
 
-    <div class="container-fluid pt-3 p-5">
+    <div class="container-fluid p-3 p-md-4">
 
         <div class="mb-3">
-            <h3 class=" text-dark d-inline me-4">Concentrators</h3>
+            <a href="#" class="href h3 text-decoration-none">Concentrators</a>
         </div>
         <div class="mb-3">
 

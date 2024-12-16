@@ -21,11 +21,11 @@
 <body>
     <x-nav.navbar />
 
-    <div class="container-fluid p-sm-5 pt-sm-3">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <span class="text-dark h5">Projects</span>
+    <div class="container-fluid p-3 p-md-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb mb-0 d-flex align-items-center">
+                <li class="breadcrumb-item d-flex align-items-center"><a href="#"
+                        class="href h3 text-decoration-none">Projects</a>
                 </li>
             </ol>
         </nav>

@@ -36,17 +36,17 @@
 <body>
     <x-nav.navbar projectId="{{ $measurementPoint->project->id }}" />
 
-    <div class="container-fluid pt-3 p-5">
-        <h3 class="text-dark">Measurement Point</h3>
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
+    <div class="container-fluid p-3 p-md-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb mb-0 d-flex align-items-center">
                 @if (Auth::user()->isAdmin())
                     <li class="breadcrumb-item"><a href="{{ route('project.admin') }}">Projects</a></li>
                 @endif
                 <li class="breadcrumb-item"><a
                         href="{{ route('project.show', $measurementPoint->project->id) }}">{{ $measurementPoint->project->job_number }}</a>
                 </li>
-                <li class="breadcrumb-item"><a href="#">{{ $measurementPoint->point_name }}</a></li>
+                <li class="breadcrumb-item d-flex align-items-center"><a href="#"
+                        class="href h3 text-decoration-none">{{ $measurementPoint->point_name }}</a></li>
             </ol>
         </nav>
         <div class="mb-3">

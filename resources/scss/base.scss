@@ -2,8 +2,12 @@
 // Include Bootstrap after defining custom variables
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
-.table {
+table {
     background-color: $white !important;
+
+    td {
+        padding: 10px 0;
+    }
 }
 
 table .w-5 {

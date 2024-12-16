@@ -35,53 +35,55 @@
 
     <x-nav.navbar projectId="{{ $project['id'] }}" />
 
-    <div class="container-fluid pt-3 p-5">
-        <h3 class="text-dark">Project</h3>
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
+    <div class="container-fluid p-3 p-md-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb mb-0 d-flex align-items-center">
                 @if (Auth::user()->isAdmin())
                     <li class="breadcrumb-item"><a href="{{ route('project.admin') }}">Projects</a></li>
                 @endif
-                <li class="breadcrumb-item"><a href="#">{{ $project['job_number'] }}</a></li>
+                <li class="breadcrumb-item d-flex align-items-center"><a href="#"
+                        class="href h3 text-decoration-none">{{ $project['job_number'] }}</a>
+                </li>
             </ol>
         </nav>
         <div class="mb-3">
-            <h5 class="d-inline me-4">Project Information</h5>
+            <h3 class="d-inline me-4">Project Information</h3>
         </div>
+        <hr>
         <table class="table">
             <tr>
-                <th scope='row'>PJO Number</th>
+                <td scope='row'>PJO Number: </td>
                 <td scope='row'>{{ $project['job_number'] }}</td>
             </tr>
             <tr>
-                <th scope='row'>Client</th>
+                <td scope='row'>Client: </td>
                 <td scope='row'>{{ $project['client_name'] }}</td>
             </tr>
             <tr>
-                <th scope='row'>Location</th>
+                <td scope='row'>Location: </td>
                 <td scope='row'>{{ $project['jobsite_location'] }}</td>
             </tr>
             <tr>
-                <th scope='row'>Project Description</th>
+                <td scope='row'>Project Description: </td>
                 <td scope='row'>{{ $project['project_description'] }}</td>
             </tr>
             <tr>
-                <th scope='row'>BCA Reference Number</th>
+                <td scope='row'>BCA Reference Number: </td>
                 <td scope='row'>{{ $project['bca_reference_number'] }}</td>
             </tr>
             <tr>
-                <th scope='row'>No. of Contacts</th>
+                <td scope='row'>No. of Contacts: </td>
                 <td scope='row'>{{ $project['sms_count'] }}</td>
             </tr>
             <tr>
-                <th scope='row'>Status</th>
+                <td scope='row'>Status: </td>
                 <td scope='row'>{{ $project['status'] }}</td>
             </tr>
         </table>
 
-        <div class="p-2 mb-3 rounded">
+        <div class="mb-3">
             <div>
-                <h5 class="d-inline">Contacts | </h5>
+                <h3 class="d-inline">Contacts | </h3>
                 <h6 id="contact_counter" class="d-inline @if (count($project->contact) == $project['sms_count']) text-danger  s @endif">
                     {{ count($project->contact) }} / {{ $project['sms_count'] }}</h6>
             </div>
@@ -93,10 +95,13 @@
                 <button class="btn btn-light text-danger border shadow-sm" id="deleteContactButton"
                     onclick='openModal("deleteConfirmationModal","contact")'>Delete</button>
             </div>
+            <hr>
             <div class="shadow" id="contacts_table"></div>
         </div>
-        <div class="">
-            <h5>Measurement Points Information</h5>
+
+        <div class="mb-3">
+            <h3>Measurement Points Information</h3>
+            <hr>
             <div id="measurement_point_table"></div>
 
             <div class="d-flex flex-row mt-3 justify-content-between">

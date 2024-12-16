@@ -1,5 +1,5 @@
 #contacts_table {
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
   border-color: #bd6747;
   padding: 10px;
   border-radius: 10px 10px 10px 10px;
@@ -12,7 +12,7 @@
 #contacts_table .tabulator-header .tabulator-col,
 #contacts_table .tabulator-header .tabulator-row-handle {
   white-space: normal;
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
 }
 #contacts_table .tabulator-header .tabulator-col .tabulator-col-content,
 #contacts_table .tabulator-header .tabulator-row-handle .tabulator-col-content {
@@ -20,24 +20,24 @@
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row {
   color: #2b1710;
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
   margin-bottom: 2px;
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
-  background-color: #e5dbd4;
+  background-color: #e9e2dc;
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
   white-space: normal;
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
-  background-color: #f7f5f1;
+  background-color: #f5f1ef;
 }
 #contacts_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
-  background-color: #e5dbd4;
+  background-color: #e9e2dc;
 }
 
 #measurement_point_table {
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
   height: 33vh;
   border-color: #bd6747;
   padding: 10px;
@@ -51,7 +51,7 @@
 #measurement_point_table .tabulator-header .tabulator-col,
 #measurement_point_table .tabulator-header .tabulator-row-handle {
   white-space: normal;
-  background-color: #fffdfc;
+  background-color: #fdfcfa;
 }
 #measurement_point_table .tabulator-header .tabulator-col .tabulator-col-content,
 #measurement_point_table .tabulator-header .tabulator-row-handle .tabulator-col-content {
@@ -62,16 +62,16 @@
   margin-bottom: 2px;
 }
 #measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
-  background-color: #e5dbd4;
+  background-color: #e9e2dc;
 }
 #measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
   white-space: normal;
 }
 #measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
-  background-color: #f7f5f1;
+  background-color: #f5f1ef;
 }
 #measurement_point_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
-  background-color: #e5dbd4;
+  background-color: #e9e2dc;
 }
 
 /* Basic styling for the list container */
@@ -92,7 +92,7 @@
 
 /* Styling for the selected item */
 .list-item.selected {
-  background-color: #e5dbd4;
+  background-color: #e9e2dc;
 }
 
 .modal:nth-of-type(even) {
