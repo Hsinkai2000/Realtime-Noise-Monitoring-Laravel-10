@@ -150,17 +150,19 @@
         const usernameField = document.getElementById('username');
         const passwordField = document.getElementById('password');
         var projectModal = document.getElementById('projectModal');
-
+        window.isSwitchingModal = false;
 
         projectModal.addEventListener('hidden.bs.modal', function(event) {
-            window.userList = [];
-            var form = document.getElementById('projectForm');
-            form.reset();
+            if (!window.isSwitchingModal) {
+                window.userList = [];
+                var form = document.getElementById('projectForm');
+                form.reset();
+                console.log('form resetted');
 
-
-            var errorMessagesDiv = document.getElementById('error-messages');
-            if (errorMessagesDiv) {
-                errorMessagesDiv.innerHTML = '';
+                var errorMessagesDiv = document.getElementById('error-messages');
+                if (errorMessagesDiv) {
+                    errorMessagesDiv.innerHTML = '';
+                }
             }
         });
         // Function to add a new user to the list
@@ -193,8 +195,9 @@
                     removeBtn.textContent = 'Remove';
 
                     // Add click event to remove the user
-                    removeBtn.addEventListener('click', () => {
-                        li.remove();
+                    removeBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        openSecondModal('projectModal', 'deleteModal', li);
                     });
 
                     li.appendChild(removeBtn);

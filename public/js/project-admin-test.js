@@ -176,36 +176,6 @@ function toggleEndUserName() {
         endUserNameDiv.style.display = "flex";
     }
 }
-function openSecondModal(initialModal, newModal) {
-    var firstModalEl = document.getElementById(initialModal);
-    var firstModal = bootstrap.Modal.getInstance(firstModalEl);
-
-    firstModal.hide();
-
-    firstModalEl.addEventListener(
-        "hidden.bs.modal",
-        function () {
-            var secondModal = new bootstrap.Modal(
-                document.getElementById(newModal)
-            );
-
-            if (newModal == "userCreateModal") {
-                document.getElementById("inputUsername").value = "";
-                document.getElementById("inputPassword").value = "";
-            }
-            secondModal.show();
-
-            document.getElementById(newModal).addEventListener(
-                "hidden.bs.modal",
-                function () {
-                    firstModal.show();
-                },
-                { once: true }
-            );
-        },
-        { once: true }
-    );
-}
 
 function resetTable(json) {
     window.rental_projects = json.rental_projects;
@@ -276,8 +246,76 @@ function display_errors(errors) {
     }
 }
 
+function openSecondModal(initialModal, newModal, li) {
+    var firstModalEl = document.getElementById(initialModal);
+    var firstModal = bootstrap.Modal.getInstance(firstModalEl);
+    window.isSwitchingModal = true;
+    firstModal.hide();
+
+    firstModalEl.addEventListener(
+        "hidden.bs.modal",
+        function () {
+            var secondModal = new bootstrap.Modal(
+                document.getElementById(newModal)
+            );
+
+            secondModal.show();
+
+            document
+                .getElementById("deleteConfirmButton")
+                .addEventListener("click", function () {
+                    li.remove();
+                    secondModal.hide();
+                });
+
+            document.getElementById(newModal).addEventListener(
+                "hidden.bs.modal",
+                function () {
+                    window.isSwitchingModal = false;
+                    firstModal.show();
+                },
+                { once: true }
+            );
+        },
+        { once: true }
+    );
+}
+
+function deleteUser(event) {
+    if (event) {
+        event.preventDefault();
+    }
+
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
+    fetch(`${baseUri}/users/${inputUserId}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            populateUser("userselectList", inputprojectId);
+            closeModal("deleteModal");
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
 window.toggleEndUserName = toggleEndUserName;
 window.openSecondModal = openSecondModal;
 window.create_project = create_project;
+
 settable(window.rental_projects);
 toggleEndUserName();

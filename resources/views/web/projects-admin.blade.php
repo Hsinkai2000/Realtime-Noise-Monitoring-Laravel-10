@@ -59,9 +59,9 @@
         </div> --}}
     </div>
 
+    <x-delete-modal type='user' />
     <x-project.project-modal />
     {{-- <x-delete-confirmation-modal /> --}}
-    <x-delete-modal type='user' />
     <x-user.user-create-modal />
 
 
