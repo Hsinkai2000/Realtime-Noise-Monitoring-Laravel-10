@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Geoscan | Main</title>
+    <title>Geoscan | {{ $project->job_number }}</title>
 
     <!-- Include jQuery from CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -34,7 +34,6 @@
 <body>
 
     <x-nav.navbar projectId="{{ $project['id'] }}" />
-
     <div class="container-fluid p-3 p-md-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb mb-0 d-flex align-items-center">
@@ -46,40 +45,79 @@
                 </li>
             </ol>
         </nav>
-        <div class="mb-3">
-            <h3 class="d-inline me-4">Project Information</h3>
+        <div class="d-flex justify-content-between align-items-center heading-group mb-3">
+            <div class="left-group d-flex align-items-center">
+                <h3 class="mb-0 me-2">Project Information</h3>
+                <button type="button" id="edit-button" class="d-inline btn btn-dark text-light shadow-sm"
+                    data-bs-toggle="modal" data-bs-target="#projectModal">Edit</button>
+            </div>
+
+            <div class="right-groups d-flex align-items-center">
+                <button id="delete-data-button" class="btn btn-light text-danger border shadow-sm" type="submit">Delete
+                    Project</button>
+            </div>
         </div>
         <hr>
-        <table class="table">
-            <tr>
-                <td scope='row'>PJO Number: </td>
-                <td scope='row'>{{ $project['job_number'] }}</td>
-            </tr>
-            <tr>
-                <td scope='row'>Client: </td>
-                <td scope='row'>{{ $project['client_name'] }}</td>
-            </tr>
-            <tr>
-                <td scope='row'>Location: </td>
-                <td scope='row'>{{ $project['jobsite_location'] }}</td>
-            </tr>
-            <tr>
-                <td scope='row'>Project Description: </td>
-                <td scope='row'>{{ $project['project_description'] }}</td>
-            </tr>
-            <tr>
-                <td scope='row'>BCA Reference Number: </td>
-                <td scope='row'>{{ $project['bca_reference_number'] }}</td>
-            </tr>
-            <tr>
-                <td scope='row'>No. of Contacts: </td>
-                <td scope='row'>{{ $project['sms_count'] }}</td>
-            </tr>
-            <tr>
-                <td scope='row'>Status: </td>
-                <td scope='row'>{{ $project['status'] }}</td>
-            </tr>
-        </table>
+        <div class="project-information">
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    PJO Number:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $project->job_number }}
+                </div>
+            </div>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Client:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $project->client_name }}
+                </div>
+            </div>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Location:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $project->jobsite_location }}
+                </div>
+            </div>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Project Description:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $project->project_description }}
+                </div>
+            </div>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    BCA Reference Number:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $project->bca_reference_number }}
+                </div>
+            </div>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    No. of Contacts:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $project->sms_count }}
+                </div>
+            </div>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Status:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $project->status }}
+                </div>
+            </div>
+        </div>
+
+
 
         <div class="mb-3">
             <div>
@@ -121,17 +159,18 @@
             </div>
         </div>
 
+        <x-delete-modal type='user' />
+        <x-project.project-modal :project="$project" />
         <x-confirmation-modal />
         <x-contacts.contact-modal />
         <x-delete-confirmation-modal />
-        <x-delete-modal type='user' />
         <x-user.user-create-modal />
         <x-measurementPoint.measurement-point-modal :project="$project" />
         <input hidden id="inputprojectId" value="{{ $project['id'] }}">
     </div>
 
 
-    <script src="{{ asset('js/project.js') }}" async defer></script>
+    <script src="{{ asset('js/project-test.js') }}" async defer></script>
 
 </body>
 
@@ -149,6 +188,7 @@
     window.project = @json($project);
     window.contacts = @json($project->contact);
     window.admin = @json(Auth::user()->isAdmin());
+    console.log(window.project);
 </script>
 
 </html>

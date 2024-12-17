@@ -6,15 +6,18 @@
                 <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
                 <form id='projectForm' method="POST">
                     @csrf
+
                     <div>
                         <div class="mb-3 row">
                             <label for="job_number" class="col-md-3 col-sm-12 text-align-center col-form-label">Job
                                 Number</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputJobNumber" name="job_number"
-                                    value="{{ old('job_number', '') }}">
+                                    value="{{ old('job_number', $project->job_number ?? '') }}">
+
                             </div>
                         </div>
 
@@ -24,7 +27,7 @@
                             </label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputClientName" name="client_name"
-                                    value="{{ old('client_name', '') }}">
+                                    value="{{ old('client_name', $project->client_name ?? '') }}">
                             </div>
                         </div>
 
@@ -33,7 +36,7 @@
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Project
                                 Description</label>
                             <div class="col-sm-8 align-content-center">
-                                <textarea name='project_description' type="text" class="form-control" id="inputProjectDescription">{{ old('project_description', '') }}</textarea>
+                                <textarea name='project_description' type="text" class="form-control" id="inputProjectDescription">{{ old('project_description', $project->project_description ?? '') }}</textarea>
                             </div>
                         </div>
 
@@ -44,7 +47,8 @@
                                 Location</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputJobsiteLocation"
-                                    name='jobsite_location' value="{{ old('jobsite_location', '') }}">
+                                    name='jobsite_location'
+                                    value="{{ old('jobsite_location', $project->jobsite_location ?? '') }}">
                             </div>
                         </div>
 
@@ -55,7 +59,8 @@
                                 Number</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputBcaReferenceNumber"
-                                    name='bca_reference_number' value="{{ old('bca_reference_number', '') }}">
+                                    name='bca_reference_number'
+                                    value="{{ old('bca_reference_number', $project->bca_reference_number ?? '') }}">
                             </div>
                         </div>
 
@@ -64,7 +69,8 @@
                                 Contacts</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="number" class="form-control" id="inputSmsCount" name='sms_count'
-                                    min="0" max="20" value="{{ old('sms_count', '0') }}">
+                                    min="0" max="20"
+                                    value="{{ old('sms_count', $project->sms_count ?? '0') }}">
                             </div>
                         </div>
 
@@ -88,7 +94,7 @@
                                 User Name</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputEndUserName" name='end_user_name'
-                                    value="{{ old('end_user_name', '') }}">
+                                    value="{{ old('end_user_name', $project->end_user_name ?? '') }}">
                             </div>
                         </div>
 
@@ -115,7 +121,8 @@
                                                 placeholder="Password">
                                         </div>
                                     </div>
-                                    <button type="button" id="addUserBtn" class="btn btn-primary btn-sm mt-3">Add
+                                    <button type="button" id="addUserBtn" class="btn btn-primary btn-sm mt-3"
+                                        onclick="addUserClicked()">Add
                                         User</button>
 
                                 </form>
@@ -134,84 +141,10 @@
                             <button type="button" class="btn btn-primary bg-white text-primary"
                                 data-bs-dismiss="modal">Discard</button>
                             <button type='button' class="btn btn-primary text-white"
-                                onclick="create_project()">Submit</button>
+                                onclick="submit_project()">Submit</button>
                         </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        window.userList = [];
-        const curruserList = document.getElementById('curruserList');
-        const addUserBtn = document.getElementById('addUserBtn');
-        const usernameField = document.getElementById('username');
-        const passwordField = document.getElementById('password');
-        var projectModal = document.getElementById('projectModal');
-        window.isSwitchingModal = false;
-
-        projectModal.addEventListener('hidden.bs.modal', function(event) {
-            if (!window.isSwitchingModal) {
-                window.userList = [];
-                var form = document.getElementById('projectForm');
-                form.reset();
-                console.log('form resetted');
-
-                var errorMessagesDiv = document.getElementById('error-messages');
-                if (errorMessagesDiv) {
-                    errorMessagesDiv.innerHTML = '';
-                }
-            }
-        });
-        // Function to add a new user to the list
-        addUserBtn.addEventListener('click', () => {
-            const username = usernameField.value.trim();
-            const password = passwordField.value.trim();
-            if (!username || !password) {
-                alert('Both username and password are required.');
-                return;
-            }
-
-            fetch(`${baseUri}/user/${username}`, {
-                method: "GET",
-            }).then((response) => {
-                if (response.status == 200) {
-                    window.userList.push({
-                        username: username,
-                        password: password
-                    });
-
-                    // Create a new list item for the user
-                    const li = document.createElement('li');
-                    li.className =
-                        'list-group-item d-flex justify-content-between align-items-center';
-                    li.textContent = username;
-
-                    // Create a remove button
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'btn btn-danger btn-sm';
-                    removeBtn.textContent = 'Remove';
-
-                    // Add click event to remove the user
-                    removeBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        openSecondModal('projectModal', 'deleteModal', li);
-                    });
-
-                    li.appendChild(removeBtn);
-                    curruserList.appendChild(li);
-
-                    // Clear input fields
-                    usernameField.value = '';
-                    passwordField.value = '';
-                } else {
-                    alert('username is already taken');
-                    return;
-                }
-            })
-
-        });
-    });
-</script>

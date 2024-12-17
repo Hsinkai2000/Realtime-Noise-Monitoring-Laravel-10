@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Validation\Rule;
 use App\Models\Project;
 use Exception;
 use App\Models\User;
@@ -24,30 +25,16 @@ class ProjectController extends Controller
     public function show_project($id)
     {
         debug_log($id);
-        $project = Project::find($id);
+        $project = Project::with('user')->find($id);
         return view('web.project', ['project' => $project]);
     }
 
     public function create(Request $request)
     {
-        $this->handleCreateValidation($request);
+        debug_log('imincreate');
+        $this->handleProjectValidation($request);
         $project_params = $request->only((new Project)->getFillable());
         $project_id = Project::insertGetId($project_params);
-
-        // $users = json_decode($request->input('users'), true);
-        // if (is_array($users)) {
-        //     foreach ($users as $user) {
-        //         $user_params = [
-        //             'username' => $user['username'],
-        //             'password' => Hash::make($user['password']),
-        //             'project_id' => $project_id
-        //         ];
-
-        //         $newUser = new User($user_params);
-        //         $newUser->save();
-        //     }
-        // }
-
 
         $rental_projects  = Project::where('project_type', 'rental')->get();
         $sales_projects  = Project::where('project_type', 'sales')->get();
@@ -129,28 +116,27 @@ class ProjectController extends Controller
 
     public function update(Request $request)
     {
-        debug_log('in update');
-        try {
-            $id = $request->route('id');
-            $project_params = $request->only((new Project)->getFillable());
+        debug_log('hello im in update');
+        $this->handleProjectValidation($request);
+        $id = $request->route('id');
+        debug_log($id);
+        $project_params = $request->only((new Project)->getFillable());
 
-            debug_log('inupdate', [$project_params]);
-            $project = Project::find($id);
-            if (!$project) {
-                return render_unprocessable_entity("Unable to find project with id " . $id);
-            }
-
-            if (!$project->update($project_params)) {
-                throw new Exception("Unable to update project");
-            }
-
-            $rental_projects  = Project::where('project_type', 'rental')->get();
-            $sales_projects  = Project::where('project_type', 'sales')->get();
-            $sales_projects = $this->format_projects($sales_projects);
-            return render_ok(["project" => $project, 'rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
-        } catch (Exception $e) {
-            render_error($e->getMessage());
+        debug_log('inupdate', [$project_params]);
+        $project = Project::find($id);
+        if (!$project) {
+            return render_unprocessable_entity("Unable to find project with id " . $id);
         }
+
+        if (!$project->update($project_params)) {
+            throw new Exception("Unable to update project");
+        }
+
+        $rental_projects  = Project::where('project_type', 'rental')->get();
+        $sales_projects  = Project::where('project_type', 'sales')->get();
+        $sales_projects = $this->format_projects($sales_projects);
+
+        return render_ok(["project" => $project, 'rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
     }
 
     public function delete(Request $request)
@@ -175,10 +161,15 @@ class ProjectController extends Controller
         }
     }
 
-    public function handleCreateValidation(Request $request)
+    public function handleProjectValidation(Request $request)
     {
         return $request->validate([
-            'job_number' => 'required|unique:App\Models\Project|string|max:255',
+            'job_number' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('projects')->ignore($request->id),
+            ],
             'client_name' => 'required|string|max:255',
             'project_type' => 'required|string|max:255',
             'jobsite_location' => 'required|string|max:255',

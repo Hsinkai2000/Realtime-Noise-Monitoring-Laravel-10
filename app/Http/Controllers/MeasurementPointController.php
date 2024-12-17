@@ -105,7 +105,7 @@ class MeasurementPointController extends Controller
                 return $data;
             });
 
-            return render_ok(['measurement_point' => $data]);
+            return response()->json($data, 200);
         } catch (Exception $e) {
             return render_error($e);
         }

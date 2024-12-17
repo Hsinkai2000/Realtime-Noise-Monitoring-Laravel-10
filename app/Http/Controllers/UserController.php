@@ -10,17 +10,35 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public function create(Request $request)
+    public function patch_users(Request $request)
     {
         Log::info("message in user");
         try {
-            $user_params = $request->json()->all();
-            debug_log('userparams: ', [$user_params]);
-            $user_params['password'] = Hash::make($user_params['password']);
+            $params = $request->json()->all();
+            $user_params = $params['users'];
+            $project_id = $params['project_id'];
+            $original_users = User::where('project_id', $project_id)->get();
 
-            $user_id = User::insertGetId($user_params);
-            $user = User::find($user_id);
-            return render_ok(["user" => $user]);
+            $original_usernames = $original_users->pluck('username')->toArray();
+            $new_usernames = array_column($user_params, 'username');
+            $removed_usernames = array_diff($original_usernames, $new_usernames);
+
+            if (!empty($removed_usernames)) {
+                User::whereIn('username', $removed_usernames)->delete();
+            }
+
+            foreach ($user_params as $user_param) {
+                if (!in_array($user_param['username'], $original_usernames)) {
+                    $new_user = [
+                        'username' => $user_param['username'],
+                        'password' => Hash::make($user_param['password']),
+                        'project_id' => $project_id
+                    ];
+                    User::create($new_user);
+                }
+            }
+
+            return render_ok('users patched');
         } catch (Exception $e) {
             return render_error($e);
         }

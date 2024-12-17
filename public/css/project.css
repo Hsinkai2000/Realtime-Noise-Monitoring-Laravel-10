@@ -50,7 +50,7 @@
 
 #measurement_point_table {
   background-color: #fdfcfa;
-  height: 33vh;
+  height: 80vh;
   border-color: #bd6747;
   padding: 10px;
   border-radius: 10px 10px 10px 10px;
@@ -134,8 +134,8 @@ span {
   cursor: pointer;
 }
 
-@media only screen and (min-width: 768px) {
-  #example-table {
-    height: 65vh;
+@media only screen and (min-width: 992px) {
+  #measurement_point_table {
+    height: 40vh;
   }
 }

@@ -1,8 +1,30 @@
+const curruserList = document.getElementById("curruserList");
+const addUserBtn = document.getElementById("addUserBtn");
+const usernameField = document.getElementById("username");
+const passwordField = document.getElementById("password");
+var projectModal = document.getElementById("projectModal");
+var userList = [];
 var baseUri = `${window.location.protocol}//${window.location.hostname}`;
 if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
 var tab = "rental";
+isSwitchingModal = false;
+
+projectModal.addEventListener("hidden.bs.modal", function (event) {
+    if (!isSwitchingModal) {
+        userList = [];
+        curruserList.innerHTML = "";
+        var form = document.getElementById("projectForm");
+        form.reset();
+        console.log("form resetted");
+
+        var errorMessagesDiv = document.getElementById("error-messages");
+        if (errorMessagesDiv) {
+            errorMessagesDiv.innerHTML = "";
+        }
+    }
+});
 
 function settable(tabledata) {
     if (window.table) {
@@ -193,21 +215,21 @@ function resetTable(json) {
 }
 
 function create_users(projectId, csrfToken) {
-    window.userList.forEach((user) => {
-        user.project_id = projectId;
-        fetch(`${baseUri}/user/`, {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-                Accept: "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-            },
-            body: JSON.stringify(user),
-        });
+    fetch(`${baseUri}/user/`, {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify({
+            project_id: projectId,
+            users: userList,
+        }),
     });
 }
 
-function create_project() {
+function submit_project() {
     const form = document.getElementById("projectForm");
     const csrfToken = document.querySelector('input[name="_token"]').value;
     const formData = new FormData(form);
@@ -249,7 +271,7 @@ function display_errors(errors) {
 function openSecondModal(initialModal, newModal, li) {
     var firstModalEl = document.getElementById(initialModal);
     var firstModal = bootstrap.Modal.getInstance(firstModalEl);
-    window.isSwitchingModal = true;
+    isSwitchingModal = true;
     firstModal.hide();
 
     firstModalEl.addEventListener(
@@ -265,13 +287,21 @@ function openSecondModal(initialModal, newModal, li) {
                 .getElementById("deleteConfirmButton")
                 .addEventListener("click", function () {
                     li.remove();
+                    console.log(li.textContent);
+                    const username = li.textContent
+                        .replace("Remove", "")
+                        .trim();
+                    userList = userList.filter(
+                        (user) => user.username !== username
+                    );
                     secondModal.hide();
+                    console.log(userList);
                 });
 
             document.getElementById(newModal).addEventListener(
                 "hidden.bs.modal",
                 function () {
-                    window.isSwitchingModal = false;
+                    isSwitchingModal = false;
                     firstModal.show();
                 },
                 { once: true }
@@ -281,41 +311,58 @@ function openSecondModal(initialModal, newModal, li) {
     );
 }
 
-function deleteUser(event) {
-    if (event) {
-        event.preventDefault();
+function addUserClicked() {
+    console.log("clicked");
+    const username = usernameField.value.trim();
+    const password = passwordField.value.trim();
+    if (!username || !password) {
+        alert("Both username and password are required.");
+        return;
     }
 
-    var csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
+    fetch(`${baseUri}/user/${username}`, {
+        method: "GET",
+    }).then((response) => {
+        if (response.status == 200) {
+            userList.push({
+                username: username,
+                password: password,
+            });
 
-    fetch(`${baseUri}/users/${inputUserId}`, {
-        method: "DELETE",
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-            Accept: "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-        },
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            populateUser("userselectList", inputprojectId);
-            closeModal("deleteModal");
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+            // Create a new list item for the user
+            const li = document.createElement("li");
+            li.className =
+                "list-group-item d-flex justify-content-between align-items-center";
+            li.textContent = username;
+
+            // Create a remove button
+            const removeBtn = document.createElement("button");
+            removeBtn.className = "btn btn-danger btn-sm";
+            removeBtn.textContent = "Remove";
+
+            // Add click event to remove the user
+            removeBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                openSecondModal("projectModal", "deleteModal", li);
+            });
+
+            li.appendChild(removeBtn);
+            curruserList.appendChild(li);
+
+            // Clear input fields
+            usernameField.value = "";
+            passwordField.value = "";
+        } else {
+            alert("username is already taken");
+            return;
+        }
+    });
 }
 
 window.toggleEndUserName = toggleEndUserName;
 window.openSecondModal = openSecondModal;
-window.create_project = create_project;
+window.submit_project = submit_project;
+window.addUserClicked = addUserClicked;
 
 settable(window.rental_projects);
 toggleEndUserName();
