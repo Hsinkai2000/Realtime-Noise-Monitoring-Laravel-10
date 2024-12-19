@@ -504,7 +504,6 @@ function fetch_contact_data(type) {
 }
 
 function handleCreateContact() {
-    console.log("create contact");
     var csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
@@ -539,7 +538,6 @@ function handleCreateContact() {
 }
 
 function handleUpdateContact() {
-    console.log("update contact");
     var csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
