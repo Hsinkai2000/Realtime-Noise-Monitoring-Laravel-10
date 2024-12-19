@@ -22,7 +22,7 @@ projectModal.addEventListener("hidden.bs.modal", function (event) {
         var form = document.getElementById("projectForm");
         form.reset();
         console.log("form resetted");
-
+        DELETE;
         var errorMessagesDiv = document.getElementById("error-messages");
         if (errorMessagesDiv) {
             errorMessagesDiv.innerHTML = "";
@@ -504,6 +504,7 @@ function fetch_contact_data(type) {
 }
 
 function handleCreateContact() {
+    console.log("create contact");
     var csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
@@ -538,6 +539,7 @@ function handleCreateContact() {
 }
 
 function handleUpdateContact() {
+    console.log("update contact");
     var csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
@@ -576,9 +578,6 @@ function handleContactSubmit() {
 }
 
 function openModal(modalName, type = null) {
-    let deleteType = "project";
-    let contactType = null;
-
     if (modalName === "deleteConfirmationModal") {
         if (type === "contact") {
             document.getElementById("deleteType").innerHTML =
@@ -610,9 +609,9 @@ function handleDelete(e) {
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
     var url =
-        deleteType === "contact"
+        deleteType == "contact"
             ? `${baseUri}/contacts/${window.selectedContactid}`
-            : `${baseUri}/project/admin/`;
+            : `${baseUri}/project/${inputprojectId}`;
 
     fetch(url, {
         method: "DELETE",
