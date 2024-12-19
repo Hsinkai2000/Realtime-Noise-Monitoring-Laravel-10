@@ -1,3 +1,4 @@
+@props(['project' => null])
 <div class="modal fade shadow" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -41,13 +42,17 @@
                                 required>
                         </div>
                     </div>
-                    <input hidden id="inputContactProjectID" name='project_id' />
+                    <input hidden id="inputContactProjectID" name='project_id' value="{{ $project->id }}" />
 
                     <div class="modal-footer">
                         <button class="btn btn-primary bg-white text-primary" data-bs-dismiss="modal">Discard</button>
                         <button class="btn btn-primary text-white" type="button"
                             onclick="handleContactSubmit()">Submit</button>
                     </div>
+
+                    <ul id="error-messagesjs" class="mt-2">
+
+                    </ul>
                 </form>
             </div>
         </div>

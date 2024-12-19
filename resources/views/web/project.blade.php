@@ -6,12 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Geoscan | {{ $project->job_number }}</title>
 
-    <!-- Include jQuery from CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Include Tabulator CSS from CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://unpkg.com/tabulator-tables@5.4.3/dist/css/tabulator.min.css" rel="stylesheet" />
-    <!-- Include Tabulator JS from CDN -->
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.3/dist/js/tabulator.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css"
@@ -26,7 +23,6 @@
     <link href="{{ asset('css/project.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 
-    {{-- @vite(['resources/scss/project.scss', 'resources/js/app.js', 'resources/js/project.js']) --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
@@ -53,7 +49,8 @@
             </div>
 
             <div class="right-groups d-flex align-items-center">
-                <button id="delete-data-button" class="btn btn-light text-danger border shadow-sm" type="submit">Delete
+                <button id="delete-data-button" class="btn btn-light text-danger border shadow-sm" type="button"
+                    onclick='openModal("deleteConfirmationModal","{{ $project->job_number }}" )'>Delete
                     Project</button>
             </div>
         </div>
@@ -125,6 +122,7 @@
                 <h6 id="contact_counter" class="d-inline @if (count($project->contact) == $project['sms_count']) text-danger  s @endif">
                     {{ count($project->contact) }} / {{ $project['sms_count'] }}</h6>
             </div>
+
             <div class="mt-2 mb-3 ">
                 <button class="d-inline btn btn-primary text-light shadow-sm" id="createContactButton"
                     onclick='openModal("contactModal","create")'>Add</button>
@@ -159,14 +157,14 @@
             </div>
         </div>
 
+        <x-contacts.contact-modal :project="$project" />
         <x-delete-modal type='user' />
+        <x-delete-confirmation-modal :project="$project" :type="$project->job_number" />
         <x-project.project-modal :project="$project" />
         <x-confirmation-modal />
-        <x-contacts.contact-modal />
-        <x-delete-confirmation-modal />
         <x-user.user-create-modal />
         <x-measurementPoint.measurement-point-modal :project="$project" />
-        <input hidden id="inputprojectId" value="{{ $project['id'] }}">
+
     </div>
 
 

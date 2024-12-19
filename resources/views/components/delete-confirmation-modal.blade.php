@@ -1,30 +1,48 @@
-<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModal"
-    aria-hidden="true">
+@props(['project' => null])
+<div class="modal fade deleteConfirmationModal" id="deleteConfirmationModal" tabindex="-1"
+    aria-labelledby="deleteConfirmationModal" aria-hidden="true" data-type="{{ $type }}">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="projectDeleteLabel">Are you sure you want to delete this {{ $type }}?
-                </h5>
+            <div class="modal-header bg-secondary">
+                <h3 class="modal-title" id="projectDeleteLabel">Are you sure you want to delete &nbsp;
+                </h3>
+                <h3 class="modal-title" id="deleteType">
+                    {{ $type }}
+                </h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <form id="deleteForm">
+                <form id="deleteConfirmationForm" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('DELETE')
                     <label class="mb-4" for="deleteConfirmation">To Delete, Please enter "DELETE"</label>
                     </br>
-                    <input class="mb-4" id="inputDeleteConfirmation" type="text">
+                    <input class="mb-4" name="confirmation" id="inputDeleteConfirmation" type="text">
                     </br>
+
                     <!-- Cancel button to dismiss the modal -->
                     <button type="button" class="btn btn-primary bg-white text-primary"
                         data-bs-dismiss="modal">Cancel</button>
 
                     <!-- Submit button to delete the project -->
-                    <button onclick="handleDelete(event)" id="deleteButton" type="button"
+                    <button id="deleteButton" onclick="handleDelete(event)" type="button"
                         class="btn btn-primary text-white">Delete</button>
-                    <p id="deleteConfirmationError" class="text-danger" hidden>Delete Confirmation
-                        Failed!</p>
+
+                    <ul id="error-messages-delete" class="mt-2" hidden>
+                        <li>Confirmation code is invalid</li>
+                    </ul>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    deleteConfirmationModal.addEventListener('hidden.bs.modal', function(event) {
+        var form = document.getElementById('deleteConfirmationForm');
+        form.reset();
+        var errorMessages = document.getElementById("error-messages-delete");
+        errorMessages.hidden = true;
+    });
+</script>

@@ -24,14 +24,13 @@ class ProjectController extends Controller
 
     public function show_project($id)
     {
-        debug_log($id);
+        debug_log('in project');
         $project = Project::with('user')->find($id);
         return view('web.project', ['project' => $project]);
     }
 
     public function create(Request $request)
     {
-        debug_log('imincreate');
         $this->handleProjectValidation($request);
         $project_params = $request->only((new Project)->getFillable());
         $project_id = Project::insertGetId($project_params);
@@ -116,13 +115,9 @@ class ProjectController extends Controller
 
     public function update(Request $request)
     {
-        debug_log('hello im in update');
         $this->handleProjectValidation($request);
         $id = $request->route('id');
-        debug_log($id);
         $project_params = $request->only((new Project)->getFillable());
-
-        debug_log('inupdate', [$project_params]);
         $project = Project::find($id);
         if (!$project) {
             return render_unprocessable_entity("Unable to find project with id " . $id);
@@ -141,24 +136,19 @@ class ProjectController extends Controller
 
     public function delete(Request $request)
     {
-        try {
-            debug_log('in delet');
-            $id = $request->route('id');
-            $project = Project::find($id);
-            if (!$project) {
-                return render_unprocessable_entity("Unable to find project with id " . $id);
-            }
-            if (!$project->delete()) {
-                throw new Exception("Unable to delete project");
-            }
-
-            $rental_projects  = Project::where('project_type', 'rental')->get();
-            $sales_projects  = Project::where('project_type', 'sales')->get();
-            $sales_projects = $this->format_projects($sales_projects);
-            return render_ok(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
-        } catch (Exception $e) {
-            return render_error($e->getMessage());
+        $id = $request->route('id');
+        $project = Project::find($id);
+        if (!$project) {
+            return render_unprocessable_entity("Unable to find project with id " . $id);
         }
+        if (!$project->delete()) {
+            throw new Exception("Unable to delete project");
+        }
+
+        $rental_projects  = Project::where('project_type', 'rental')->get();
+        $sales_projects  = Project::where('project_type', 'sales')->get();
+        $sales_projects = $this->format_projects($sales_projects);
+        return render_ok('project successfully deleted');
     }
 
     public function handleProjectValidation(Request $request)

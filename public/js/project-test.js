@@ -3,12 +3,16 @@ const addUserBtn = document.getElementById("addUserBtn");
 const usernameField = document.getElementById("username");
 const passwordField = document.getElementById("password");
 var projectModal = document.getElementById("projectModal");
-
+var contactModal = document.getElementById("contactModal");
+var deleteConfirmationModal = document.getElementById(
+    "deleteConfirmationModal"
+);
+var deleteType = "";
+var contactType = "";
 var baseUri = `${window.location.protocol}//${window.location.hostname}`;
 if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
-var tab = "rental";
 var inputprojectId = window.project.id;
 isSwitchingModal = false;
 
@@ -23,6 +27,17 @@ projectModal.addEventListener("hidden.bs.modal", function (event) {
         if (errorMessagesDiv) {
             errorMessagesDiv.innerHTML = "";
         }
+    }
+});
+
+contactModal.addEventListener("hidden.bs.modal", function (event) {
+    var form = document.getElementById("contact_form");
+    form.reset();
+    console.log("form resetted");
+
+    var errorMessagesDiv = document.getElementById("error-messagesjs");
+    if (errorMessagesDiv) {
+        errorMessagesDiv.innerHTML = "";
     }
 });
 
@@ -153,7 +168,20 @@ function manage_measurement_point_columns() {
 
 function fetchUsers() {}
 
+function check_contact_max() {
+    if (window.contacts.length >= window.project.sms_count) {
+        document.getElementById("createContactButton").disabled = true;
+        document.getElementById("contact_counter").style.color = "#cc2e0e";
+    } else {
+        document.getElementById("createContactButton").disabled = false;
+        document.getElementById("contact_counter").style.color = "#2b1710";
+    }
+}
+
 function set_contact_table() {
+    document.getElementById("contact_counter").textContent =
+        window.contacts.length + " / " + window.project.sms_count;
+    check_contact_max();
     var contactTable = new Tabulator("#contacts_table", {
         layout: "fitColumns",
         data: window.contacts,
@@ -297,7 +325,7 @@ function submit_project() {
         console.log("responded");
         if (response.status == 422) {
             response.json().then((json) => {
-                display_errors(json.errors);
+                display_errors("error-messages", json.errors);
             });
         } else {
             response.json().then((json) => {
@@ -361,8 +389,8 @@ function toggleEndUserName() {
     }
 }
 
-function display_errors(errors) {
-    error_messages = document.getElementById("error-messages");
+function display_errors(element, errors) {
+    error_messages = document.getElementById(element);
     error_messages.innerHTML = "";
     // Loop through errors and display them
     for (const [field, messages] of Object.entries(errors)) {
@@ -455,9 +483,166 @@ function addUserClicked() {
     });
 }
 
+function fetch_contact_data(type) {
+    var inputName = document.getElementById("inputName");
+    var inputDesignation = document.getElementById("inputDesignation");
+    var inputEmail = document.getElementById("inputEmail");
+    var inputPhoneNumber = document.getElementById("inputPhoneNumber");
+    var inputContactProjectID = document.getElementById(
+        "inputContactProjectID"
+    );
+    var form = document.getElementById("contact_form");
+    inputContactProjectID.value = inputprojectId;
+
+    form.reset();
+    if (type == "update") {
+        inputName.value = window.selectedContact.contact_person_name;
+        inputDesignation.value = window.selectedContact.designation;
+        inputEmail.value = window.selectedContact.email;
+        inputPhoneNumber.value = window.selectedContact.phone_number;
+    }
+}
+
+function handleCreateContact() {
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    var form = document.getElementById("contact_form");
+
+    var formData = new FormData(form);
+
+    var formDataJson = {};
+    formData.forEach((value, key) => {
+        formDataJson[key] = value;
+    });
+
+    fetch(`${baseUri}/contacts/`, {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify(formDataJson),
+    }).then((response) => {
+        if (response.status == 422) {
+            response.json().then((json) => {
+                display_errors("error-messagesjs", json.errors);
+            });
+        } else {
+            window.location.reload();
+        }
+    });
+    return false;
+}
+
+function handleUpdateContact() {
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    var form = document.getElementById("contact_form");
+
+    var formData = new FormData(form);
+
+    var formDataJson = {};
+    formData.forEach((value, key) => {
+        formDataJson[key] = value;
+    });
+
+    fetch(`${baseUri}/contacts/${window.selectedContactid}`, {
+        method: "PATCH",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify(formDataJson),
+    }).then((response) => {
+        if (response.status == 422) {
+            response.json().then((json) => {
+                display_errors("error-messagesjs", json.errors);
+            });
+        } else {
+            window.location.reload();
+        }
+    });
+    return false;
+}
+
+function handleContactSubmit() {
+    contactType == "create" ? handleCreateContact() : handleUpdateContact();
+}
+
+function openModal(modalName, type = null) {
+    let deleteType = "project";
+    let contactType = null;
+
+    if (modalName === "deleteConfirmationModal") {
+        if (type === "contact") {
+            document.getElementById("deleteType").innerHTML =
+                window.selectedContact["contact_person_name"];
+            deleteType = "contact";
+        } else {
+            document.getElementById("deleteType").innerHTML = type;
+            deleteType = "project";
+        }
+    } else {
+        contactType = type;
+        fetch_contact_data(contactType);
+    }
+
+    var modal = new bootstrap.Modal(document.getElementById(modalName));
+    modal.toggle();
+}
+
+function handleDelete(e) {
+    e.preventDefault();
+    var input = document.getElementById("inputDeleteConfirmation").value;
+
+    if (input !== "DELETE") {
+        document.getElementById("error-messages-delete").hidden = false;
+        return false;
+    }
+
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    var url =
+        deleteType === "contact"
+            ? `${baseUri}/contacts/${window.selectedContactid}`
+            : `${baseUri}/project/admin/`;
+
+    fetch(url, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+    }).then((response) => {
+        if (response.status === 422) {
+            console.log(response);
+        } else {
+            if (deleteType === "contact") {
+                window.location.reload();
+            } else {
+                window.location.href = `/project/admin/`;
+            }
+        }
+    });
+
+    return true;
+}
+
 window.addUserClicked = addUserClicked;
 window.toggleEndUserName = toggleEndUserName;
 window.submit_project = submit_project;
+window.openModal = openModal;
+window.handleContactSubmit = handleContactSubmit;
+window.handleDelete = handleDelete;
 
 set_contact_table();
 set_measurement_point_table();
