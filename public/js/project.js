@@ -1174,6 +1174,7 @@ window.populate_soundLimits = populate_soundLimits;
 window.toggle_soundLimits = toggle_soundLimits;
 window.handleContactSubmit = handleContactSubmit;
 window.handleConfirmationSubmit = handleConfirmationSubmit;
+
 getProjectId();
 get_measurement_point_data();
 set_contact_table();

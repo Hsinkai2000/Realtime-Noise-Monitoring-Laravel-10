@@ -308,17 +308,17 @@
                             </div>
                         </div>
 
-                        </br>
+                    </div>
 
-
-                        <div class="modal-footer">
-                            <div id="error_message" class="text-danger me-auto"></div>
-                            <button type="button" class="btn btn-primary bg-white text-primary"
-                                data-bs-dismiss="modal">Discard</button>
-                            <button type='button' onclick="handle_measurementpoint_submit()"
-                                class="btn btn-primary text-white">Submit</button>
-                        </div>
                 </form>
+            </div>
+
+            <div class="modal-footer">
+                <div id="error_messagemp" class="text-danger me-auto"></div>
+                <button type="button" class="btn btn-primary bg-white text-primary"
+                    data-bs-dismiss="modal">Discard</button>
+                <button type='button' onclick="handle_measurementpoint_submit()" id="mp_submit_button"
+                    class="btn btn-primary text-white">Submit</button>
             </div>
         </div>
     </div>

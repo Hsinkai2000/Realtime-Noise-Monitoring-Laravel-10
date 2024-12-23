@@ -4,6 +4,7 @@ const usernameField = document.getElementById("username");
 const passwordField = document.getElementById("password");
 var projectModal = document.getElementById("projectModal");
 var contactModal = document.getElementById("contactModal");
+var measurementPointModal = document.getElementById("measurementPointModal");
 var deleteConfirmationModal = document.getElementById(
     "deleteConfirmationModal"
 );
@@ -16,13 +17,68 @@ if (window.location.port) {
 var inputprojectId = window.project.id;
 isSwitchingModal = false;
 
+const valueMap = {
+    Residential: {
+        mon_sat_7am_7pm_leq5min: 90.0,
+        mon_sat_7pm_10pm_leq5min: 70.0,
+        mon_sat_10pm_12am_leq5min: 55.0,
+        mon_sat_12am_7am_leq5min: 55.0,
+        sun_ph_7am_7pm_leq5min: 75.0,
+        sun_ph_7pm_10pm_leq5min: 65.0,
+        sun_ph_10pm_12am_leq5min: 55.0,
+        sun_ph_12am_7am_leq5min: 55.0,
+        mon_sat_7am_7pm_leq12hr: 75.0,
+        mon_sat_7pm_10pm_leq12hr: 65.0,
+        mon_sat_10pm_12am_leq12hr: 55.0,
+        mon_sat_12am_7am_leq12hr: 55.0,
+        sun_ph_7am_7pm_leq12hr: 75.0,
+        sun_ph_7pm_10pm_leq12hr: 140.0,
+        sun_ph_10pm_12am_leq12hr: 140.0,
+        sun_ph_12am_7am_leq12hr: 140.0,
+    },
+    "Hospital/Schools": {
+        mon_sat_7am_7pm_leq5min: 75.0,
+        mon_sat_7pm_10pm_leq5min: 55.0,
+        mon_sat_10pm_12am_leq5min: 55.0,
+        mon_sat_12am_7am_leq5min: 55.0,
+        sun_ph_7am_7pm_leq5min: 75.0,
+        sun_ph_7pm_10pm_leq5min: 55.0,
+        sun_ph_10pm_12am_leq5min: 55.0,
+        sun_ph_12am_7am_leq5min: 55.0,
+        mon_sat_7am_7pm_leq12hr: 60.0,
+        mon_sat_7pm_10pm_leq12hr: 50.0,
+        mon_sat_10pm_12am_leq12hr: 50.0,
+        mon_sat_12am_7am_leq12hr: 50.0,
+        sun_ph_7am_7pm_leq12hr: 60.0,
+        sun_ph_7pm_10pm_leq12hr: 50.0,
+        sun_ph_10pm_12am_leq12hr: 50.0,
+        sun_ph_12am_7am_leq12hr: 50.0,
+    },
+    Others: {
+        mon_sat_7am_7pm_leq5min: 90.0,
+        mon_sat_7pm_10pm_leq5min: 70.0,
+        mon_sat_10pm_12am_leq5min: 70.0,
+        mon_sat_12am_7am_leq5min: 70.0,
+        sun_ph_7am_7pm_leq5min: 90.0,
+        sun_ph_7pm_10pm_leq5min: 70.0,
+        sun_ph_10pm_12am_leq5min: 70.0,
+        sun_ph_12am_7am_leq5min: 70.0,
+        mon_sat_7am_7pm_leq12hr: 75.0,
+        mon_sat_7pm_10pm_leq12hr: 65.0,
+        mon_sat_10pm_12am_leq12hr: 65.0,
+        mon_sat_12am_7am_leq12hr: 65.0,
+        sun_ph_7am_7pm_leq12hr: 75.0,
+        sun_ph_7pm_10pm_leq12hr: 65.0,
+        sun_ph_10pm_12am_leq12hr: 65.0,
+        sun_ph_12am_7am_leq12hr: 65.0,
+    },
+};
+
 projectModal.addEventListener("hidden.bs.modal", function (event) {
     if (!isSwitchingModal) {
         populateUsers();
         var form = document.getElementById("projectForm");
         form.reset();
-        console.log("form resetted");
-        DELETE;
         var errorMessagesDiv = document.getElementById("error-messages");
         if (errorMessagesDiv) {
             errorMessagesDiv.innerHTML = "";
@@ -41,6 +97,28 @@ contactModal.addEventListener("hidden.bs.modal", function (event) {
     }
 });
 
+measurementPointModal.addEventListener("hidden.bs.modal", function (event) {
+    if (!isSwitchingModal) {
+        var form = document.getElementById("measurement_point_form");
+        form.reset();
+        console.log("form resetted");
+
+        var errorMessagesDiv = document.getElementById("error_messagemp");
+        if (errorMessagesDiv) {
+            errorMessagesDiv.innerHTML = "";
+        }
+        populate_soundLimits();
+        populateSelects();
+    }
+});
+
+function toggle_soundLimits() {
+    var soundlimit = document.getElementById("advanced_sound_limits");
+    soundlimit.hidden
+        ? (soundlimit.hidden = false)
+        : (soundlimit.hidden = true);
+}
+
 function manage_measurement_point_columns() {
     if (window.admin) {
         return [
@@ -51,14 +129,6 @@ function manage_measurement_point_columns() {
                 hozAlign: "center",
                 resizable: false,
                 headerSort: false,
-            },
-            {
-                formatter: "rowSelection",
-                titleFormatter: "rowSelection",
-                hozAlign: "center",
-                headerSort: false,
-                frozen: true,
-                width: 30,
             },
             {
                 title: "Point Name",
@@ -127,14 +197,6 @@ function manage_measurement_point_columns() {
                 headerSort: false,
             },
             {
-                formatter: "rowSelection",
-                titleFormatter: "rowSelection",
-                hozAlign: "center",
-                headerSort: false,
-                frozen: true,
-                width: 30,
-            },
-            {
                 title: "Point Name",
                 field: "point_name",
                 minWidth: 100,
@@ -165,8 +227,6 @@ function manage_measurement_point_columns() {
         ];
     }
 }
-
-function fetchUsers() {}
 
 function check_contact_max() {
     if (window.contacts.length >= window.project.sms_count) {
@@ -264,21 +324,6 @@ function set_measurement_point_table() {
     measurementPointTable.on("rowClick", function (e, row) {
         window.location.href = "/measurement_point/" + row.getIndex();
     });
-    measurementPointTable.on("rowSelectionChanged", function (data, rows) {
-        table_row_changed(data);
-    });
-}
-
-function table_row_changed(data) {
-    if (data && data.length > 0) {
-        document.getElementById("editButton").disabled = false;
-        document.getElementById("deleteButton").disabled = false;
-        inputMeasurementPointId = data[0].id;
-        inputMeasurementPoint = data[0];
-    } else {
-        document.getElementById("editButton").disabled = true;
-        document.getElementById("deleteButton").disabled = true;
-    }
 }
 
 function update_users(projectId, csrfToken) {
@@ -634,14 +679,368 @@ function handleDelete(e) {
     return true;
 }
 
+function populate_soundLimits(event, reset_defaults = false) {
+    if (event && event.preventDefault) {
+        event.preventDefault();
+    }
+
+    var selectedCategory = document.getElementById("selectCategory").value;
+
+    var inputmonsat7am7pmleq5 = document.getElementById(
+        "inputmonsat7am7pmleq5"
+    );
+    var inputmonsat7pm10pmleq5 = document.getElementById(
+        "inputmonsat7pm10pmleq5"
+    );
+    var inputmonsat10pm12amleq5 = document.getElementById(
+        "inputmonsat10pm12amleq5"
+    );
+    var inputmonsat12am7amleq5 = document.getElementById(
+        "inputmonsat12am7amleq5"
+    );
+
+    var inputmonsat7am7pmleq12 = document.getElementById(
+        "inputmonsat7am7pmleq12"
+    );
+    var inputmonsat7pm10pmleq12 = document.getElementById(
+        "inputmonsat7pm10pmleq12"
+    );
+    var inputmonsat10pm12amleq12 = document.getElementById(
+        "inputmonsat10pm12amleq12"
+    );
+    var inputmonsat12am7amleq12 = document.getElementById(
+        "inputmonsat12am7amleq12"
+    );
+
+    var inputsunph7am7pmleq5 = document.getElementById("inputsunph7am7pmleq5");
+    var inputsunph7pm10pmleq5 = document.getElementById(
+        "inputsunph7pm10pmleq5"
+    );
+    var inputsunph10pm12amleq5 = document.getElementById(
+        "inputsunph10pm12amleq5"
+    );
+    var inputsunph12am7amleq5 = document.getElementById(
+        "inputsunph12am7amleq5"
+    );
+
+    var inputsunph7am7pmleq12 = document.getElementById(
+        "inputsunph7am7pmleq12"
+    );
+    var inputsunph7pm10pmleq12 = document.getElementById(
+        "inputsunph7pm10pmleq12"
+    );
+    var inputsunph10pm12amleq12 = document.getElementById(
+        "inputsunph10pm12amleq12"
+    );
+    var inputsunph12am7amleq12 = document.getElementById(
+        "inputsunph12am7amleq12"
+    );
+    inputmonsat7am7pmleq5.value =
+        valueMap[selectedCategory].mon_sat_7am_7pm_leq5min;
+    inputmonsat7pm10pmleq5.value =
+        valueMap[selectedCategory].mon_sat_7pm_10pm_leq5min;
+    inputmonsat10pm12amleq5.value =
+        valueMap[selectedCategory].mon_sat_10pm_12am_leq5min;
+    inputmonsat12am7amleq5.value =
+        valueMap[selectedCategory].mon_sat_12am_7am_leq5min;
+
+    inputmonsat7am7pmleq12.value =
+        valueMap[selectedCategory].mon_sat_7am_7pm_leq12hr;
+    inputmonsat7pm10pmleq12.value =
+        valueMap[selectedCategory].mon_sat_7pm_10pm_leq12hr;
+    inputmonsat10pm12amleq12.value =
+        valueMap[selectedCategory].mon_sat_10pm_12am_leq12hr;
+    inputmonsat12am7amleq12.value =
+        valueMap[selectedCategory].mon_sat_12am_7am_leq12hr;
+
+    inputsunph7am7pmleq5.value =
+        valueMap[selectedCategory].sun_ph_7am_7pm_leq5min;
+    inputsunph7pm10pmleq5.value =
+        valueMap[selectedCategory].sun_ph_7pm_10pm_leq5min;
+    inputsunph10pm12amleq5.value =
+        valueMap[selectedCategory].sun_ph_10pm_12am_leq5min;
+    inputsunph12am7amleq5.value =
+        valueMap[selectedCategory].sun_ph_12am_7am_leq5min;
+
+    inputsunph7am7pmleq12.value =
+        valueMap[selectedCategory].sun_ph_7am_7pm_leq12hr;
+    inputsunph7pm10pmleq12.value =
+        valueMap[selectedCategory].sun_ph_7pm_10pm_leq12hr;
+    inputsunph10pm12amleq12.value =
+        valueMap[selectedCategory].sun_ph_10pm_12am_leq12hr;
+    inputsunph12am7amleq12.value =
+        valueMap[selectedCategory].sun_ph_12am_7am_leq12hr;
+}
+
+function populateSelects() {
+    populateConcentrator();
+    populateNoiseMeter();
+}
+
+function populateConcentrator() {
+    var selectConcentrator;
+    var defaultConcentrator;
+    selectConcentrator = document.getElementById("selectConcentrator");
+    selectConcentrator.innerHTML = "";
+    create_empty_option(selectConcentrator, "Choose Concentrator...");
+
+    const url = `${baseUri}/concentrators/`;
+    fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(
+                    "Network response was not ok " + response.statusText
+                );
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            data = data.concentrators;
+
+            // Create options from fetched data
+            data.forEach((concentrator) => {
+                const option = document.createElement("option");
+                option.value = concentrator.id;
+                option.textContent =
+                    concentrator.device_id +
+                    " | " +
+                    concentrator.concentrator_label;
+
+                if (
+                    defaultConcentrator &&
+                    concentrator.id == defaultConcentrator.concentrator_id
+                ) {
+                    option.selected = true;
+                }
+                selectConcentrator.appendChild(option);
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching concentrators :", error);
+        });
+}
+
+function populateNoiseMeter() {
+    var selectNoiseMeter;
+    var defaultNoiseMeter;
+    selectNoiseMeter = document.getElementById("selectNoiseMeter");
+    selectNoiseMeter.innerHTML = "";
+    create_empty_option(selectNoiseMeter, "Choose Noise Meter...");
+
+    const url = `${baseUri}/noise_meters`;
+    fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(
+                    "Network response was not ok " + response.statusText
+                );
+            }
+            return response.json();
+        })
+        .then((data) => {
+            data = data.noise_meters;
+
+            data.forEach((noise_meter) => {
+                const option = document.createElement("option");
+                option.value = noise_meter.id;
+                option.textContent =
+                    noise_meter.serial_number +
+                    " | " +
+                    noise_meter.noise_meter_label;
+                if (
+                    defaultNoiseMeter &&
+                    noise_meter.id == defaultNoiseMeter.noise_meter_id
+                ) {
+                    option.selected = true;
+                }
+
+                selectNoiseMeter.appendChild(option);
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching Noise Meters :", error);
+        });
+}
+
+function create_empty_option(select, text) {
+    var defaultOption = document.createElement("option");
+    defaultOption.textContent = text;
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    select.appendChild(defaultOption);
+}
+
+async function handle_measurementpoint_submit(confirmation = false) {
+    await handle_create_measurement_point(confirmation);
+}
+
+async function handle_create_measurement_point(confirmation) {
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    var form = document.getElementById("measurement_point_form");
+
+    var formData = new FormData(form);
+
+    var formDataJson = {};
+    formData.forEach((value, key) => {
+        formDataJson[key] = value;
+    });
+
+    formDataJson["confirmation"] = confirmation;
+
+    return fetch(`${baseUri}/measurement_point`, {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify(formDataJson),
+    })
+        .then((response) => {
+            if (response.status == 422) {
+                response.json().then((json) => {
+                    message = "";
+                    console.log(json.errors);
+                    if (json.errors.point_name) {
+                        display_errors("error_messagemp", {
+                            point_name: json.errors.point_name,
+                        });
+                    } else if (
+                        json.errors.concentrator_id ||
+                        json.errors.noise_meter_id
+                    ) {
+                        json.errors.concentrator_id
+                            ? (message += json.errors.concentrator_id + "\t")
+                            : (message = "");
+
+                        json.errors.noise_meter_id
+                            ? (message += json.errors.noise_meter_id + "\t")
+                            : (message = "");
+
+                        document.getElementById("devicesSpan").innerHTML =
+                            message;
+
+                        openSecondModal(
+                            "measurementPointModal",
+                            "confirmationModal"
+                        );
+                    }
+                });
+            } else {
+                response.json().then(async (json) => {
+                    formDataJson["measurement_point_id"] =
+                        json.measurement_point["id"];
+                    return await create_sound_limits(formDataJson);
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("There was an error: " + error.message);
+        });
+}
+
+async function create_sound_limits(formDataJson) {
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    return fetch(`${baseUri}/soundlimits`, {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify(formDataJson),
+    }).then((response) => {
+        if (response.status == 422) {
+            response.json().then((errorData) => {
+                document.getElementById("error_message").innerHTML =
+                    errorData["Unprocessable Entity"];
+            });
+        } else {
+            window.location.reload();
+        }
+    });
+}
+
+function openSecondModal(initialModal, newModal) {
+    if (newModal == "confirmationModal") {
+        document.getElementById("confirmationError").hidden = true;
+    }
+    isSwitchingModal = true;
+
+    var firstModalEl = document.getElementById(initialModal);
+    var firstModal = bootstrap.Modal.getInstance(firstModalEl);
+
+    firstModal.hide();
+
+    firstModalEl.addEventListener(
+        "hidden.bs.modal",
+        function () {
+            var secondModal = new bootstrap.Modal(
+                document.getElementById(newModal)
+            );
+
+            secondModal.show();
+
+            document.getElementById(newModal).addEventListener(
+                "hidden.bs.modal",
+                function () {
+                    isSwitchingModal = false;
+                    firstModal.show();
+                },
+                { once: true }
+            );
+        },
+        { once: true }
+    );
+}
+
+async function handleConfirmationSubmit(event) {
+    try {
+        if (event) {
+            event.preventDefault();
+        }
+        var csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+
+        var confirmation = document.getElementById(
+            "inputContinueConfirmation"
+        ).value;
+        if (confirmation == "YES") {
+            await handle_measurementpoint_submit(true);
+            location.reload();
+        } else {
+            var error = document.getElementById("confirmationError");
+            error.hidden = false;
+        }
+    } catch (error) {
+        console.log(error);
+    } finally {
+        get_measurement_point_data();
+    }
+}
+
 window.addUserClicked = addUserClicked;
 window.toggleEndUserName = toggleEndUserName;
 window.submit_project = submit_project;
 window.openModal = openModal;
 window.handleContactSubmit = handleContactSubmit;
 window.handleDelete = handleDelete;
+window.toggle_soundLimits = toggle_soundLimits;
+window.populate_soundLimits = populate_soundLimits;
+window.handle_measurementpoint_submit = handle_measurementpoint_submit;
 
+populateSelects();
 set_contact_table();
 set_measurement_point_table();
 toggleEndUserName();
 populateUsers();
+populate_soundLimits();

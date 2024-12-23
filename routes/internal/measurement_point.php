@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\MeasurementPointController;
 use Illuminate\Support\Facades\Route;
 
@@ -9,3 +10,4 @@ Route::get("/measurement_points", [MeasurementPointController::class, 'index'])-
 Route::get("/measurement_points/{id}", [MeasurementPointController::class, 'get'])->name('measurement_point');
 Route::patch("/measurement_points/{id}", [MeasurementPointController::class, 'update'])->name('measurement_point.update');
 Route::delete("/measurement_points/{id}", [MeasurementPointController::class, 'delete'])->name('measurement_point.delete');
+Route::post("/measurement_point/validate", [MeasurementPointController::class, 'handleMeasurementPointValidation'])->name('measurement_point.validate');

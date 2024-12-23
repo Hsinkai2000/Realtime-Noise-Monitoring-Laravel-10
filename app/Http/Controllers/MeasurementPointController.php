@@ -7,7 +7,10 @@ use App\Models\MeasurementPoint;
 use App\Models\NoiseMeter;
 use App\Models\SoundLimit;
 use Exception;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+
+use function PHPSTORM_META\type;
 
 class MeasurementPointController extends Controller
 {
@@ -20,9 +23,11 @@ class MeasurementPointController extends Controller
 
     public function create(Request $request)
     {
+
+        $this->handleMeasurementPointValidation($request);
+
         $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
-        $confirmation = $request->get('confirmation');
-        debug_log($measurement_point_params);
+
         if (!isset($measurement_point_params['concentrator_id'])) {
             $measurement_point_params['concentrator_id'] = null;
         }
@@ -30,28 +35,11 @@ class MeasurementPointController extends Controller
             $measurement_point_params['noise_meter_id'] = null;
         }
 
-        $point = MeasurementPoint::where([['project_id', $measurement_point_params['project_id']], ['point_name', $measurement_point_params['point_name']]])->get();
+        $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
 
-        if ($point->isNotEmpty()) {
-            return render_unprocessable_entity('Please ensure measurement point name is unique within project');
-        }
-
-        try {
-            if (isset($measurement_point_params['concentrator_id']) || isset($measurement_point_params['noise_meter_id'])) {
-
-                $data = $this->check_device_availability($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
-                if (!empty($data) && !$confirmation) {
-                    return render_unprocessable_entity($data);
-                }
-                $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
-            }
-
-            $measurement_point_id = MeasurementPoint::insertGetId($measurement_point_params);
-            $measurement_point = MeasurementPoint::find($measurement_point_id);
-            return render_ok(["measurement_point" => $measurement_point]);
-        } catch (Exception $e) {
-            return render_error($e);
-        }
+        $measurement_point_id = MeasurementPoint::insertGetId($measurement_point_params);
+        $measurement_point = MeasurementPoint::find($measurement_point_id);
+        return render_ok(["measurement_point" => $measurement_point]);
     }
 
     public function index()
@@ -192,6 +180,26 @@ class MeasurementPointController extends Controller
         return $data;
     }
 
+    private function isDeviceAvailable($id, $type)
+    {
+        if ($id === null) {
+            return true;
+        }
+
+        if ($type === 'concentrator') {
+
+            return !MeasurementPoint::where('concentrator_id', $id)->exists();
+        }
+
+        if ($type === 'noise_meter') {
+
+            return !MeasurementPoint::where('noise_meter_id', $id)->exists();
+        }
+
+        return false;
+    }
+
+
     private function update_device_usage($concentrator_id, $noise_meter_id)
     {
         $concentrator = MeasurementPoint::where('concentrator_id', $concentrator_id)->get();
@@ -208,5 +216,28 @@ class MeasurementPointController extends Controller
 
             $noise_meter[0]->save();
         }
+    }
+
+    public function handleMeasurementPointValidation(Request $request)
+    {
+
+        return $request->validate([
+            'point_name' => [
+                'required',
+                Rule::unique('measurement_points')->where(function ($query) use ($request) {
+                    return $query->where('project_id', $request->get('project_id'));
+                }),
+            ],
+            'concentrator_id' => ['nullable', 'exists:concentrators,id', function ($attribute, $value, $fail) {
+                if (!$this->isDeviceAvailable($value, 'concentrator')) {
+                    $fail(Concentrator::find($value)->value('concentrator_label'));
+                }
+            }],
+            'noise_meter_id' => ['nullable', 'exists:noise_meters,id', function ($attribute, $value, $fail) {
+                if (!$this->isDeviceAvailable($value, 'noise_meter')) {
+                    $fail(NoiseMeter::find($value)->value('noise_meter_label'));
+                }
+            }],
+        ]);
     }
 }

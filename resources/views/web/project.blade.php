@@ -136,34 +136,28 @@
         </div>
 
         <div class="mb-3">
-            <h3>Measurement Points Information</h3>
+            <div class="d-flex justify-content-between align-items-center heading-group mb-3">
+                <h3 class="mb-0 me-2">Measurement Points Information</h3>
+                @if (Auth::user()->isAdmin())
+                    <button class="btn btn-primary text-light shadow-sm" id="createButton"
+                        onclick='openModal("measurementPointModal")'>Create</button>
+                @endif
+
+            </div>
             <hr>
             <div id="measurement_point_table"></div>
 
             <div class="d-flex flex-row mt-3 justify-content-between">
-                @if (Auth::user()->isAdmin())
-                    <button class="btn btn-light text-danger border shadow-sm" id="deleteButton"
-                        onclick="openModal('deleteConfirmationModal','measurementPoints')">Delete</button>
-                @endif
                 <div id="measurement_point_pages" class="ms-auto me-auto"></div>
-                <div>
-                    <button class="btn btn-primary bg-light text-primary px-4 me-3 shadow-sm" id="editButton"
-                        onclick='openModal("measurementPointModal", "update")'>Edit</button>
-                    @if (Auth::user()->isAdmin())
-                        <button class="btn btn-primary text-light shadow-sm" id="createButton"
-                            onclick='openModal("measurementPointModal", "create")'>Create</button>
-                    @endif
-                </div>
             </div>
         </div>
 
-        <x-contacts.contact-modal :project="$project" />
-        <x-delete-modal type='user' />
-        <x-delete-confirmation-modal :project="$project" :type="$project->job_number" />
-        <x-project.project-modal :project="$project" />
         <x-confirmation-modal />
-        <x-user.user-create-modal />
+        <x-delete-confirmation-modal :project="$project" :type="$project->job_number" />
         <x-measurementPoint.measurement-point-modal :project="$project" />
+        <x-delete-modal type='user' />
+        <x-contacts.contact-modal :project="$project" />
+        <x-project.project-modal :project="$project" />
 
     </div>
 
