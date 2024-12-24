@@ -104,7 +104,8 @@
                             </div>
                         @endif
 
-                        <input hidden name='project_id' value="{{ $project['id'] }}" />
+                        <input name='project_id' hidden
+                            value="@if (!$measurementPoint) {{ $project['id'] }}@else {{ $measurementPoint->project_id }} @endif" />
 
 
                         </br>

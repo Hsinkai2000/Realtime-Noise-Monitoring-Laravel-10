@@ -8,6 +8,8 @@ var deleteConfirmationModal = document.getElementById(
     "deleteConfirmationModal"
 );
 var isSwitchingModal = false;
+var inputprojectId = window.measurementPointData.project.id;
+console.log("porjectid " + inputprojectId);
 
 const localeEn = {
     days: [
@@ -141,9 +143,7 @@ function populateConcentrator() {
     selectConcentrator.innerHTML = "";
     defaultConcentrator = window.concentrator;
 
-    if (!defaultConcentrator.device_id) {
-        create_empty_option(selectConcentrator, "Choose Concentrator...");
-    }
+    create_empty_option(selectConcentrator, "Choose Concentrator...");
 
     const url = `${baseUri}/concentrators/`;
     fetch(url)
@@ -190,9 +190,7 @@ function populateNoiseMeter() {
 
     defaultNoiseMeter = window.noise_meter;
 
-    if (!defaultNoiseMeter.serial_number) {
-        create_empty_option(selectNoiseMeter, "Choose Noise Meter...");
-    }
+    create_empty_option(selectNoiseMeter, "Choose Noise Meter...");
 
     const url = `${baseUri}/noise_meters`;
     fetch(url)
@@ -515,11 +513,177 @@ function handleDelete(e) {
         if (response.status === 422) {
             console.log(response.error);
         } else {
-            window.location.href = `/project/${window.measurementPointData.project_id}`;
+            window.location.href = `/project/${inputprojectId}`;
         }
     });
 
     return true;
+}
+
+async function handle_measurementpoint_submit(confirmation = false) {
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    var form = document.getElementById("measurement_point_form");
+
+    var formData = new FormData(form);
+
+    var formDataJson = {};
+    formData.forEach((value, key) => {
+        formDataJson[key] = value;
+    });
+
+    formDataJson["confirmation"] = confirmation;
+
+    return fetch(
+        `${baseUri}/measurement_points/${window.measurementPointData.id}`,
+        {
+            method: "PATCH",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+            },
+            body: JSON.stringify(formDataJson),
+        }
+    )
+        .then((response) => {
+            if (response.status == 422) {
+                response.json().then((json) => {
+                    message = "";
+                    console.log(json.errors);
+                    if (json.errors.point_name) {
+                        display_errors("error_messagemp", {
+                            point_name: json.errors.point_name,
+                        });
+                    } else if (
+                        json.errors.concentrator_id ||
+                        json.errors.noise_meter_id
+                    ) {
+                        if (json.errors.concentrator_id) {
+                            message +=
+                                json.errors.concentrator_id.join(" ") + "\n";
+                        }
+
+                        if (json.errors.noise_meter_id) {
+                            message +=
+                                json.errors.noise_meter_id.join(" ") + "\n";
+                        }
+
+                        document.getElementById("devicesSpan").innerHTML =
+                            message;
+
+                        openSecondModal(
+                            "measurementPointModal",
+                            "confirmationModal"
+                        );
+                    }
+                });
+            } else {
+                response.json().then(async (json) => {
+                    formDataJson["measurement_point_id"] =
+                        json.measurement_point["id"];
+                    return await update_sound_limits(formDataJson);
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("There was an error: " + error.message);
+        });
+}
+
+async function update_sound_limits(formDataJson) {
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    return fetch(`${baseUri}/soundlimits/${window.soundLimit.id}`, {
+        method: "PATCH",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify(formDataJson),
+    }).then((response) => {
+        if (response.status == 422) {
+            response.json().then((errorData) => {
+                document.getElementById("error_message").innerHTML =
+                    errorData["Unprocessable Entity"];
+            });
+        } else {
+            window.location.reload();
+        }
+    });
+}
+
+async function handleConfirmationSubmit(event) {
+    console.log("here");
+    try {
+        if (event) {
+            event.preventDefault();
+        }
+
+        var confirmation = document.getElementById(
+            "inputContinueConfirmation"
+        ).value;
+        if (confirmation == "YES") {
+            await handle_measurementpoint_submit(true);
+            location.reload();
+        } else {
+            var error = document.getElementById("confirmationError");
+            error.hidden = false;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function display_errors(element, errors) {
+    error_messages = document.getElementById(element);
+    error_messages.innerHTML = "";
+    // Loop through errors and display them
+    for (const [field, messages] of Object.entries(errors)) {
+        const li = document.createElement("li");
+        li.className = "alert alert-danger";
+        li.textContent = `${field} : ${messages}`;
+        error_messages.appendChild(li);
+    }
+}
+
+function openSecondModal(initialModal, newModal) {
+    if (newModal == "confirmationModal") {
+        document.getElementById("confirmationError").hidden = true;
+    }
+    isSwitchingModal = true;
+
+    var firstModalEl = document.getElementById(initialModal);
+    var firstModal = bootstrap.Modal.getInstance(firstModalEl);
+
+    firstModal.hide();
+
+    firstModalEl.addEventListener(
+        "hidden.bs.modal",
+        function () {
+            var secondModal = new bootstrap.Modal(
+                document.getElementById(newModal)
+            );
+
+            secondModal.show();
+
+            document.getElementById(newModal).addEventListener(
+                "hidden.bs.modal",
+                function () {
+                    isSwitchingModal = false;
+                    firstModal.show();
+                },
+                { once: true }
+            );
+        },
+        { once: true }
+    );
 }
 
 window.openPdf = openPdf;
@@ -527,5 +691,7 @@ window.openModal = openModal;
 window.set_tables = set_tables;
 window.toggle_soundLimits = toggle_soundLimits;
 window.handleDelete = handleDelete;
+window.handle_measurementpoint_submit = handle_measurementpoint_submit;
+
 set_tables();
 populateSelects();

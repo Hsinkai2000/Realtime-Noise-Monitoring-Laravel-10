@@ -94,6 +94,7 @@
         </div>
     </div>
 
+    <x-confirmation-modal />
     <x-delete-confirmation-modal :type="$measurementPoint->point_name" />
     <x-measurementPoint.measurement-point-modal :measurementPoint="$measurementPoint" />
     <x-pdfs.view-pdf-component />
@@ -104,6 +105,7 @@
     window.measurementPointData = @json($measurementPoint);
     window.noise_meter = @json($measurementPoint->noiseMeter);
     window.concentrator = @json($measurementPoint->concentrator);
+    window.soundLimit = @json($measurementPoint->soundLimit);
     window.admin = @json(Auth::user()->isAdmin());
 </script>
 <script src="{{ asset('js/measurement_point-test.js') }}" async defer></script>

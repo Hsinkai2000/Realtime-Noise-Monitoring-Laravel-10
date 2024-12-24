@@ -872,10 +872,7 @@ function create_empty_option(select, text) {
 }
 
 async function handle_measurementpoint_submit(confirmation = false) {
-    await handle_create_measurement_point(confirmation);
-}
-
-async function handle_create_measurement_point(confirmation) {
+    console.log("in submit");
     var csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
@@ -901,6 +898,8 @@ async function handle_create_measurement_point(confirmation) {
         body: JSON.stringify(formDataJson),
     })
         .then((response) => {
+            console.log("responded");
+            console.log(response);
             if (response.status == 422) {
                 response.json().then((json) => {
                     message = "";
@@ -913,13 +912,15 @@ async function handle_create_measurement_point(confirmation) {
                         json.errors.concentrator_id ||
                         json.errors.noise_meter_id
                     ) {
-                        json.errors.concentrator_id
-                            ? (message += json.errors.concentrator_id + "\t")
-                            : (message = "");
+                        if (json.errors.concentrator_id) {
+                            message +=
+                                json.errors.concentrator_id.join(" ") + "\n";
+                        }
 
-                        json.errors.noise_meter_id
-                            ? (message += json.errors.noise_meter_id + "\t")
-                            : (message = "");
+                        if (json.errors.noise_meter_id) {
+                            message +=
+                                json.errors.noise_meter_id.join(" ") + "\n";
+                        }
 
                         document.getElementById("devicesSpan").innerHTML =
                             message;
@@ -1007,24 +1008,20 @@ async function handleConfirmationSubmit(event) {
         if (event) {
             event.preventDefault();
         }
-        var csrfToken = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
-
         var confirmation = document.getElementById(
             "inputContinueConfirmation"
         ).value;
         if (confirmation == "YES") {
+            console.log("yes");
             await handle_measurementpoint_submit(true);
-            location.reload();
+            // location.reload();
         } else {
+            console.log("failed");
             var error = document.getElementById("confirmationError");
             error.hidden = false;
         }
     } catch (error) {
         console.log(error);
-    } finally {
-        get_measurement_point_data();
     }
 }
 
