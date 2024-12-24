@@ -1,10 +1,13 @@
+@props(['measurementPoint' => null])
+
 <div class="modal fade shadow" id="measurementPointModal" tabindex="-1" aria-labelledby="measurementPointLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="measurementPointLabel">Measurement Point</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-dark">
+                <h3 class="modal-title text-light" id="measurementPointLabel">Measurement Point</h3>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id='measurement_point_form' method="POST">
@@ -16,7 +19,8 @@
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Measurement Point
                                 Name</label>
                             <div class="col-sm-8 align-content-center">
-                                <input type="text" class="form-control" id="inputPointName" name="point_name">
+                                <input type="text" class="form-control" id="inputPointName" name="point_name"
+                                    @if ($measurementPoint) value="{{ old('point_name', $measurementPoint ? $measurementPoint->point_name : '') }}" @endif>
                             </div>
                         </div>
 
@@ -24,7 +28,8 @@
                             <label for="remarks"
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Remarks</label>
                             <div class="col-sm-8 align-content-center">
-                                <input type="text" class="form-control" id="inputRemarks" name="remarks">
+                                <input type="text" class="form-control" id="inputRemarks" name="remarks"
+                                    @if ($measurementPoint) value="{{ old('remarks', $measurementPoint ? $measurementPoint->remarks : '') }}" @endif>
                             </div>
                         </div>
 
@@ -33,7 +38,8 @@
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Device Location</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputDeviceLocation"
-                                    name="device_location">
+                                    name="device_location"
+                                    @if ($measurementPoint) value="{{ old('device_location', $measurementPoint ? $measurementPoint->device_location : '') }}" @endif>
                             </div>
                         </div>
                         </br>
@@ -52,13 +58,15 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="mb-3 row" id="existing_devices" hidden>
+                        <div class="mb-3 row" id="existing_devices" @if (!$measurementPoint) hidden @endif>
                             <div class="col-6">
                                 <div class="col">
                                     Existing Device Id:
                                 </div>
                                 <div class="col" id="existing_device_id">
+                                    @if ($measurementPoint)
+                                        {{ $measurementPoint->concentrator ? $measurementPoint->concentrator->device_id . ' | ' . $measurementPoint->concentrator->concentrator_label : 'Not Linked' }}
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-6">
@@ -66,6 +74,9 @@
                                     Existing Noise Meter
                                 </div>
                                 <div class="col" id="existing_serial">
+                                    @if ($measurementPoint)
+                                        {{ $measurementPoint->concentrator ? $measurementPoint->noiseMeter->serial_number . ' | ' . $measurementPoint->noiseMeter->noise_meter_label : 'Not Linked' }}
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -100,12 +111,14 @@
                         <hr>
                         </br>
                         <h4>Sound Limits</h4>
-                        <div id='existing_category' class="mb-3 row" hidden>
+                        <div id='existing_category' class="mb-3 row" @if (!$measurementPoint) hidden @endif>
                             <div class="col-md-6 col-sm-12">
                                 Existing Category
                             </div>
                             <div class="col-md-6 col-sm-12" id="category">
-
+                                @if ($measurementPoint)
+                                    {{ $measurementPoint->soundLimit->category }}
+                                @endif
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -160,28 +173,36 @@
                                     <div class="form-group">
                                         <label>7am-7pm</label>
                                         <input type="text" class="form-control" id="inputmonsat7am7pmleq5"
-                                            name="mon_sat_7am_7pm_leq5min" {{ $isReadOnly }}>
+                                            name="mon_sat_7am_7pm_leq5min"
+                                            @if ($measurementPoint) value="{{ old('mon_sat_7am_7pm_leq5min', $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>7pm-10pm</label>
                                         <input type="text" class="form-control" id="inputmonsat7pm10pmleq5"
-                                            name="mon_sat_7pm_10pm_leq5min" {{ $isReadOnly }}>
+                                            name="mon_sat_7pm_10pm_leq5min"
+                                            @if ($measurementPoint) value="{{ old('mon_sat_7pm_10pm_leq5min', $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq5min) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>10pm-12am</label>
                                         <input type="text" class="form-control" id="inputmonsat10pm12amleq5"
-                                            name="mon_sat_10pm_12am_leq5min" {{ $isReadOnly }}>
+                                            name="mon_sat_10pm_12am_leq5min"
+                                            @if ($measurementPoint) value="{{ old('mon_sat_10pm_12am_leq5min', $measurementPoint->soundLimit->mon_sat_10pm_12am_leq5min) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>12am-7am</label>
                                         <input type="text" class="form-control" id="inputmonsat12am7amleq5"
-                                            name="mon_sat_12am_7am_leq5min" {{ $isReadOnly }}>
+                                            name="mon_sat_12am_7am_leq5min"
+                                            @if ($measurementPoint) value="{{ old('mon_sat_12am_7am_leq5min', $measurementPoint->soundLimit->mon_sat_12am_7am_leq5min) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                             </div>
@@ -197,28 +218,36 @@
                                     <div class="form-group">
                                         <label>7am-7pm</label>
                                         <input type="text" class="form-control" id="inputmonsat7am7pmleq12"
-                                            name="mon_sat_7am_7pm_leq12hr" {{ $isReadOnly }}>
+                                            name="mon_sat_7am_7pm_leq12hr"
+                                            @if ($measurementPoint) value="{{ old('mon_sat_7am_7pm_leq12hr', $measurementPoint->soundLimit->mon_sat_7am_7pm_leq12hr) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>7pm-10pm</label>
                                         <input type="text" class="form-control" id="inputmonsat7pm10pmleq12"
-                                            name="mon_sat_7pm_10pm_leq12hr" {{ $isReadOnly }}>
+                                            name="mon_sat_7pm_10pm_leq12hr"
+                                            @if ($measurementPoint) value="{{ old('mon_sat_7pm_10pm_leq12hr', $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq12hr) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>10pm-12am</label>
                                         <input type="text" class="form-control" id="inputmonsat10pm12amleq12"
-                                            name="mon_sat_10pm_12am_leq12hr" {{ $isReadOnly }}>
+                                            name="mon_sat_10pm_12am_leq12hr"
+                                            @if ($measurementPoint) value="{{ old('mon_sat_10pm_12am_leq12hr', $measurementPoint->soundLimit->mon_sat_10pm_12am_leq12hr) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>12am-7am</label>
                                         <input type="text" class="form-control" id="inputmonsat12am7amleq12"
-                                            name="mon_sat_12am_7am_leq12hr" {{ $isReadOnly }}>
+                                            name="mon_sat_12am_7am_leq12hr"
+                                            @if ($measurementPoint) value="{{ old('mon_sat_12am_7am_leq12hr', $measurementPoint->soundLimit->mon_sat_12am_7am_leq12hr) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                             </div>
@@ -244,28 +273,36 @@
                                     <div class="form-group">
                                         <label>7am-7pm</label>
                                         <input type="text" class="form-control" id="inputsunph7am7pmleq5"
-                                            name="sun_ph_7am_7pm_leq5min" {{ $isReadOnly }}>
+                                            name="sun_ph_7am_7pm_leq5min"
+                                            @if ($measurementPoint) value="{{ old('sun_ph_7am_7pm_leq5min', $measurementPoint->soundLimit->sun_ph_7am_7pm_leq5min) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>7pm-10pm</label>
                                         <input type="text" class="form-control" id="inputsunph7pm10pmleq5"
-                                            name="sun_ph_7pm_10pm_leq5min" {{ $isReadOnly }}>
+                                            name="sun_ph_7pm_10pm_leq5min"
+                                            @if ($measurementPoint) value="{{ old('sun_ph_7pm_10pm_leq5min', $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq5min) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>10pm-12am</label>
                                         <input type="text" class="form-control" id="inputsunph10pm12amleq5"
-                                            name="sun_ph_10pm_12am_leq5min" {{ $isReadOnly }}>
+                                            name="sun_ph_10pm_12am_leq5min"
+                                            @if ($measurementPoint) value="{{ old('sun_ph_10pm_12am_leq5min', $measurementPoint->soundLimit->sun_ph_10pm_12am_leq5min) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>12am-7am</label>
                                         <input type="text" class="form-control" id="inputsunph12am7amleq5"
-                                            name="sun_ph_12am_7am_leq5min" {{ $isReadOnly }}>
+                                            name="sun_ph_12am_7am_leq5min"
+                                            @if ($measurementPoint) value="{{ old('sun_ph_12am_7am_leq5min', $measurementPoint->soundLimit->sun_ph_12am_7am_leq5min) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                             </div>
@@ -281,28 +318,36 @@
                                     <div class="form-group">
                                         <label>7am-7pm</label>
                                         <input type="text" class="form-control" id="inputsunph7am7pmleq12"
-                                            name="sun_ph_7am_7pm_leq12hr" {{ $isReadOnly }}>
+                                            name="sun_ph_7am_7pm_leq12hr"
+                                            @if ($measurementPoint) value="{{ old('sun_ph_7am_7pm_leq12hr', $measurementPoint->soundLimit->sun_ph_7am_7pm_leq12hr) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>7pm-10pm</label>
                                         <input type="text" class="form-control" id="inputsunph7pm10pmleq12"
-                                            name="sun_ph_7pm_10pm_leq12hr" {{ $isReadOnly }}>
+                                            name="sun_ph_7pm_10pm_leq12hr"
+                                            @if ($measurementPoint) value="{{ old('sun_ph_7pm_10pm_leq12hr', $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq12hr) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>10pm-12am</label>
                                         <input type="text" class="form-control" id="inputsunph10pm12amleq12"
-                                            name="sun_ph_10pm_12am_leq12hr" {{ $isReadOnly }}>
+                                            name="sun_ph_10pm_12am_leq12hr"
+                                            @if ($measurementPoint) value="{{ old('sun_ph_10pm_12am_leq12hr', $measurementPoint->soundLimit->sun_ph_10pm_12am_leq12hr) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <div class="form-group">
                                         <label>12am-7am</label>
                                         <input type="text" class="form-control" id="inputsunph12am7amleq12"
-                                            name="sun_ph_12am_7am_leq12hr" {{ $isReadOnly }}>
+                                            name="sun_ph_12am_7am_leq12hr"
+                                            @if ($measurementPoint) value="{{ old('sun_ph_12am_7am_leq12hr', $measurementPoint->soundLimit->sun_ph_12am_7am_leq12hr) }}" @endif
+                                            {{ $isReadOnly }}>
                                     </div>
                                 </div>
                             </div>

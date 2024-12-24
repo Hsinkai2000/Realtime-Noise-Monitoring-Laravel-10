@@ -49,8 +49,18 @@
                         class="href h3 text-decoration-none">{{ $measurementPoint->point_name }}</a></li>
             </ol>
         </nav>
-        <div class="mb-3">
-            <h5 class="d-inline me-4">Measurement Point Information</h5>
+        <div class="d-flex justify-content-between align-items-center heading-group mb-3">
+            <div class="left-group d-flex align-items-center">
+                <h3 class="mb-0 me-2">Measurement Point Information</h3>
+                <button type="button" id="edit-button" class="d-inline btn btn-dark text-light shadow-sm"
+                    data-bs-toggle="modal" data-bs-target="#measurementPointModal">Edit</button>
+            </div>
+
+            <div class="right-groups d-flex align-items-center">
+                <button id="delete-data-button" class="btn btn-light text-danger border shadow-sm" type="button"
+                    onclick='openModal("deleteConfirmationModal","{{ $measurementPoint->point_name }}" )'>Delete
+                    Project</button>
+            </div>
         </div>
         <table class="table">
             <tr>
@@ -84,16 +94,18 @@
         </div>
     </div>
 
+    <x-delete-confirmation-modal :type="$measurementPoint->point_name" />
+    <x-measurementPoint.measurement-point-modal :measurementPoint="$measurementPoint" />
     <x-pdfs.view-pdf-component />
 
 </body>
 
 <script>
     window.measurementPointData = @json($measurementPoint);
-    window.measurementPointData.noise_meter = @json($measurementPoint->noiseMeter);
-    window.measurementPointData.concentrator = @json($measurementPoint->concentrator);
+    window.noise_meter = @json($measurementPoint->noiseMeter);
+    window.concentrator = @json($measurementPoint->concentrator);
     window.admin = @json(Auth::user()->isAdmin());
 </script>
-<script src="{{ asset('js/measurement_point.js') }}" async defer></script>
+<script src="{{ asset('js/measurement_point-test.js') }}" async defer></script>
 
 </html>

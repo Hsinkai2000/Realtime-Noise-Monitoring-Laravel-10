@@ -56,15 +56,15 @@ class MeasurementPointController extends Controller
         try {
 
             $id = $request->route('id');
-            $measurementPoint = MeasurementPoint::where('project_id', $id)->get();
+            $measurementPoint = MeasurementPoint::where('project_id', $id)->with(['noiseMeter', 'concentrator', 'soundLimit'])->get();
             if (!$measurementPoint) {
                 return render_unprocessable_entity("Unable to find Measurement point with id " . $id);
             }
             $data = $measurementPoint->map(function ($measurementPoint) {
                 $concentrator = $measurementPoint->concentrator;
-                $noise_meter = $measurementPoint->noiseMeter;
-                debug_log('data', [$measurementPoint->id]);
-                $data = [
+                $noiseMeter = $measurementPoint->noiseMeter;
+
+                return [
                     'id' => $measurementPoint->id,
                     'project_id' => $measurementPoint->project_id,
                     'noise_meter_id' => $measurementPoint->noise_meter_id,
@@ -73,24 +73,21 @@ class MeasurementPointController extends Controller
                     'device_location' => $measurementPoint->device_location,
                     'remarks' => $measurementPoint->remarks,
                     'data_status' => $measurementPoint->check_data_status(),
-                    'category' => $measurementPoint->soundLimit->category,
+                    'category' => $measurementPoint->soundLimit->category ?? null,
+                    'concentrator' => $concentrator ? [
+                        'label' => $concentrator->concentrator_label,
+                        'device_id' => $concentrator->device_id,
+                        'battery_voltage' => $concentrator->battery_voltage,
+                        'concentrator_csq' => $concentrator->concentrator_csq,
+                        'last_communication_packet_sent' => $concentrator->last_communication_packet_sent
+                            ? $concentrator->last_communication_packet_sent->format('Y-m-d H:i:s')
+                            : null,
+                    ] : null,
+                    'noise_meter' => $noiseMeter ? [
+                        'noise_meter_label' => $noiseMeter->noise_meter_label,
+                        'serial_number' => $noiseMeter->serial_number,
+                    ] : null,
                 ];
-
-                if ($concentrator) {
-                    $data['concentrator_label'] = $concentrator->concentrator_label;
-                    $data['device_id'] = $concentrator->device_id;
-                    $data['battery_voltage'] = $concentrator->battery_voltage;
-                    $data['concentrator_csq'] = $concentrator->concentrator_csq;
-                    $data['last_communication_packet_sent'] = $concentrator->last_communication_packet_sent ? $concentrator->last_communication_packet_sent->format('Y-m-d H:m:s') : "";
-                }
-
-                if ($noise_meter) {
-                    $data['noise_meter_label'] = $noise_meter->noise_meter_label;
-                    $data['serial_number'] = $noise_meter->serial_number;
-                }
-                $data['soundLimit'] = $measurementPoint->soundLimit;
-
-                return $data;
             });
 
             return response()->json($data, 200);
@@ -101,9 +98,10 @@ class MeasurementPointController extends Controller
 
     public function update(Request $request)
     {
+        $this->handleMeasurementPointValidation($request);
+
         $id = $request->route('id');
         $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
-        $confirmation = $request->get('confirmation');
 
         if (!isset($measurement_point_params['concentrator_id'])) {
             $measurement_point_params['concentrator_id'] = null;
@@ -111,30 +109,15 @@ class MeasurementPointController extends Controller
         if (!isset($measurement_point_params['noise_meter_id'])) {
             $measurement_point_params['noise_meter_id'] = null;
         }
-        $point = MeasurementPoint::where([['project_id', $measurement_point_params['project_id']], ['point_name', $measurement_point_params['point_name']], ['id', '!=', $id]])->get();
 
-        if ($point->isNotEmpty()) {
-            return render_unprocessable_entity('Please ensure measurement point name is unique within project');
-        }
+        $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
 
-        if (isset($measurement_point_params['concentrator_id']) || isset($measurement_point_params['noise_meter_id'])) {
-
-            $data = $this->check_device_availability($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id'], $id);
-            if (!empty($data) && !$confirmation) {
-                return render_unprocessable_entity($data);
-            }
-            $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
-        }
         $measurement_point = MeasurementPoint::find($id);
         if (!$measurement_point) {
             return render_unprocessable_entity("Unable to find Measurement point with id " . $id);
         }
-        try {
-            $measurement_point->update($measurement_point_params);
-            return render_ok(["measurement_point" => $measurement_point]);
-        } catch (Exception $e) {
-            return render_error($e);
-        };
+        $measurement_point->update($measurement_point_params);
+        return render_ok(["measurement_point" => $measurement_point]);
     }
 
     public function delete(Request $request)
