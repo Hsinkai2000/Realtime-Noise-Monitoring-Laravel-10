@@ -37,6 +37,7 @@
     td {
         border: 1px solid black;
         border-collapse: collapse;
+        background-color: white;
     }
 
     table .w-5 {
