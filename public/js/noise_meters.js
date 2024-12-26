@@ -4,6 +4,19 @@ if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
 
+var noiseMeterModal = document.getElementById("noiseMeterModal");
+
+noiseMeterModal.addEventListener("hidden.bs.modal", function (event) {
+    var form = document.getElementById("noise_meter_form");
+    form.reset();
+    console.log("form resetted");
+
+    var errorMessagesDiv = document.getElementById("error_message");
+    if (errorMessagesDiv) {
+        errorMessagesDiv.innerHTML = "";
+    }
+});
+
 function set_tables(data) {
     var noise_meter_table = new Tabulator("#noise_meter_table", {
         pagination: "local",
@@ -133,20 +146,15 @@ function handle_update() {
         .then((response) => {
             if (response.status == 422) {
                 response.json().then((errorData) => {
-                    document.getElementById("error_message").innerHTML =
-                        errorData["Unprocessable Entity"];
+                    display_errors("error_message", errorData.errors);
                 });
             } else {
-                response.json().then((json) => {
-                    resetTable(json);
-                    closeModal("noiseMeterModal");
-                });
+                window.location.reload();
             }
         })
         .catch((error) => {
             alert("There was an error while processing");
         });
-    return false;
 }
 
 function handle_create() {
@@ -166,20 +174,15 @@ function handle_create() {
         .then((response) => {
             if (response.status == 422) {
                 response.json().then((errorData) => {
-                    document.getElementById("error_message").innerHTML =
-                        errorData["Unprocessable Entity"];
+                    display_errors("error_message", errorData.errors);
                 });
             } else {
-                response.json().then((json) => {
-                    resetTable(json);
-                    closeModal("noiseMeterModal");
-                });
+                window.location.reload();
             }
         })
         .catch((error) => {
             alert("There was an error while processing");
         });
-    return false;
 }
 
 function handle_noise_meter_submit(event) {
@@ -217,8 +220,7 @@ function handleDelete(event) {
                 return response.json();
             })
             .then((data) => {
-                resetTable(data);
-                closeModal("deleteConfirmationModal");
+                window.location.reload();
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -237,6 +239,12 @@ function resetTable(json) {
 function openModal(modalName, type) {
     var modal = new bootstrap.Modal(document.getElementById(modalName));
     modal.toggle();
+
+    if (modalName == "deleteConfirmationModal") {
+        console.log(window.noiseMeter.noise_meter_label);
+        document.getElementById("deleteType").innerHTML =
+            window.noiseMeter.noise_meter_label;
+    }
 
     if (type == "create") {
         window.modalType = "create";
@@ -277,15 +285,19 @@ function openSecondModal(initialModal, newModal) {
     );
 }
 
-function closeModal(modal) {
-    // Close the modal
-    const modalElement = document.getElementById(modal);
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    modalInstance.hide();
+function display_errors(element, errors) {
+    error_messages = document.getElementById(element);
+    error_messages.innerHTML = "";
+    // Loop through errors and display them
+    for (const [field, messages] of Object.entries(errors)) {
+        const li = document.createElement("li");
+        li.className = "alert alert-danger";
+        li.textContent = `${field} : ${messages}`;
+        error_messages.appendChild(li);
+    }
 }
 
 set_tables(window.noiseMeters);
-
 window.set_tables = set_tables;
 window.openModal = openModal;
 window.openSecondModal = openSecondModal;

@@ -37,11 +37,6 @@
 
         <div class="mb-3">
             <a href="#" class="href h3 text-decoration-none">Concentrators</a>
-        </div>
-        <div class="mb-3">
-
-            <div id='concentrator_table'></div>
-
             <div class="d-flex flex-row mt-3 justify-content-between">
                 <button class="btn btn-light text-danger border shadow-sm" id="deleteButton"
                     onclick="openModal('deleteConfirmationModal')">Delete</button>
@@ -53,6 +48,9 @@
                         onclick='openModal("concentratorModal", "create")'>Create</button>
                 </div>
             </div>
+        </div>
+        <div class="mb-3">
+            <div id='concentrator_table'></div>
         </div>
     </div>
 

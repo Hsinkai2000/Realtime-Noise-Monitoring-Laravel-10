@@ -3,13 +3,15 @@
     aria-labelledby="deleteConfirmationModal" aria-hidden="true" data-type="{{ $type }}">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-secondary">
-                <h3 class="modal-title" id="projectDeleteLabel">Are you sure you want to delete &nbsp;
+            <div class="modal-header bg-dark">
+                <h3 class="modal-title text-light" id="projectDeleteLabel">Are you sure you want to delete&nbsp;
                 </h3>
-                <h3 class="modal-title" id="deleteType">
+                <h3 class="modal-title text-light" id="deleteType">
                     {{ $type }}
                 </h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h3 class="modal-title text-light">?</h3>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
 
             <div class="modal-body">

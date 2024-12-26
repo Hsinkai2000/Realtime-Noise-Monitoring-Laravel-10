@@ -1,9 +1,10 @@
 <div class="modal fade shadow" id="projectModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-secondary">
-                <h3 class="modal-title text-text" id="projectcreateLabel">Project</h3>
-                <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-dark">
+                <h3 class="modal-title text-light" id="projectcreateLabel">Project</h3>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
 

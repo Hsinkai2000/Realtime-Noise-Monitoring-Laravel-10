@@ -5,27 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Concentrator;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ConcentratorController extends Controller
 {
     public function create(Request $request)
     {
-        try {
-            $concentrator_params = $request->only((new Concentrator)->getFillable());
-            if (strlen("00" . $concentrator_params['device_id']) !== 16) {
-                return render_unprocessable_entity('Concentrator device id not 64 bits');
-            }
-            try {
-                $concentrator_id = Concentrator::insertGetId($concentrator_params);
-                $concentrator = Concentrator::find($concentrator_id);
-                $concentrators = Concentrator::all();
-                return render_ok(["concentrator" => $concentrator, 'concentrators' => $concentrators]);
-            } catch (Exception $e) {
-                return render_unprocessable_entity("Concentrator Device ID already in use.");
-            }
-        } catch (Exception $e) {
-            return render_error($e);
-        }
+        $this->handleValidate($request);
+        $concentrator_params = $request->only((new Concentrator)->getFillable());
+
+        $concentrator_id = Concentrator::insertGetId($concentrator_params);
+        $concentrator = Concentrator::find($concentrator_id);
+        $concentrators = Concentrator::all();
+        return render_ok(["concentrator" => $concentrator, 'concentrators' => $concentrators]);
     }
 
     public function index()
@@ -64,26 +56,21 @@ class ConcentratorController extends Controller
 
     public function update(Request $request)
     {
-        try {
-            $id = $request->route('id');
-            $concentrator_params = $request->only((new Concentrator)->getFillable());
-            debug_log('asd', [$concentrator_params]);
-            $concentrator = Concentrator::find($id);
-            if (!$concentrator) {
-                return render_unprocessable_entity("Unable to find concentrator with id " . $id);
-            }
+        $this->handleValidate($request);
 
-            try {
-                $concentrator->update($concentrator_params);
-                $concentrators = Concentrator::all();
-                return render_ok(["concentrator" => $concentrator, 'concentrators' => $concentrators]);
-                return render_ok(["concentrator" => $concentrator_params]);
-            } catch (Exception $e) {
-                return render_unprocessable_entity("Unable to update concentrator");
-            }
-        } catch (Exception $e) {
-            render_error($e);
+        $id = $request->route('id');
+        $concentrator_params = $request->only((new Concentrator)->getFillable());
+
+        $concentrator = Concentrator::find($id);
+        if (!$concentrator) {
+            return render_unprocessable_entity("Unable to find concentrator with id " . $id);
         }
+
+
+        $concentrator->update($concentrator_params);
+        $concentrators = Concentrator::all();
+        return render_ok(["concentrator" => $concentrator, 'concentrators' => $concentrators]);
+        return render_ok(["concentrator" => $concentrator_params]);
     }
 
     public function delete(Request $request)
@@ -103,5 +90,12 @@ class ConcentratorController extends Controller
         } catch (Exception $e) {
             return render_error($e);
         }
+    }
+
+    private function handleValidate(Request $request)
+    {
+        return $request->validate([
+            'device_id' => ['required', 'string', 'size:14', Rule::unique('concentrators')->ignore($request->id)]
+        ]);
     }
 }

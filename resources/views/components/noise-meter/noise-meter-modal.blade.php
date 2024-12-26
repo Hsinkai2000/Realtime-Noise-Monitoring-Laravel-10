@@ -1,9 +1,10 @@
 <div class="modal fade shadow" id="noiseMeterModal" tabindex="-1" aria-labelledby="noiseMeterLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="noiseMeterModal">Noise Meter</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-dark">
+                <h3 class="modal-title text-light" id="noiseMeterModal">Noise Meter</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id='noise_meter_form'>
@@ -37,7 +38,6 @@
                             </div>
                         </div>
 
-
                         <div class="mb-3 row">
                             <label for="last_calibration_date"
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">
@@ -47,7 +47,6 @@
                                     name="last_calibration_date" required>
                             </div>
                         </div>
-
 
                         <div class="mb-3 row">
                             <label for="remarks"
