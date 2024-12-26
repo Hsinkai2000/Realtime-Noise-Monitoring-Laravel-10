@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="col" id="existing_serial">
                                     @if ($measurementPoint)
-                                        {{ $measurementPoint->concentrator ? $measurementPoint->noiseMeter->serial_number . ' | ' . $measurementPoint->noiseMeter->noise_meter_label : 'Not Linked' }}
+                                        {{ $measurementPoint->noiseMeter ? $measurementPoint->noiseMeter->serial_number . ' | ' . $measurementPoint->noiseMeter->noise_meter_label : 'Not Linked' }}
                                     @endif
                                 </div>
                             </div>
