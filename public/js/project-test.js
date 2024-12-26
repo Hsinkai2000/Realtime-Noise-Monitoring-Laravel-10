@@ -1,4 +1,5 @@
 const curruserList = document.getElementById("curruserList");
+var userList = [];
 const addUserBtn = document.getElementById("addUserBtn");
 const usernameField = document.getElementById("username");
 const passwordField = document.getElementById("password");
