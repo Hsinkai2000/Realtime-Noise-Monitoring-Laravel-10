@@ -12,8 +12,9 @@
             <div class="modal-body">
                 <form id='measurement_point_form' method="POST">
                     @csrf
-                    <div>
-                        <h4>Measurement Point</h4>
+                    <div class="mb-3">
+                        <h4>Measurement Point Information</h4>
+                        <hr>
                         <div class="mb-3 row">
                             <label for="point_name" class="col-md-3 col-sm-12 text-align-center col-form-label">Point
                                 Name</label>
@@ -42,9 +43,8 @@
                             </div>
                         </div>
                         </br>
-                        <hr>
-                        </br>
                         <h4>Link Devices</h4>
+                        <hr>
                         <div class="mb-3 row">
                             <div class="col-6">
                                 <div class="col">
@@ -113,11 +113,9 @@
                         <input name='project_id' hidden
                             value="@if (!$measurementPoint) {{ $project['id'] }}@else {{ $measurementPoint->project_id }} @endif" />
 
-
-                        </br>
-                        <hr>
                         </br>
                         <h4>Sound Limits</h4>
+                        <hr>
                         <div id='existing_category' class="mb-3 row" @if (!$measurementPoint) hidden @endif>
                             <div class="col-md-6 col-sm-12">
                                 Existing Category

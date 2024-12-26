@@ -10,8 +10,8 @@
 
                 <form id='projectForm' method="POST">
                     @csrf
-
                     <h4>Project Information</h4>
+                    <hr>
                     <div>
                         <div class="mb-3 row">
                             <label for="job_number" class="col-md-3 col-sm-12 text-align-center col-form-label">Job
@@ -99,13 +99,10 @@
                                     value="{{ old('end_user_name', $project->end_user_name ?? '') }}">
                             </div>
                         </div>
-
-                        </br>
+                        <br>
+                        <h4>User Information</h4>
                         <hr>
-                        </br>
-
                         <div class="mb-3 row">
-                            <h4>User Information</h4>
                             <div class="">
                                 <form id="userForm">
                                     <!-- List of Users -->

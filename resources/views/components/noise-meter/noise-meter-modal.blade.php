@@ -10,7 +10,6 @@
                 <form id='noise_meter_form'>
                     @csrf
                     <div>
-                        <h4>Noise Meter</h4>
                         <div class="mb-3 row">
                             <label for="serial_number"
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Serial

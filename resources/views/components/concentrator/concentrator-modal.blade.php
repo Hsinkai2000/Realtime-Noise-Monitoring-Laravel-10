@@ -10,7 +10,6 @@
                 <form id='concentrator_form'>
                     @csrf
                     <div>
-                        <h4>Concentrator</h4>
                         <div class="mb-3 row">
                             <label for="serial_number"
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Device Id</label>
