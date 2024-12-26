@@ -8,6 +8,7 @@
         Report_{{ $measurementPoint->noiseMeter->serial_number }}_{{ $start_date->format('dmY') }}-{{ $end_date->format('dmY') }}
     </title>
 
+    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/pdf.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 
