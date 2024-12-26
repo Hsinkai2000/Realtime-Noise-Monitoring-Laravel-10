@@ -131,8 +131,10 @@ measurementPointModal.addEventListener("hidden.bs.modal", function (event) {
 });
 
 function populateSelects() {
-    populateConcentrator();
-    populateNoiseMeter();
+    if (window.admin) {
+        populateConcentrator();
+        populateNoiseMeter();
+    }
 }
 
 function populateConcentrator() {

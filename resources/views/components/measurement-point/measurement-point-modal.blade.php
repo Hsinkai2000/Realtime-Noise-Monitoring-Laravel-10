@@ -101,6 +101,13 @@
                                     </div>
                                 </div>
                             </div>
+                        @else
+                            <input name="concentrator_id"
+                                value="@if ($measurementPoint) {{ $measurementPoint->concentrator ? $measurementPoint->concentrator->id : '' }} @endif"
+                                hidden>
+                            <input name="noise_meter_id"
+                                value="@if ($measurementPoint) {{ $measurementPoint->noiseMeter ? $measurementPoint->noiseMeter->id : '' }} @endif"
+                                hidden>
                         @endif
 
                         <input name='project_id' hidden
@@ -136,7 +143,8 @@
                         </div>
                         </br>
 
-                        <span onclick="toggle_soundLimits()" type='button'>Advanced Sound Limit Configuration > </span>
+                        <span onclick="toggle_soundLimits()" class="text-primary" type='button'>Advanced Sound Limit
+                            Configuration > </span>
                         </br>
 
                         <div id="advanced_sound_limits" hidden>

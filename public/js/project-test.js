@@ -775,14 +775,17 @@ function populate_soundLimits(event, reset_defaults = false) {
 }
 
 function populateSelects() {
-    populateConcentrator();
-    populateNoiseMeter();
+    if (window.admin) {
+        populateConcentrator();
+        populateNoiseMeter();
+    }
 }
 
 function populateConcentrator() {
     var selectConcentrator;
     var defaultConcentrator;
     selectConcentrator = document.getElementById("selectConcentrator");
+
     selectConcentrator.innerHTML = "";
     create_empty_option(selectConcentrator, "Choose Concentrator...");
 

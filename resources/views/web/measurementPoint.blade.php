@@ -55,12 +55,13 @@
                 <button type="button" id="edit-button" class="d-inline btn btn-dark text-light shadow-sm"
                     data-bs-toggle="modal" data-bs-target="#measurementPointModal">Edit</button>
             </div>
-
-            <div class="right-groups d-flex align-items-center">
-                <button id="delete-data-button" class="btn btn-light text-danger border shadow-sm" type="button"
-                    onclick='openModal("deleteConfirmationModal","{{ $measurementPoint->point_name }}" )'>Delete
-                    Project</button>
-            </div>
+            @if (Auth::user()->isAdmin())
+                <div class="right-groups d-flex align-items-center">
+                    <button id="delete-data-button" class="btn btn-light text-danger border shadow-sm" type="button"
+                        onclick='openModal("deleteConfirmationModal","{{ $measurementPoint->point_name }}" )'>Delete
+                    </button>
+                </div>
+            @endif
         </div>
         <table class="table">
             <tr>

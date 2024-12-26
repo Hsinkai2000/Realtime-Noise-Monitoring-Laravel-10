@@ -44,15 +44,18 @@
         <div class="d-flex justify-content-between align-items-center heading-group mb-3">
             <div class="left-group d-flex align-items-center">
                 <h3 class="mb-0 me-2">Project Information</h3>
-                <button type="button" id="edit-button" class="d-inline btn btn-dark text-light shadow-sm"
-                    data-bs-toggle="modal" data-bs-target="#projectModal">Edit</button>
+                @if (Auth::user()->isAdmin())
+                    <button type="button" id="edit-button" class="d-inline btn btn-dark text-light shadow-sm"
+                        data-bs-toggle="modal" data-bs-target="#projectModal">Edit</button>
+                @endif
             </div>
-
-            <div class="right-groups d-flex align-items-center">
-                <button id="delete-data-button" class="btn btn-light text-danger border shadow-sm" type="button"
-                    onclick='openModal("deleteConfirmationModal","{{ $project->job_number }}" )'>Delete
-                    Project</button>
-            </div>
+            @if (Auth::user()->isAdmin())
+                <div class="right-groups d-flex align-items-center">
+                    <button id="delete-data-button" class="btn btn-light text-danger border shadow-sm" type="button"
+                        onclick='openModal("deleteConfirmationModal","{{ $project->job_number }}" )'>Delete
+                        Project</button>
+                </div>
+            @endif
         </div>
         <hr>
         <div class="project-information">
@@ -155,8 +158,8 @@
         <x-confirmation-modal />
         <x-delete-modal type='user' />
         <x-delete-confirmation-modal :project="$project" :type="$project->job_number" />
-        <x-measurementPoint.measurement-point-modal :project="$project" />
         <x-contacts.contact-modal :project="$project" />
+        <x-measurementPoint.measurement-point-modal :project="$project" />
         <x-project.project-modal :project="$project" />
 
     </div>
