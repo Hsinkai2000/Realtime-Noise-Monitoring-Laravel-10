@@ -1,9 +1,10 @@
 <div class="modal fade shadow" id="viewPdfModal" tabindex="-1" aria-labelledby="viewPdfModal" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewPdfLabel">View Pdf</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-light" id="viewPdfLabel">View Pdf</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="viewPdfForm">
@@ -14,7 +15,8 @@
                                 Date</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id='start_date'
-                                    placeholder="Choose Starting Date" name="start_date">
+                                    placeholder="Choose Starting Date" name="start_date"
+                                    value="{{ \Carbon\Carbon::now()->toDateString() }}">
                             </div>
                         </div>
                         <div class="row mb-3">

@@ -44,7 +44,7 @@
                     onclick="openModal('deleteConfirmationModal')">Delete</button>
                 <div id="noise_meter_pages"></div>
                 <div>
-                    <button class="btn btn-primary bg-light text-primary px-4 me-3 shadow-sm" id="editButton"
+                    <button class="btn btn-dark text-light px-4 me-3 shadow-sm" id="editButton"
                         onclick='openModal("noiseMeterModal", "update")'>Edit</button>
                     <button class="btn btn-primary text-light shadow-sm" id="createButton"
                         onclick="openModal('noiseMeterModal','create')">Create</button>

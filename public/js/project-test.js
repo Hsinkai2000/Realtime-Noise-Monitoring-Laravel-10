@@ -382,7 +382,7 @@ function submit_project() {
     });
 }
 
-function openSecondModal(initialModal, newModal, li) {
+function openSecondModalUser(initialModal, newModal, li) {
     var firstModalEl = document.getElementById(initialModal);
     var firstModal = bootstrap.Modal.getInstance(firstModalEl);
     isSwitchingModal = true;
@@ -473,7 +473,7 @@ function populateUsers() {
         // Add click event to remove the user
         removeBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            openSecondModal("projectModal", "deleteModal", li);
+            openSecondModalUser("projectModal", "deleteModal", li);
         });
 
         li.appendChild(removeBtn);
@@ -513,7 +513,8 @@ function addUserClicked() {
             // Add click event to remove the user
             removeBtn.addEventListener("click", (e) => {
                 e.preventDefault();
-                openSecondModal("projectModal", "deleteModal", li);
+                console.log("pressed");
+                openSecondModalUser("projectModal", "deleteModal", li);
             });
 
             li.appendChild(removeBtn);

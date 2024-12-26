@@ -15,8 +15,7 @@
                     <div>
                         <h4>Measurement Point</h4>
                         <div class="mb-3 row">
-                            <label for="point_name"
-                                class="col-md-3 col-sm-12 text-align-center col-form-label">Measurement Point
+                            <label for="point_name" class="col-md-3 col-sm-12 text-align-center col-form-label">Point
                                 Name</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputPointName" name="point_name"

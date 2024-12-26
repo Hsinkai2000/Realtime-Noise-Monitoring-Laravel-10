@@ -22,7 +22,7 @@
                         data-bs-dismiss="modal">Discard</button>
 
                     <!-- Submit button to delete the project -->
-                    <button onclick="handleConfirmationSubmit(event)" id="deleteButton" type="button"
+                    <button onclick="handleConfirmationSubmit(event)" id="confirmSubmitButton" type="button"
                         class="btn btn-primary text-white">Continue</button>
                     <p id="confirmationError" class="text-danger" hidden>Confirmation Failed!</p>
                 </form>

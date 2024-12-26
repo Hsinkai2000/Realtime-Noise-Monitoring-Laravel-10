@@ -343,8 +343,8 @@ function closeModal(modal) {
 }
 
 function initDatePicker() {
-    document.getElementById("start_date").value = null;
-    document.getElementById("end_date").value = null;
+    document.getElementById("start_date").value = formatDate(new Date());
+    document.getElementById("end_date").value = formatDate(new Date());
     dpMin = new AirDatepicker("#start_date", {
         autoClose: true,
         dateFormat: "dd-MM-yyyy",
@@ -369,6 +369,13 @@ function initDatePicker() {
             });
         },
     });
+}
+
+function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
 }
 
 async function openPdf() {

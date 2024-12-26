@@ -312,7 +312,6 @@ function openSecondModal(initialModal, newModal, li) {
 }
 
 function addUserClicked() {
-    console.log("clicked");
     const username = usernameField.value.trim();
     const password = passwordField.value.trim();
     if (!username || !password) {
@@ -343,6 +342,7 @@ function addUserClicked() {
             // Add click event to remove the user
             removeBtn.addEventListener("click", (e) => {
                 e.preventDefault();
+                console.log("pressed");
                 openSecondModal("projectModal", "deleteModal", li);
             });
 

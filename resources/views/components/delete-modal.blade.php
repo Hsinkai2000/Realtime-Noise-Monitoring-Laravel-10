@@ -1,4 +1,4 @@
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-dark">
@@ -10,7 +10,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="deleteForm">
+                <form id="deleteUserForm">
                     <!-- Cancel button to dismiss the modal -->
                     <button class="btn btn-primary bg-white text-primary" type="button"
                         data-bs-dismiss="modal">Cancel</button>

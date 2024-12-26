@@ -11,6 +11,7 @@
                 <form id='projectForm' method="POST">
                     @csrf
 
+                    <h4>Project Information</h4>
                     <div>
                         <div class="mb-3 row">
                             <label for="job_number" class="col-md-3 col-sm-12 text-align-center col-form-label">Job
@@ -99,10 +100,13 @@
                             </div>
                         </div>
 
+                        </br>
+                        <hr>
+                        </br>
+
                         <div class="mb-3 row">
-                            <label for="user_id"
-                                class="col-md-3 col-sm-12 text-align-center col-form-label">User</label>
-                            <div class="col-sm-8 align-content-center">
+                            <h4>User Information</h4>
+                            <div class="">
                                 <form id="userForm">
                                     <!-- List of Users -->
                                     <h6>Current Users</h6>
@@ -119,11 +123,11 @@
                                         </div>
                                         <div class="col-6">
                                             <input type="password" id="password" class="form-control"
-                                                placeholder="Password">
+                                                placeholder="Password" autocomplete="new-password">
                                         </div>
                                     </div>
-                                    <button type="button" id="addUserBtn" class="btn btn-primary btn-sm mt-3"
-                                        onclick="addUserClicked()">Add
+                                    <button type="button" id="addUserBtn"
+                                        class="btn btn-primary text-light btn-sm mt-3" onclick="addUserClicked()">Add
                                         User</button>
 
                                 </form>

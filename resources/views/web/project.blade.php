@@ -153,9 +153,9 @@
         </div>
 
         <x-confirmation-modal />
+        <x-delete-modal type='user' />
         <x-delete-confirmation-modal :project="$project" :type="$project->job_number" />
         <x-measurementPoint.measurement-point-modal :project="$project" />
-        <x-delete-modal type='user' />
         <x-contacts.contact-modal :project="$project" />
         <x-project.project-modal :project="$project" />
 
