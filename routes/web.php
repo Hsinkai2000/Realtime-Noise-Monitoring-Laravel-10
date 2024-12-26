@@ -24,6 +24,11 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 });
 
+Route::get('/font/{path}', function ($path) {
+    return response()->file(public_path('font/' . $path));
+})->where('path', '.*');
+
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [AuthController::class, 'verify_logged_in'])->name('verify_logged_in');
