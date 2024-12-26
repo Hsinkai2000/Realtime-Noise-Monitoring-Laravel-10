@@ -21,7 +21,7 @@
 <style>
     body {
         font-size: 14px;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: Arial, Helvetica, sans-serif !important;
     }
 
     .bottom-bar {
