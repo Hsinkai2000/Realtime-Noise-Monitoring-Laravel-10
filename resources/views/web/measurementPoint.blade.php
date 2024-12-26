@@ -63,20 +63,33 @@
                 </div>
             @endif
         </div>
-        <table class="table">
-            <tr>
-                <th scope='row'>Point Name</th>
-                <td scope='row'>{{ $measurementPoint->point_name }}</td>
-            </tr>
-            <tr>
-                <th scope='row'>Device Location</th>
-                <td scope='row'>{{ $measurementPoint->device_location }}</td>
-            </tr>
-            <tr>
-                <th scope='row'>Remarks</th>
-                <td scope='row'>{{ $measurementPoint->remarks }}</td>
-            </tr>
-        </table>
+
+        <div class="measurementPoint-information">
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Point Name:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $measurementPoint->point_name }}
+                </div>
+            </div>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Device Location:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $measurementPoint->device_location }}
+                </div>
+            </div>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Remarks:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $measurementPoint->remarks }}
+                </div>
+            </div>
+        </div>
 
         <h6>Noise Meter</h6>
         <div id='noise_meter_table'>
