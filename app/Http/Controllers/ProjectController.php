@@ -163,6 +163,7 @@ class ProjectController extends Controller
             'client_name' => 'required|string|max:255',
             'project_type' => 'required|string|max:255',
             'jobsite_location' => 'required|string|max:255',
+            'sms_count' => 'nullable|integer|min:0|max:20'
         ]);
     }
 }
