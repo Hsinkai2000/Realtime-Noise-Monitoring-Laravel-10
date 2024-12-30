@@ -12,7 +12,7 @@
     <link href="{{ asset('css/pdf.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 
-    {{-- @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resources/js/app.js']) --}}
+    {{-- @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resource ss/js/app.js']) --}}
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}">

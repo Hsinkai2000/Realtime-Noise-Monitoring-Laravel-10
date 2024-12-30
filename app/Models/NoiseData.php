@@ -17,8 +17,6 @@ class NoiseData extends Model
         'measurement_point_id',
         'leq',
         'received_at',
-        'created_at',
-        'updated_at',
     ];
 
     protected $casts = [
@@ -26,8 +24,6 @@ class NoiseData extends Model
         'measurement_point_id' => 'integer',
         'leq' => 'float',
         'received_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 
     public function measurementPoint(): BelongsTo

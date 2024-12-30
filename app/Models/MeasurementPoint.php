@@ -433,7 +433,7 @@ class MeasurementPoint extends Model
 
     public function getLastLeqData()
     {
-        return $this->noiseData()->latest()->first();
+        return $this->noiseData()->orderBy('received_at', 'desc')->first();
     }
 
     protected function serializeDate(\DateTimeInterface $date)
