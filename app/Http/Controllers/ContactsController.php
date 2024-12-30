@@ -88,7 +88,7 @@ class ContactsController extends Controller
         return $request->validate([
             'contact_person_name' => 'required',
             'designation' => 'required',
-            'phone_number' => 'nullable|bail|numeric|digits:8',
+            'phone_number' => 'numeric|digits:8|nullable',
         ]);
     }
 }
