@@ -164,6 +164,8 @@ class ProjectController extends Controller
             'project_type' => 'required|string|max:255',
             'jobsite_location' => 'required|string|max:255',
             'sms_count' => 'nullable|integer|min:0|max:20'
+        ], [
+            'sms_count.min' => 'sms_count cannot be negative.',
         ]);
     }
 }
