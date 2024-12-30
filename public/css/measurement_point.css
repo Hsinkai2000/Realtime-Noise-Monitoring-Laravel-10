@@ -54,3 +54,8 @@
 .datepicker {
   z-index: 9999;
 }
+
+table th,
+table td {
+  padding: 5px 5px;
+}

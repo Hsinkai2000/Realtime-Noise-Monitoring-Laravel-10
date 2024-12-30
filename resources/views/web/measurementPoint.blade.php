@@ -89,18 +89,141 @@
                     {{ $measurementPoint->remarks }}
                 </div>
             </div>
-        </div>
-
-        <h6>Noise Meter</h6>
-        <div id='noise_meter_table'>
-        </div>
-
-        @if (Auth::user()->isAdmin())
-            <h6>Concentrator</h6>
-            <div id='concentrator_table'>
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Category:
+                </div>
+                <div class="col-md-10 col-6">
+                    {{ $measurementPoint->soundLimit->category }}
+                </div>
             </div>
-        @endif
+            <div class="row w-100 pb-3">
+                <div class="col-md-2 col-6">
+                    Sound Limits:
+                </div>
+                <div class="col-md-10 col-6">
+                    @if ($measurementPoint->soundLimit->category == 'Residential')
+                        <table class="table-bordered w-100">
+                            <tr>
+                                <th></th>
+                                <th>7am-7pm</th>
+                                <th>7pm-10pm</th>
+                                <th>10pm-12am</th>
+                                <th>12am-7am</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">Mon-Sat</th>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_10pm_12am_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_12am_7am_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq12hr }} dBA <br>(Leq 12 hrs)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq12hr }} dBA <br>(Leq 1 hr)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_10pm_12am_leq12hr }} dBA <br>(Leq 1 hr)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_12am_7am_leq12hr }} dBA <br>(Leq 1 hr)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">Sun/Ph</th>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_7am_7pm_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_10pm_12am_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_12am_7am_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_7am_7pm_leq12hr < 140 ? $measurementPoint->soundLimit->sun_ph_7am_7pm_leq12hr . ' dBA' : '-' }}
+                                    (Leq 12 hrs)
+                                </td>
+                                <td colspan="3">
+                                    {{ $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq12hr < 140 ? $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq12hr . ' dBA' : '-' }}
+                                    <br>(Leq 12 hrs)
 
+                                </td>
+                            </tr>
+                        </table>
+                    @else
+                        <table class="table-bordered w-100">
+                            <tr>
+                                <th>{{ 'Category: ' . $measurementPoint->soundLimit->category }}</th>
+                                <th>7am-7pm</th>
+                                <th>7pm-10pm</th>
+                                <th>10pm-12am</th>
+                                <th>12am-7am</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">Mon-Sat</th>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_10pm_12am_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_12am_7am_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq12hr }} dBA <br>(Leq 12 hrs)
+                                </td>
+                                <td colspan="3">{{ $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq12hr }} dBA
+                                    <br>(Leq
+                                    12
+                                    hrs)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">Sun/Ph</th>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_7am_7pm_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_10pm_12am_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_12am_7am_leq5min }} dBA <br>(Leq 5 mins)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ $measurementPoint->soundLimit->sun_ph_7am_7pm_leq12hr < 140 ? $measurementPoint->soundLimit->sun_ph_7am_7pm_leq12hr . ' dBA' : '-' }}
+                                    (Leq 12 hrs)
+                                </td>
+                                <td colspan="3">
+                                    {{ $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq12hr < 140 ? $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq12hr . ' dBA' : '-' }}
+                                    (Leq 12 hrs)
+                                </td>
+                            </tr>
+                        </table>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="mb-3">
+            <h6>Noise Meter:</h6>
+            <div id='noise_meter_table'>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            @if (Auth::user()->isAdmin())
+                <h6>Concentrator</h6>
+                <div id='concentrator_table'>
+                </div>
+            @endif
+        </div>
         <br />
         <div class="d-flex justify-content-center">
             <button class="btn btn-primary bg-light text-primary px-4 me-3 shadow-sm"
