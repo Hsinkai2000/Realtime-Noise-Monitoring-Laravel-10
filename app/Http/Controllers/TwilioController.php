@@ -25,7 +25,7 @@ class TwilioController extends Controller
                 $this->updateAlertLog($postData['SmsSid'], 'Twilio ' . $postData['SmsStatus']);
                 return response()->json(['success' => true], 200);
             } else {
-                return response()->json(['success' => false], 200);
+                return response()->json(['success' => false], 400);
             }
         } catch (\Exception $e) {
             Log::error('Error in Twilio callback', ['exception' => $e]);
