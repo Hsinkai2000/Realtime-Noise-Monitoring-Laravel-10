@@ -24,15 +24,15 @@ class PagesController extends Controller
         }
         switch ($geoscanLib->message_type()) {
             case 0x00:
-                debug_log('inside message 0', []);
+                \Log::debug("message 0");
                 $this->message_0_callback($request, $geoscanLib);
                 break;
             case 0x01:
-                debug_log('inside message 1', []);
+                \Log::debug("message 1");
                 $this->message_1_callback($request, $geoscanLib);
                 break;
             default:
-                debug_log('inside message default', []);
+                \Log::debug("message default");
                 break;
         }
     }
@@ -44,7 +44,7 @@ class PagesController extends Controller
             $this->check_message_0_conditions($concentrator);
             $s_values = $geoscanLib->summary_values();
             $this->updateConcentrator($request, $s_values, $concentrator);
-            Log::info('Concentrator updated successfully');
+            Log::debug('Concentrator updated successfully');
             render_ok("ok");
         } catch (Exception $e) {
             render_unprocessable_entity($e->getMessage());
@@ -72,7 +72,7 @@ class PagesController extends Controller
                 $ndevice_params = $this->prepareNdeviceParams($noise_data, $measurement_point);
                 $this->update_measurement_point($measurement_point, $ndevice_params);
                 $measurement_point->check_last_data_for_alert();
-                Log::info('Record Successfully updated', ['noise_data' => $noise_data]);
+                Log::debug('Record Successfully updated', ['noise_data' => $noise_data]);
                 render_ok("Record Successfully updated");
             } catch (Exception $e) {
                 throw new Exception("Error processing noise data : " . $e);

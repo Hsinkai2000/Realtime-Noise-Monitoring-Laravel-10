@@ -33,7 +33,6 @@ class AuthController extends Controller
     public function loginPost(Request $request)
     {
         $user_params = $request->only((new User)->getFillable());
-        debug_log('user', [$user_params]);
 
         if (Auth::attempt(['username' => $user_params['username'], 'password' => $user_params['password']])) {
             $request->session()->regenerate();

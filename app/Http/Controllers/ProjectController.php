@@ -24,7 +24,6 @@ class ProjectController extends Controller
 
     public function show_project($id)
     {
-        debug_log('in project');
         $project = Project::with('user')->find($id);
         return view('web.project', ['project' => $project]);
     }
@@ -91,11 +90,10 @@ class ProjectController extends Controller
 
                 return response()->json(["projects" => $projects]);
             } catch (Exception $e) {
-                debug_log('ss', [$e->getMessage()]);
                 return render_error($e->getMessage());
             }
         };
-        debug_log("unauthorised");
+
         return render_error("Unauthorised");
     }
 

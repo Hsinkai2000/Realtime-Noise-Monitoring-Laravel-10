@@ -27,8 +27,7 @@ class TwilioService
             ]);
             return $response;
         } catch (\Exception $e) {
-            debug_log("Error sending SMS to $to: " . $e->getMessage());
-
+            \Log::error("Error Sending SMS to" . $to, $e->getMessage());
             return null;
         }
     }

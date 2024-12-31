@@ -11,8 +11,6 @@ class ContactsController extends Controller
 {
     public function create(Request $request)
     {
-        debug_log($request->only((new Contact)->getFillable()));
-        debug_log($request->get('project_id'));
         $this->handleContactValidation($request);
         $contact_params = $request->only((new Contact)->getFillable());
         $contact_id = Contact::insertGetId($contact_params);

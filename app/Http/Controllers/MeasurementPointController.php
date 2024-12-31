@@ -106,9 +106,6 @@ class MeasurementPointController extends Controller
         }
         $id = $request->route('id');
         $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
-        debug_log($id);
-        debug_log($measurement_point_params);
-
 
         if (!isset($measurement_point_params['concentrator_id'])) {
             $measurement_point_params['concentrator_id'] = null;
@@ -227,7 +224,6 @@ class MeasurementPointController extends Controller
                 if (!$this->isDeviceAvailable($value, null, 'concentrator')) {
                     // $fail(Concentrator::find($value)->value('concentrator_label'));
                     $concentrator = Concentrator::find($value);
-                    debug_log('concentrator id : ' . $concentrator->concentrator_label);
                     $fail($concentrator->concentrator_label);
                 }
             }],

@@ -20,7 +20,6 @@ class TwilioController extends Controller
     {
         try {
             $postData = $request->all();
-
             if ($this->hasRequiredParameters($postData)) {
                 $this->updateAlertLog($postData['SmsSid'], 'Twilio ' . $postData['SmsStatus']);
                 return response()->json(['success' => true], 200);

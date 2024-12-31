@@ -3,10 +3,6 @@
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-function debug_log($message, array $context = [])
-{
-    Log::channel('debug')->debug($message, $context);
-}
 
 function render_ok($message)
 {

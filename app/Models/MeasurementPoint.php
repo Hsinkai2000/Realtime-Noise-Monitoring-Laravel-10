@@ -244,7 +244,7 @@ class MeasurementPoint extends Model
                 $email_messageid = $email_response->getSymfonySentMessage()->getMessageId();
                 $email_messagedebug = $email_response->getSymfonySentMessage()->getDebug();
             } catch (Exception $e) {
-                debug_log('error sending email', [$e->getMessage()]);
+                \Log::error("Error sending email", [$e->getMessage()]);
                 $email_messagedebug = $e;
             }
         }
@@ -272,10 +272,10 @@ class MeasurementPoint extends Model
                     $sms_status = "SMS sending";
                 }
             } catch (Exception $e) {
-                debug_log("Message not sent", [$e->getMessage()]);
+                \Log::debug("Message not sent", [$e->getMessage()]);
             }
         } else {
-            debug_log("No phone number found");
+            \Log::debug("No Phone Number Found");
         }
         return [$sms_messageid, $sms_status];
     }

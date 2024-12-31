@@ -58,7 +58,6 @@ class NoiseMeterController extends Controller
         $noise_meter = NoiseMeter::find($id);
 
         if (!$noise_meter) {
-            debug_log('here1');
             return render_unprocessable_entity("Unable to find noise meter with id " . $id);
         }
 

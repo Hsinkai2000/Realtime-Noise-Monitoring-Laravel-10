@@ -30,7 +30,6 @@ class PartialsReportData extends Component
      */
     public function render(): View | Closure | string
     {
-        debug_log('running');
         return view('components.pdfs.partials-report-data');
     }
 }
