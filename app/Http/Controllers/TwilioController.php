@@ -30,7 +30,7 @@ class TwilioController extends Controller
                 return response()->json(['success' => true], 200);
             } else {
                 debug_log('no params');
-                return response()->json(['error' => 'Missing parameters in the request'], 400);
+                return response()->json(['success' => false], 200);
             }
         } catch (\Exception $e) {
             debug_log('error', [$e]);
