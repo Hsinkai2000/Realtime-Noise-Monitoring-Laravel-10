@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TwilioController;
 use App\Models\Project;
 
 /*
@@ -22,6 +23,7 @@ Route::group(['middleware' => 'guest'], function () {
     });
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
+    Route::post('/twilio/callback', [TwilioController::class, 'callback'])->name('twilio.callback');
 });
 
 Route::get('/font/{path}', function ($path) {

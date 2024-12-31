@@ -20,15 +20,14 @@ class TwilioService
     {
         try {
             $message = view($template, ['data' => $data])->render();
-
+            debug_log('in send message:', [config('services.twilio.callback_url')]);
             $response = $this->twilio->messages->create($to, [
                 'from' => config('services.twilio.from'),
                 'body' => $message,
-                'riskCheck' => 'disable',
-                // 'statusCallback' => config('services.twilio.callback_url'),
+                'statusCallback' => config('services.twilio.callback_url'),
             ]);
 
-            debug_log("SMS sent successfully to to: {$data["client_name"]}");
+            debug_log("SMS sent", [$response->body]);
 
             return $response;
         } catch (\Exception $e) {

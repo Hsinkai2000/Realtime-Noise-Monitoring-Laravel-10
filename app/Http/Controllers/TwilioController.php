@@ -18,16 +18,22 @@ class TwilioController extends Controller
 
     public function callback(Request $request)
     {
+        debug_log('callback called and inside');
         try {
             $postData = $request->all();
+            debug_log('callback data', [$postData]);
 
             if ($this->hasRequiredParameters($postData)) {
+                debug_log('has required Parameters');
                 $this->updateAlertLog($postData['SmsSid'], 'Twilio ' . $postData['SmsStatus']);
+                debug_log('updated');
                 return response()->json(['success' => true], 200);
             } else {
+                debug_log('no params');
                 return response()->json(['error' => 'Missing parameters in the request'], 400);
             }
         } catch (\Exception $e) {
+            debug_log('error', [$e]);
             Log::error('Error in Twilio callback', ['exception' => $e]);
             return response()->json(['error' => 'Internal server error'], 500);
         }
