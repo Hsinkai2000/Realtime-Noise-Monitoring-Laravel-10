@@ -71,25 +71,25 @@ function settable(tabledata) {
                     minWidth: 150,
                     headerSort: false,
                 },
-                {
-                    title: "Status (Ongoing/Completed)",
-                    field: "status",
-                    editor: "list",
-                    editorParams: {
-                        values: ["", "Ongoing", "Completed"],
-                        clearable: true,
-                    },
-                    minWidth: 150,
-                    headerFilter: true,
-                    headerFilterParams: {
-                        values: {
-                            "": "select...",
-                            Ongoing: "Ongoing",
-                            Completed: "Completed",
-                        },
-                        clearable: true,
-                    },
-                },
+                // {
+                //     title: "Status (Ongoing/Completed)",
+                //     field: "status",
+                //     editor: "list",
+                //     editorParams: {
+                //         values: ["", "Ongoing", "Completed"],
+                //         clearable: true,
+                //     },
+                //     minWidth: 150,
+                //     headerFilter: true,
+                //     headerFilterParams: {
+                //         values: {
+                //             "": "select...",
+                //             Ongoing: "Ongoing",
+                //             Completed: "Completed",
+                //         },
+                //         clearable: true,
+                //     },
+                // },
                 {
                     title: "Created At",
                     field: "created_at",

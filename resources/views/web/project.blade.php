@@ -107,14 +107,14 @@
                     {{ $project->sms_count }}
                 </div>
             </div>
-            <div class="row w-100 pb-3">
+            {{-- <div class="row w-100 pb-3">
                 <div class="col-md-2 col-6">
                     Status:
                 </div>
                 <div class="col-md-10 col-6">
                     {{ $project->status }}
                 </div>
-            </div>
+            </div> --}}
         </div>
 
 
