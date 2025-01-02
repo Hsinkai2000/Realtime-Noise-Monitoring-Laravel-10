@@ -241,7 +241,7 @@ function set_tables() {
     var noise_meter_table = new Tabulator("#noise_meter_table", {
         layout: "fitColumns",
         data: new Array(window.noise_meter),
-        placeholder: "No linked Contacts",
+        placeholder: "No linked noise meter",
         columns: [
             {
                 title: "Serial Number",
@@ -279,7 +279,7 @@ function set_tables() {
     var concentrator_table = new Tabulator("#concentrator_table", {
         layout: "fitColumns",
         data: new Array(window.concentrator),
-        placeholder: "No linked Contacts",
+        placeholder: "No linked concentrator",
         columns: [
             {
                 title: "Device ID",
