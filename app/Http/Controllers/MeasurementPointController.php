@@ -233,7 +233,7 @@ class MeasurementPointController extends Controller
                     $fail($noiseMeter->noise_meter_label);
                 }
             }],
-        ]);
+        ] + $this->soundLimitValidation($request));
     }
     public function handleMeasurementPointUpdateValidation(Request $request)
     {
@@ -257,6 +257,42 @@ class MeasurementPointController extends Controller
                 }
             }],
 
-        ]);
+        ] + $this->soundLimitValidation($request));
+    }
+
+    protected function soundLimitValidation(Request $request): array
+    {
+        $fields = [
+            'mon_sat_7am_7pm_leq5min',
+            'mon_sat_7pm_10pm_leq5min',
+            'mon_sat_10pm_12am_leq5min',
+            'mon_sat_12am_7am_leq5min',
+            'sun_ph_7am_7pm_leq5min',
+            'sun_ph_7pm_10pm_leq5min',
+            'sun_ph_10pm_12am_leq5min',
+            'sun_ph_12am_7am_leq5min',
+            'mon_sat_7am_7pm_leq12hr',
+            'mon_sat_7pm_10pm_leq12hr',
+            'mon_sat_10pm_12am_leq12hr',
+            'mon_sat_12am_7am_leq12hr',
+            'sun_ph_7am_7pm_leq12hr',
+            'sun_ph_7pm_10pm_leq12hr',
+            'sun_ph_10pm_12am_leq12hr',
+            'sun_ph_12am_7am_leq12hr',
+        ];
+
+        $rules = [];
+        foreach ($fields as $field) {
+            $rules[$field] = [
+                'nullable',
+                'numeric',
+                function ($attribute, $value, $fail) {
+                    if ($value < 0) {
+                        $fail('Sound limit cannot be negative.');
+                    }
+                },
+            ];
+        }
+        return $rules;
     }
 }

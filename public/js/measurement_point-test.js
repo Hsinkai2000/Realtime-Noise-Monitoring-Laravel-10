@@ -560,33 +560,41 @@ async function handle_measurementpoint_submit(confirmation = false) {
         .then((response) => {
             if (response.status == 422) {
                 response.json().then((json) => {
-                    message = "";
-                    console.log(json.errors);
-                    if (json.errors.point_name) {
-                        display_errors("error_messagemp", {
-                            point_name: json.errors.point_name,
-                        });
-                    } else if (
-                        json.errors.concentrator_id ||
-                        json.errors.noise_meter_id
-                    ) {
-                        if (json.errors.concentrator_id) {
-                            message +=
-                                json.errors.concentrator_id.join(" ") + "\n";
-                        }
+                    let message = "";
 
-                        if (json.errors.noise_meter_id) {
-                            message +=
-                                json.errors.noise_meter_id.join(" ") + "\n";
-                        }
+                    if (json.errors) {
+                        const errorKeys = Object.keys(json.errors);
 
-                        document.getElementById("devicesSpan").innerHTML =
-                            message;
-
-                        openSecondModal(
-                            "measurementPointModal",
-                            "confirmationModal"
+                        const isDeviceErrorOnly = errorKeys.every((key) =>
+                            ["concentrator_id", "noise_meter_id"].includes(key)
                         );
+
+                        if (!isDeviceErrorOnly) {
+                            if (json.errors.concentrator_id)
+                                delete json.errors.concentrator_id;
+                            if (json.errors.noise_meter_id)
+                                delete json.errors.noise_meter_id;
+                            display_errors("error_messagemp", json.errors);
+                        } else {
+                            if (json.errors.concentrator_id) {
+                                message +=
+                                    json.errors.concentrator_id.join(" ") +
+                                    "\n";
+                            }
+
+                            if (json.errors.noise_meter_id) {
+                                message +=
+                                    json.errors.noise_meter_id.join(" ") + "\n";
+                            }
+
+                            document.getElementById("devicesSpan").innerHTML =
+                                message;
+
+                            openSecondModal(
+                                "measurementPointModal",
+                                "confirmationModal"
+                            );
+                        }
                     }
                 });
             } else {
