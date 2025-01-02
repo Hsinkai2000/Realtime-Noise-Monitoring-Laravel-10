@@ -98,10 +98,10 @@
                 </div>
             </div>
             <div class="row w-100 pb-3">
-                <div class="col-md-2 col-6">
+                <div class="col-md-2 col-sm-6">
                     Sound Limits:
                 </div>
-                <div class="col-md-10 col-6">
+                <div class="col-md-10 col-sm-6">
                     @if ($measurementPoint->soundLimit->category == 'Residential')
                         <table class="table-bordered w-100">
                             <tr>
