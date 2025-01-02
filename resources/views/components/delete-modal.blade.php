@@ -16,7 +16,7 @@
                         data-bs-dismiss="modal">Cancel</button>
 
                     <!-- Submit button to delete the project -->
-                    <button id="deleteConfirmButton" type="button" class="btn btn-primary text-white">Delete</button>
+                    <button id="deleteConfirmButton" type="button" class="btn btn-primary text-white">Remove</button>
                 </form>
             </div>
         </div>
