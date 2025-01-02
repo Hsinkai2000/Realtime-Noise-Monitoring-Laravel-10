@@ -3,6 +3,7 @@ if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
 var dpMin, dpMax;
+var viewPdfModal = document.getElementById("viewPdfModal");
 var measurementPointModal = document.getElementById("measurementPointModal");
 var deleteConfirmationModal = document.getElementById(
     "deleteConfirmationModal"
@@ -114,6 +115,10 @@ const valueMap = {
         sun_ph_12am_7am_leq12hr: 65.0,
     },
 };
+
+viewPdfModal.addEventListener("hidden.bs.modal", function (event) {
+    document.getElementById("error-messages-pdf").hidden = true;
+});
 
 measurementPointModal.addEventListener("hidden.bs.modal", function (event) {
     if (!isSwitchingModal) {
