@@ -36,7 +36,7 @@ function settable(tabledata) {
             pagination: "local",
             layout: "fitColumns",
             data: tabledata,
-            placeholder: "Not authorised",
+            placeholder: "No Rental Projects",
             paginationSize: 20,
             paginationCounter: "rows",
             selectable: 1,
@@ -109,15 +109,18 @@ function settable(tabledata) {
             ],
         });
     } else {
+        console.log(tabledata);
         var table = new Tabulator("#example-table", {
             pagination: "local",
             data: tabledata,
             layout: "fitColumns",
-            placeholder: "Not authorised",
+            placeholder: "No Sales Project",
             paginationSize: 20,
             paginationCounter: "rows",
             dataTree: true,
             dataTreeStartExpanded: true,
+            dataTreeFilter: true,
+            dataTreeSort: true,
             selectable: 1,
             responsiveLayout: "collapse",
             columns: [
@@ -141,7 +144,6 @@ function settable(tabledata) {
                     title: "Jobsite Location",
                     field: "jobsite_location",
                     minWidth: 150,
-                    headerFilter: "input",
                 },
                 {
                     title: "Project Description",
