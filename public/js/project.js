@@ -429,9 +429,9 @@ function toggleEndUserName() {
     var rentalRadio = document.getElementById("projectTypeRental");
     var endUserNameDiv = document.getElementById("endUserNameDiv");
     if (rentalRadio.checked) {
-        endUserNameDiv.style.display = "none";
+        endUserNameDiv.hidden = true;
     } else {
-        endUserNameDiv.style.display = "flex";
+        endUserNameDiv.hidden = false;
     }
 }
 
@@ -1051,6 +1051,6 @@ window.handle_measurementpoint_submit = handle_measurementpoint_submit;
 populateSelects();
 set_contact_table();
 set_measurement_point_table();
-toggleEndUserName();
+// toggleEndUserName();
 populateUsers();
 populate_soundLimits();

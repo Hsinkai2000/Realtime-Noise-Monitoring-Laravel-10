@@ -82,16 +82,18 @@
                                 Type</label>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="project_type"
-                                    id="projectTypeRental" value="rental" onchange="toggleEndUserName()" checked>
+                                    id="projectTypeRental" value="rental" onchange="toggleEndUserName()"
+                                    @if ($project->project_type == 'rental') checked @else if(!$project) checked @endif>
                                 <label class="form-check-label" for="project_type">Rental</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="project_type" id="projectTypeSales"
-                                    value="sales" onchange="toggleEndUserName()">
+                                    value="sales" onchange="toggleEndUserName()"
+                                    @if ($project->project_type == 'sales') checked @endif>
                                 <label class="form-check-label" for="project_type">Sales</label>
                             </div>
                         </div>
-                        <div class="mb-3 row" id="endUserNameDiv">
+                        <div class="mb-3 row" id="endUserNameDiv" @if ($project->project_type == 'rental') hidden @endif>
                             <label for="end_user_name" class="col-md-3 col-sm-12 text-align-center col-form-label">End
                                 User Name</label>
                             <div class="col-sm-8 align-content-center">
