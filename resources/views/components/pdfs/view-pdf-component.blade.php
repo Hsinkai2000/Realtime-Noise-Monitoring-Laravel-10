@@ -28,6 +28,9 @@
                             </div>
                         </div>
                     </div>
+                    <ul id="error-messages-pdf" class="mt-2 text-danger" hidden>
+                        <li>End Date must be after start date</li>
+                    </ul>
                 </form>
             </div>
 

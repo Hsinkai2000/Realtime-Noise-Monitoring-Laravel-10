@@ -381,19 +381,24 @@ function formatDate(date) {
 }
 
 async function openPdf() {
-    var select_start_date = document.getElementById("start_date");
-    var select_end_date = document.getElementById("end_date");
+    var select_start_date = document.getElementById("start_date").value;
+    var select_end_date = document.getElementById("end_date").value;
 
-    const newTab = window.open(
-        `${baseUri}/pdf/${new URLSearchParams({
-            id: window.measurementPointData.id,
-            start_date: select_start_date.value,
-            end_date: select_end_date.value,
-        }).toString()}`,
-        "Report"
-    );
-    newTab.focus();
-    closeModal("viewPdfModal");
+    if (select_start_date <= select_end_date) {
+        const newTab = window.open(
+            `${baseUri}/pdf/${new URLSearchParams({
+                id: window.measurementPointData.id,
+                start_date: select_start_date,
+                end_date: select_end_date,
+            }).toString()}`,
+            "Report"
+        );
+        newTab.focus();
+        closeModal("viewPdfModal");
+    } else {
+        document.getElementById("error-messages-pdf").hidden = false;
+        return false;
+    }
 }
 
 function toggle_soundLimits() {
