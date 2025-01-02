@@ -31,7 +31,7 @@
                     <button id="deleteButton" onclick="handleDelete(event)" type="button"
                         class="btn btn-primary text-white">Delete</button>
 
-                    <ul id="error-messages-delete" class="mt-2" hidden>
+                    <ul id="error-messages-delete" class="mt-2 text-danger" hidden>
                         <li>Confirmation code is invalid</li>
                     </ul>
                 </form>

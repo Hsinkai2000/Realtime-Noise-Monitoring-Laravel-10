@@ -226,8 +226,8 @@ function handleDelete(event) {
                 console.error("Error:", error);
             });
     } else {
-        var error = document.getElementById("deleteConfirmationError");
-        error.hidden = false;
+        document.getElementById("error-messages-delete").hidden = false;
+        return false;
     }
 }
 
