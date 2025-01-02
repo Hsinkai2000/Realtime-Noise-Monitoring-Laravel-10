@@ -3,6 +3,18 @@ var baseUri = `${window.location.protocol}//${window.location.hostname}`;
 if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
+var concentratorModal = document.getElementById("concentratorModal");
+
+concentratorModal.addEventListener("hidden.bs.modal", function (event) {
+    var form = document.getElementById("concentrator_form");
+    form.reset();
+    console.log("form resetted");
+
+    var errorMessagesDiv = document.getElementById("error_message");
+    if (errorMessagesDiv) {
+        errorMessagesDiv.innerHTML = "";
+    }
+});
 
 function set_tables(data) {
     var concentrator_table = new Tabulator("#concentrator_table", {
@@ -12,9 +24,17 @@ function set_tables(data) {
         pagination: "local",
         paginationSize: 20,
         paginationCounter: "rows",
-        paginationElement: document.getElementById("concentrator_pages"),
         selectable: 1,
+        responsiveLayout: "collapse",
         columns: [
+            {
+                formatter: "responsiveCollapse",
+                width: 30,
+                minWidth: 30,
+                hozAlign: "center",
+                resizable: false,
+                headerSort: false,
+            },
             {
                 formatter: "rowSelection",
                 titleFormatter: "rowSelection",
@@ -73,20 +93,15 @@ function set_tables(data) {
         ],
     });
     concentrator_table.on("rowSelectionChanged", function (data, rows) {
-        table_row_changed(data);
+        window.concentrator = data[0];
+        table_row_changed(window.concentrator);
     });
 }
 
 function table_row_changed(data) {
-    if (data && data.length > 0) {
+    if (data) {
         document.getElementById("editButton").disabled = false;
         document.getElementById("deleteButton").disabled = false;
-        window.concentrators.forEach((concentrator) => {
-            if (concentrator.id == data[0].id) {
-                window.concentrator = concentrator;
-            }
-        });
-        console.log(window.concentrator);
     } else {
         document.getElementById("editButton").disabled = true;
         document.getElementById("deleteButton").disabled = true;
@@ -96,36 +111,15 @@ function table_row_changed(data) {
 function fill_data() {
     var inputdevice_id = document.getElementById("inputdevice_id");
     var inputLabel = document.getElementById("inputLabel");
-    var inputCSQ = document.getElementById("inputCSQ");
-    var inputHp = document.getElementById("inputHp");
-    var inputVoltage = document.getElementById("inputVoltage");
-    var inputLastCommunicationPacketSent = document.getElementById(
-        "inputLastCommunicationPacketSent"
-    );
-    var inputLastAssignedIpAddress = document.getElementById(
-        "inputLastAssignedIpAddress"
-    );
     var inputRemarks = document.getElementById("inputRemarks");
 
     if (window.modalType == "update") {
         inputdevice_id.value = window.concentrator.device_id;
         inputLabel.value = window.concentrator.concentrator_label;
-        inputCSQ.value = window.concentrator.concentrator_csq;
-        inputHp.value = window.concentrator.concentrator_hp;
-        inputVoltage.value = window.concentrator.battery_voltage;
-        inputLastCommunicationPacketSent.value =
-            window.concentrator.last_communication_packet_sent;
-        inputLastAssignedIpAddress.value =
-            window.concentrator.last_assigned_ip_address;
         inputRemarks.value = window.concentrator.remarks;
     } else if (window.modalType == "create") {
         inputdevice_id.value = null;
         inputLabel.value = null;
-        inputCSQ.value = null;
-        inputHp.value = null;
-        inputVoltage.value = null;
-        inputLastCommunicationPacketSent.value = null;
-        inputLastAssignedIpAddress.value = null;
         inputRemarks.value = null;
     }
 }
@@ -156,11 +150,13 @@ function handle_update() {
         .then((response) => {
             if (response.status == 422) {
                 response.json().then((errorData) => {
-                    document.getElementById("error_message").innerHTML =
-                        errorData["Unprocessable Entity"];
+                    display_errors("error_message", errorData.errors);
                 });
             } else {
-                closeModal("concentratorModal");
+                response.json().then((json) => {
+                    resetTable(json);
+                    closeModal("concentratorModal");
+                });
             }
         })
         .catch((error) => {
@@ -185,11 +181,13 @@ function handle_create() {
         .then((response) => {
             if (response.status == 422) {
                 response.json().then((errorData) => {
-                    document.getElementById("error_message").innerHTML =
-                        errorData["Unprocessable Entity"];
+                    display_errors("error_message", errorData.errors);
                 });
             } else {
-                closeModal("concentratorModal");
+                response.json().then((json) => {
+                    resetTable(json);
+                    closeModal("concentratorModal");
+                });
             }
         })
         .catch((error) => {
@@ -233,15 +231,21 @@ function handleDelete(event) {
                 return response.json();
             })
             .then((data) => {
+                resetTable(data);
                 closeModal("deleteConfirmationModal");
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
     } else {
-        var error = document.getElementById("deleteConfirmationError");
-        error.hidden = false;
+        document.getElementById("error-messages-delete").hidden = false;
+        return false;
     }
+}
+
+function resetTable(json) {
+    window.concentrators = json.concentrators;
+    set_tables(window.concentrators);
 }
 
 function openModal(modalName, type) {
@@ -292,9 +296,21 @@ function closeModal(modal) {
     const modalElement = document.getElementById(modal);
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     modalInstance.hide();
-    location.reload();
 }
 
+function display_errors(element, errors) {
+    error_messages = document.getElementById(element);
+    error_messages.innerHTML = "";
+    // Loop through errors and display them
+    for (const [field, messages] of Object.entries(errors)) {
+        const li = document.createElement("li");
+        li.className = "alert alert-danger";
+        li.textContent = `${field} : ${messages}`;
+        error_messages.appendChild(li);
+    }
+}
+
+set_tables(window.concentrators);
 window.set_tables = set_tables;
 window.openModal = openModal;
 window.openSecondModal = openSecondModal;

@@ -1,57 +1,72 @@
+const curruserList = document.getElementById("curruserList");
+const addUserBtn = document.getElementById("addUserBtn");
+const usernameField = document.getElementById("username");
+const passwordField = document.getElementById("password");
+var projectModal = document.getElementById("projectModal");
+var userList = [];
 var baseUri = `${window.location.protocol}//${window.location.hostname}`;
 if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
-var tabledata = null;
-var userList = [];
-var inputprojectId = null;
-var modalType = "";
-var inputUserId = null;
 var tab = "rental";
+isSwitchingModal = false;
 
-function settable(tabledata, project_type) {
-    document.getElementById("table_pages").innerHTML = "";
+projectModal.addEventListener("hidden.bs.modal", function (event) {
+    if (!isSwitchingModal) {
+        userList = [];
+        curruserList.innerHTML = "";
+        var form = document.getElementById("projectForm");
+        form.reset();
+        console.log("form resetted");
 
-    // If a table already exists, destroy it
+        var errorMessagesDiv = document.getElementById("error-messages");
+        if (errorMessagesDiv) {
+            errorMessagesDiv.innerHTML = "";
+        }
+    }
+});
+
+function settable(tabledata) {
     if (window.table) {
         window.table.destroy();
     }
-    if (project_type == "rental") {
+    if (tab == "rental") {
+        console.log("in rental");
         var table = new Tabulator("#example-table", {
             pagination: "local",
             layout: "fitColumns",
             data: tabledata,
-            placeholder: "Not authorised",
+            placeholder: "No Rental Projects",
             paginationSize: 20,
             paginationCounter: "rows",
-            paginationElement: document.getElementById("table_pages"),
             selectable: 1,
+            responsiveLayout: "collapse",
             columns: [
                 {
-                    formatter: "rowSelection",
-                    titleFormatter: "rowSelection",
-                    hozAlign: "center",
-                    headerSort: false,
-                    frozen: true,
+                    formatter: "responsiveCollapse",
                     width: 30,
+                    minWidth: 30,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerSort: false,
                 },
                 {
                     title: "PJO Number",
                     field: "job_number",
                     headerFilter: "input",
-                    minWidth: 100,
+                    minWidth: 150,
                     frozen: true,
                 },
                 {
                     title: "Client Name",
                     field: "client_name",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerFilter: "input",
                 },
                 {
                     title: "Jobsite Location",
                     field: "jobsite_location",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerFilter: "input",
                 },
                 {
@@ -63,13 +78,13 @@ function settable(tabledata, project_type) {
                 {
                     title: "BCA Reference Number",
                     field: "bca_reference_number",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerSort: false,
                 },
                 {
                     title: "SMS Contacts (Number of alerts)",
                     field: "sms_count",
-                    minWidth: 100,
+                    minWidth: 150,
                     headerSort: false,
                 },
                 // {
@@ -80,7 +95,7 @@ function settable(tabledata, project_type) {
                 //         values: ["", "Ongoing", "Completed"],
                 //         clearable: true,
                 //     },
-                //     minWidth: 100,
+                //     minWidth: 150,
                 //     headerFilter: true,
                 //     headerFilterParams: {
                 //         values: {
@@ -91,47 +106,44 @@ function settable(tabledata, project_type) {
                 //         clearable: true,
                 //     },
                 // },
-                {
-                    title: "Created At",
-                    field: "created_at",
-                    minWidth: 100,
-                },
             ],
         });
     } else {
+        console.log(tabledata);
         var table = new Tabulator("#example-table", {
             pagination: "local",
             data: tabledata,
             layout: "fitColumns",
-            placeholder: "Not authorised",
-            paginationElement: document.getElementById("table_pages"),
+            placeholder: "No Sales Project",
             paginationSize: 20,
             paginationCounter: "rows",
             dataTree: true,
             dataTreeStartExpanded: true,
+            dataTreeFilter: true,
+            dataTreeSort: true,
             selectable: 1,
+            responsiveLayout: "collapse",
             columns: [
                 {
-                    formatter: "rowSelection",
-                    titleFormatter: "rowSelection",
-                    hozAlign: "center",
-                    headerSort: false,
-                    frozen: true,
+                    formatter: "responsiveCollapse",
                     width: 30,
+                    minWidth: 30,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerSort: false,
                 },
                 {
                     title: "Name",
                     field: "name",
                     headerFilter: "input",
-                    minWidth: 100,
+                    minWidth: 150,
                     frozen: true,
                     responsive: 0,
                 },
                 {
                     title: "Jobsite Location",
                     field: "jobsite_location",
-                    minWidth: 100,
-                    headerFilter: "input",
+                    minWidth: 150,
                 },
                 {
                     title: "Project Description",
@@ -143,125 +155,40 @@ function settable(tabledata, project_type) {
                     title: "BCA Reference Number",
                     field: "bca_reference_number",
                     headerSort: false,
-                    minWidth: 100,
-                },
-                {
-                    title: "Created At",
-                    field: "created_at",
-                    minWidth: 100,
+                    minWidth: 150,
                 },
             ],
+            rowFormatter: function (row) {
+                // Apply special formatting for parent rows
+                if (row.getTreeChildren().length) {
+                    row.getElement().style.pointerEvents = "none";
+                }
+            },
         });
     }
     table.on("rowClick", function (e, row) {
         window.location.href = "/project/" + row.getIndex();
     });
-    table.on("rowSelectionChanged", function (data, rows) {
-        table_row_changed(data);
-    });
     window.table = table;
 }
 
-function table_row_changed(data) {
-    const editButton = document.getElementById("editButton");
-    const deleteButton = document.getElementById("deleteButton");
-
-    if (data && data.length > 0) {
-        editButton.disabled = false;
-        deleteButton.disabled = false;
-        inputprojectId = data[0].id;
-    } else {
-        editButton.disabled = true;
-        deleteButton.disabled = true;
-    }
-}
-
 function changeTab(event, project_type) {
-    // Toggle active class on tabs
     document.querySelectorAll(".nav-link").forEach((tab) => {
         tab.classList.remove("active");
     });
 
     event.currentTarget.classList.add("active");
+    switch (project_type) {
+        case "rental":
+            tab = "rental";
+            settable(window.rental_projects);
+            break;
 
-    fetch_data(project_type);
-}
-
-function fetch_data(project_type) {
-    const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-
-    fetch(`${baseUri}/projects`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            "X-CSRF-TOKEN": csrfToken,
-        },
-        body: JSON.stringify({ project_type }),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("User not Authorised");
-            }
-            return response.json();
-        })
-        .then((json) => {
-            const tabledata = json.projects || [];
-            settable(tabledata, project_type);
-        })
-        .catch((error) => {
-            console.error(error);
-            settable([], project_type);
-        });
-}
-
-function create_users(projectId, csrfToken) {
-    userList.forEach((user) => {
-        user.project_id = projectId;
-        fetch(`${baseUri}/user/`, {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-                Accept: "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-            },
-            body: JSON.stringify(user),
-        }).then((response) => {
-            return response.json();
-        });
-    });
-    return true;
-}
-
-function handleCreate() {
-    const form = document.getElementById("projectForm");
-    const csrfToken = document.querySelector('input[name="_token"]').value;
-    const formData = new FormData(form);
-
-    fetch(`${baseUri}/project`, {
-        method: form.method,
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-            Accept: "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-        },
-        body: formData,
-    })
-        .then((response) => {
-            if (response.status == 422) {
-                response.json().then((errorData) => {
-                    document.getElementById("error_message").innerHTML =
-                        errorData["Unprocessable Entity"];
-                });
-            }
-            return response.json();
-        })
-        .then((json) => {
-            create_users(json.project_id, csrfToken);
-            fetch_data(tab);
-            closeModal("projectModal");
-        });
+        default:
+            tab = "sales";
+            settable(window.sales_projects);
+            break;
+    }
 }
 
 function toggleEndUserName() {
@@ -274,263 +201,79 @@ function toggleEndUserName() {
     }
 }
 
-function deleteUser(event) {
-    if (event) {
-        event.preventDefault();
-    }
-    var csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
+function resetTable(json) {
+    window.rental_projects = json.rental_projects;
+    window.sales_projects = json.sales_projects;
+    switch (tab) {
+        case "rental":
+            console.log("here");
+            settable(window.rental_projects);
+            break;
 
-    fetch(`${baseUri}/users/${inputUserId}`, {
-        method: "DELETE",
+        default:
+            settable(window.sales_projects);
+            break;
+    }
+}
+
+function create_users(projectId, csrfToken) {
+    fetch(`${baseUri}/user/`, {
+        method: "POST",
         headers: {
             "X-CSRF-TOKEN": csrfToken,
             Accept: "application/json",
             "X-Requested-With": "XMLHttpRequest",
         },
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            populateUser("userselectList", inputprojectId);
-            // Close the modal
-            closeModal("deleteModal");
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+        body: JSON.stringify({
+            project_id: projectId,
+            users: userList,
+        }),
+    });
 }
 
-function handleDelete(event) {
-    if (event) {
-        event.preventDefault();
-    }
-    var csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-    var confirmation = document.getElementById("inputDeleteConfirmation").value;
-
-    if (confirmation == "DELETE") {
-        fetch(`${baseUri}/project/${inputprojectId}`, {
-            method: "DELETE",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-                Accept: "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                closeModal("deleteConfirmationModal");
-            })
-            .catch((error) => {
-                console.error("Error:", error);
+function submit_project() {
+    const form = document.getElementById("projectForm");
+    const csrfToken = document.querySelector('input[name="_token"]').value;
+    const formData = new FormData(form);
+    fetch(`${baseUri}/project`, {
+        method: form.method,
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+    }).then((response) => {
+        console.log("responded");
+        if (response.status == 422) {
+            response.json().then((json) => {
+                display_errors(json.errors);
             });
-    } else {
-        var error = document.getElementById("deleteConfirmationError");
-        error.hidden = false;
-    }
-}
-
-function fetch_project_data(data) {
-    var updatejobNumber = document.getElementById("inputJobNumber");
-    var clientName = document.getElementById("inputClientName");
-    var projectDescription = document.getElementById("inputProjectDescription");
-    var jobsiteLocation = document.getElementById("inputJobsiteLocation");
-    var bcaReferenceNumber = document.getElementById("inputBcaReferenceNumber");
-    var sms_count = document.getElementById("inputSmsCount");
-    var projectTypeRental = document.getElementById("projectTypeRental");
-    var projectTypeSales = document.getElementById("projectTypeSales");
-    var endUserName = document.getElementById("inputEndUserName");
-    var endUserNameDiv = document.getElementById("endUserNameDiv");
-
-    if (data != null) {
-        updatejobNumber.value = data.job_number;
-        clientName.value = data.client_name;
-        projectDescription.value = data.project_description;
-        jobsiteLocation.value = data.jobsite_location;
-        bcaReferenceNumber.value = data.bca_reference_number;
-        sms_count.value = data.sms_count;
-        if (data.end_user_name) {
-            projectTypeSales.checked = true;
-            endUserNameDiv.style.display = "block"; // Show the end user name field
-            endUserName.value = data.end_user_name;
         } else {
-            projectTypeRental.checked = true;
-            endUserNameDiv.style.display = "none"; // Hide the end user name field
-        }
-        populateUser("userselectList", data.id);
-    } else {
-        updatejobNumber.value = null;
-        clientName.value = null;
-        projectDescription.value = null;
-        jobsiteLocation.value = null;
-        bcaReferenceNumber.value = null;
-        sms_count.value = 0;
-        populateUser("userselectList");
-    }
-}
-
-function handleUpdate() {
-    var csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-    var form = document.getElementById("projectForm");
-
-    var formData = new FormData(form);
-
-    var formDataJson = {};
-    formData.forEach((value, key) => {
-        formDataJson[key] = value;
-    });
-
-    fetch(`${baseUri}/project/${inputprojectId}`, {
-        method: "PATCH",
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-        },
-        body: JSON.stringify(formDataJson),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(
-                    "Network response was not ok " + response.statusText
-                );
-            }
-            return response.json();
-        })
-        .then((json) => {
-            create_users(inputprojectId, csrfToken);
-            fetch_data(tab);
-            closeModal("projectModal");
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-            alert("There was an error: " + error.message);
-        });
-
-    return false;
-}
-
-function submitClicked() {
-    if (modalType == "update") {
-        handleUpdate();
-    } else {
-        handleCreate();
-    }
-}
-
-function handle_create_dummy_user() {
-    var inputUsername = document.getElementById("inputUsername").value;
-    var inputPassword = document.getElementById("inputPassword").value;
-    userList.push({
-        username: inputUsername,
-        password: inputPassword,
-    });
-    if (modalType == "update") {
-        populateUser("userselectList", inputprojectId);
-    } else {
-        populateUser("userselectList");
-    }
-
-    closeModal("userCreateModal");
-}
-
-function populateUser(element, project_id = null) {
-    window.userselectList = document.getElementById(element);
-    if (project_id) {
-        fetch(`${baseUri}/users/${project_id}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                populateList(data.users);
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
+            response.json().then((json) => {
+                create_users(json.project_id, csrfToken);
+                window.location.reload();
             });
-    } else {
-        populateList([]);
-    }
-}
-
-function populateList(data) {
-    window.userselectList.innerHTML = "";
-
-    let selectedListItem = null;
-    if (userList != []) {
-        userList.forEach((user) => {
-            data.push(user);
-        });
-    }
-
-    data.forEach((item) => {
-        const listItem = document.createElement("div");
-        listItem.textContent = item.username;
-        listItem.className = "list-item";
-
-        listItem.addEventListener("click", function () {
-            handleSelection(item);
-
-            if (selectedListItem) {
-                selectedListItem.classList.remove("selected");
-            }
-
-            listItem.classList.add("selected");
-
-            selectedListItem = listItem;
-        });
-
-        window.userselectList.appendChild(listItem);
+        }
     });
 }
 
-function handleSelection(item) {
-    inputUserId = item.id;
-}
-
-function openModal(modalName, type) {
-    if (modalName == "deleteConfirmationModal") {
-        document.getElementById("deleteConfirmationError").hidden = true;
-    }
-    var modal = new bootstrap.Modal(document.getElementById(modalName));
-    modal.toggle();
-    document.getElementById("error_message").innerHTML = "";
-    document.getElementById("inputEndUserName").value = "";
-    document.getElementById("projectTypeRental").checked = true;
-    toggleEndUserName();
-
-    if (type == "update") {
-        userList = [];
-        modalType = "update";
-        fetch_project_data(window.projects[inputprojectId - 1]);
-    } else if (type == "create") {
-        userList = [];
-        modalType = "create";
-        fetch_project_data(null);
+function display_errors(errors) {
+    error_messages = document.getElementById("error-messages");
+    error_messages.innerHTML = "";
+    // Loop through errors and display them
+    for (const [field, messages] of Object.entries(errors)) {
+        const li = document.createElement("li");
+        li.className = "alert alert-danger";
+        li.textContent = `${field} : ${messages}`;
+        error_messages.appendChild(li);
     }
 }
 
-function openSecondModal(initialModal, newModal) {
+function openSecondModal(initialModal, newModal, li) {
     var firstModalEl = document.getElementById(initialModal);
     var firstModal = bootstrap.Modal.getInstance(firstModalEl);
-
+    isSwitchingModal = true;
     firstModal.hide();
 
     firstModalEl.addEventListener(
@@ -540,15 +283,27 @@ function openSecondModal(initialModal, newModal) {
                 document.getElementById(newModal)
             );
 
-            if (newModal == "userCreateModal") {
-                document.getElementById("inputUsername").value = "";
-                document.getElementById("inputPassword").value = "";
-            }
             secondModal.show();
+
+            document
+                .getElementById("deleteConfirmButton")
+                .addEventListener("click", function () {
+                    li.remove();
+                    console.log(li.textContent);
+                    const username = li.textContent
+                        .replace("Remove", "")
+                        .trim();
+                    userList = userList.filter(
+                        (user) => user.username !== username
+                    );
+                    secondModal.hide();
+                    console.log(userList);
+                });
 
             document.getElementById(newModal).addEventListener(
                 "hidden.bs.modal",
                 function () {
+                    isSwitchingModal = false;
                     firstModal.show();
                 },
                 { once: true }
@@ -558,23 +313,58 @@ function openSecondModal(initialModal, newModal) {
     );
 }
 
-function closeModal(modal) {
-    // Close the modal
-    const modalElement = document.getElementById(modal);
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    modalInstance.hide();
+function addUserClicked() {
+    const username = usernameField.value.trim();
+    const password = passwordField.value.trim();
+    if (!username || !password) {
+        alert("Both username and password are required.");
+        return;
+    }
+
+    fetch(`${baseUri}/user/${username}`, {
+        method: "GET",
+    }).then((response) => {
+        if (response.status == 200) {
+            userList.push({
+                username: username,
+                password: password,
+            });
+
+            // Create a new list item for the user
+            const li = document.createElement("li");
+            li.className =
+                "list-group-item d-flex justify-content-between align-items-center";
+            li.textContent = username;
+
+            // Create a remove button
+            const removeBtn = document.createElement("button");
+            removeBtn.className = "btn btn-danger btn-sm";
+            removeBtn.textContent = "Remove";
+
+            // Add click event to remove the user
+            removeBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                console.log("pressed");
+                openSecondModal("projectModal", "deleteModal", li);
+            });
+
+            li.appendChild(removeBtn);
+            curruserList.appendChild(li);
+
+            // Clear input fields
+            usernameField.value = "";
+            passwordField.value = "";
+        } else {
+            alert("username is already taken");
+            return;
+        }
+    });
 }
 
-window.deleteUser = deleteUser;
-window.openModal = openModal;
-window.openSecondModal = openSecondModal;
-window.populateUser = populateUser;
-window.handleDelete = handleDelete;
-window.handle_create_dummy_user = handle_create_dummy_user;
-window.changeTab = changeTab;
-window.fetch_data = fetch_data;
 window.toggleEndUserName = toggleEndUserName;
-window.submitClicked = submitClicked;
+window.openSecondModal = openSecondModal;
+window.submit_project = submit_project;
+window.addUserClicked = addUserClicked;
 
-fetch_data("rental");
+settable(window.rental_projects);
 toggleEndUserName();

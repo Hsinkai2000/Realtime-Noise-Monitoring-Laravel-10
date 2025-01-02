@@ -165,7 +165,7 @@
     </div>
 
 
-    <script src="{{ asset('js/project-test.js') }}" async defer></script>
+    <script src="{{ asset('js/project.js') }}" async defer></script>
 
 </body>
 

@@ -1,7 +1,21 @@
 var baseUri = `${window.location.protocol}//${window.location.hostname}`;
+var selectedNoiseMeter = [];
 if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
+
+var noiseMeterModal = document.getElementById("noiseMeterModal");
+
+noiseMeterModal.addEventListener("hidden.bs.modal", function (event) {
+    var form = document.getElementById("noise_meter_form");
+    form.reset();
+    console.log("form resetted");
+
+    var errorMessagesDiv = document.getElementById("error_message");
+    if (errorMessagesDiv) {
+        errorMessagesDiv.innerHTML = "";
+    }
+});
 
 function set_tables(data) {
     var noise_meter_table = new Tabulator("#noise_meter_table", {
@@ -11,9 +25,17 @@ function set_tables(data) {
         placeholder: "No linked Contacts",
         paginationSize: 20,
         paginationCounter: "rows",
-        paginationElement: document.getElementById("noise_meter_pages"),
         selectable: 1,
+        responsiveLayout: "collapse",
         columns: [
+            {
+                formatter: "responsiveCollapse",
+                width: 30,
+                minWidth: 30,
+                hozAlign: "center",
+                resizable: false,
+                headerSort: false,
+            },
             {
                 formatter: "rowSelection",
                 titleFormatter: "rowSelection",
@@ -54,19 +76,15 @@ function set_tables(data) {
         ],
     });
     noise_meter_table.on("rowSelectionChanged", function (data, rows) {
-        table_row_changed(data);
+        window.noiseMeter = data[0];
+        table_row_changed(window.noiseMeter);
     });
 }
 
 function table_row_changed(data) {
-    if (data && data.length > 0) {
+    if (data) {
         document.getElementById("editButton").disabled = false;
         document.getElementById("deleteButton").disabled = false;
-        window.noiseMeters.forEach((noiseMeter) => {
-            if (noiseMeter.id == data[0].id) {
-                window.noiseMeter = noiseMeter;
-            }
-        });
     } else {
         document.getElementById("editButton").disabled = true;
         document.getElementById("deleteButton").disabled = true;
@@ -84,7 +102,8 @@ function fill_data() {
     document.getElementById("error_message").innerHTML = "";
 
     if (window.modalType == "update") {
-        console.log(window.noise_meter_id);
+        console.log("here");
+        console.log(window.noiseMeter);
         serial.value = window.noiseMeter.serial_number;
         label.value = window.noiseMeter.noise_meter_label;
         last_calibration_date.value = window.noiseMeter.last_calibration_date;
@@ -127,17 +146,15 @@ function handle_update() {
         .then((response) => {
             if (response.status == 422) {
                 response.json().then((errorData) => {
-                    document.getElementById("error_message").innerHTML =
-                        errorData["Unprocessable Entity"];
+                    display_errors("error_message", errorData.errors);
                 });
             } else {
-                closeModal("noiseMeterModal");
+                window.location.reload();
             }
         })
         .catch((error) => {
             alert("There was an error while processing");
         });
-    return false;
 }
 
 function handle_create() {
@@ -157,17 +174,15 @@ function handle_create() {
         .then((response) => {
             if (response.status == 422) {
                 response.json().then((errorData) => {
-                    document.getElementById("error_message").innerHTML =
-                        errorData["Unprocessable Entity"];
+                    display_errors("error_message", errorData.errors);
                 });
             } else {
-                closeModal("noiseMeterModal");
+                window.location.reload();
             }
         })
         .catch((error) => {
             alert("There was an error while processing");
         });
-    return false;
 }
 
 function handle_noise_meter_submit(event) {
@@ -205,20 +220,31 @@ function handleDelete(event) {
                 return response.json();
             })
             .then((data) => {
-                closeModal("deleteConfirmationModal");
+                window.location.reload();
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
     } else {
-        var error = document.getElementById("deleteConfirmationError");
-        error.hidden = false;
+        document.getElementById("error-messages-delete").hidden = false;
+        return false;
     }
+}
+
+function resetTable(json) {
+    window.noise_meters = json.noise_meters;
+    set_tables(window.noise_meters);
 }
 
 function openModal(modalName, type) {
     var modal = new bootstrap.Modal(document.getElementById(modalName));
     modal.toggle();
+
+    if (modalName == "deleteConfirmationModal") {
+        console.log(window.noiseMeter.noise_meter_label);
+        document.getElementById("deleteType").innerHTML =
+            window.noiseMeter.noise_meter_label;
+    }
 
     if (type == "create") {
         window.modalType = "create";
@@ -259,14 +285,19 @@ function openSecondModal(initialModal, newModal) {
     );
 }
 
-function closeModal(modal) {
-    // Close the modal
-    const modalElement = document.getElementById(modal);
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    modalInstance.hide();
-    location.reload();
+function display_errors(element, errors) {
+    error_messages = document.getElementById(element);
+    error_messages.innerHTML = "";
+    // Loop through errors and display them
+    for (const [field, messages] of Object.entries(errors)) {
+        const li = document.createElement("li");
+        li.className = "alert alert-danger";
+        li.textContent = `${field} : ${messages}`;
+        error_messages.appendChild(li);
+    }
 }
 
+set_tables(window.noiseMeters);
 window.set_tables = set_tables;
 window.openModal = openModal;
 window.openSecondModal = openSecondModal;

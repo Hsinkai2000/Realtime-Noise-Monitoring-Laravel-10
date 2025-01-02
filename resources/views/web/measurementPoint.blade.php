@@ -245,6 +245,6 @@
     window.soundLimit = @json($measurementPoint->soundLimit);
     window.admin = @json(Auth::user()->isAdmin());
 </script>
-<script src="{{ asset('js/measurement_point-test.js') }}" async defer></script>
+<script src="{{ asset('js/measurement_point.js') }}" async defer></script>
 
 </html>
