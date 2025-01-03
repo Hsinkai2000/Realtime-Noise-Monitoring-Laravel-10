@@ -139,9 +139,8 @@ class ProjectController extends Controller
         if (!$project) {
             return render_unprocessable_entity("Unable to find project with id " . $id);
         }
-        if (!$project->delete()) {
-            throw new Exception("Unable to delete project");
-        }
+
+        $project->deleteProject();
 
         $rental_projects  = Project::where('project_type', 'rental')->get();
         $sales_projects  = Project::where('project_type', 'sales')->get();

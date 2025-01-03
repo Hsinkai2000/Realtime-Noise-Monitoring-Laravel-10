@@ -58,4 +58,18 @@ class Project extends Model
     {
         return $date->format('Y-m-d');
     }
+
+    public function deleteProject()
+    {
+        foreach ($this->measurement_point as $measurementPoint) {
+            $measurementPoint->deleteMeasurementPoint();
+        }
+        foreach ($this->contact as $contact) {
+            $contact->delete();
+        }
+        foreach ($this->user as $user) {
+            $user->delete();
+        }
+        $this->delete();
+    }
 }
