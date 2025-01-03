@@ -136,6 +136,29 @@ function settable(tabledata) {
                     title: "Name",
                     field: "name",
                     headerFilter: "input",
+                    headerFilterFunc: function (
+                        headerValue,
+                        rowValue,
+                        rowData,
+                        filterParams
+                    ) {
+                        const searchValue = headerValue.toLowerCase();
+
+                        // If parent matches, include all children
+                        if (rowValue.toLowerCase().includes(searchValue)) {
+                            return true; // Display parent and all children
+                        }
+
+                        // Check if any child matches
+                        if (rowData._children) {
+                            return rowData._children.some((child) =>
+                                child.name.toLowerCase().includes(searchValue)
+                            );
+                        }
+
+                        // Normal match for non-parent rows
+                        return false;
+                    },
                     minWidth: 150,
                     frozen: true,
                     responsive: 0,
@@ -144,6 +167,31 @@ function settable(tabledata) {
                     title: "Jobsite Location",
                     field: "jobsite_location",
                     minWidth: 150,
+                    headerFilter: "input",
+                    headerFilterFunc: function (
+                        headerValue,
+                        rowValue,
+                        rowData,
+                        filterParams
+                    ) {
+                        // Include parent if any child matches
+                        if (rowData._children) {
+                            return (
+                                rowData._children.some((child) =>
+                                    child.jobsite_location
+                                        .toLowerCase()
+                                        .includes(headerValue.toLowerCase())
+                                ) ||
+                                rowValue
+                                    .toLowerCase()
+                                    .includes(headerValue.toLowerCase())
+                            );
+                        }
+                        // Normal match for non-parent rows
+                        return rowValue
+                            .toLowerCase()
+                            .includes(headerValue.toLowerCase());
+                    },
                 },
                 {
                     title: "Project Description",
