@@ -453,4 +453,10 @@ class MeasurementPoint extends Model
         }
         return false;
     }
+
+    private function deleteMeasurementPoint()
+    {
+        $this->soundLimit->delete();
+        $this->delete();
+    }
 }
