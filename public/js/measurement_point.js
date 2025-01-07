@@ -703,6 +703,19 @@ function openSecondModal(initialModal, newModal) {
             document.getElementById(newModal).addEventListener(
                 "hidden.bs.modal",
                 function () {
+                    if (newModal == "deleteConfirmationModal") {
+                        var deleteConfirmationModal = document.getElementById(
+                            "deleteConfirmationModal"
+                        );
+                        var form = document.getElementById(
+                            "deleteConfirmationForm"
+                        );
+                        form.reset();
+                        var errorMessages = document.getElementById(
+                            "error-messages-delete"
+                        );
+                        errorMessages.hidden = true;
+                    }
                     isSwitchingModal = false;
                     firstModal.show();
                 },
