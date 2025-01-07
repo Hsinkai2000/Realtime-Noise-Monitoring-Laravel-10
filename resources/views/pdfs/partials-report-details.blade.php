@@ -30,21 +30,35 @@
     <hr>
     <br />
     <h3>Measurement Point Details:</h3>
-    <table class="table-bordered w-100">
-        <tr>
-            <th>Noise Meter</th>
-            <th>Last Calibration Date</th>
-            <th>Device Location</th>
-            <th>Remarks</th>
-        </tr>
+    @if ($measurementPoint->noiseMeter)
+        <table class="table-bordered w-100">
+            <tr>
+                <th>Noise Meter</th>
+                <th>Last Calibration Date</th>
+                <th>Device Location</th>
+                <th>Remarks</th>
+            </tr>
 
-        <tr>
-            <td>{{ $measurementPoint->noiseMeter->brand . ' S/N ' . $measurementPoint->noiseMeter->serial_number }}</td>
-            <td>{{ \Carbon\Carbon::parse($measurementPoint->noiseMeter->last_calibration_date)->format('Y-m-d') }}</td>
-            <td>{{ $measurementPoint->device_location }}</td>
-            <td>{{ $measurementPoint->remarks }}</td>
-        </tr>
-    </table>
+            <tr>
+                <td>{{ $measurementPoint->noiseMeter->brand . ' S/N ' . $measurementPoint->noiseMeter->serial_number }}
+                </td>
+                <td>{{ \Carbon\Carbon::parse($measurementPoint->noiseMeter->last_calibration_date)->format('Y-m-d') }}
+                </td>
+                <td>{{ $measurementPoint->device_location }}</td>
+                <td>{{ $measurementPoint->remarks }}</td>
+            </tr>
+        </table>
+    @else
+        <table class="table-bordered w-100">
+            <tr>
+                <th>Noise Meter</th>
+            </tr>
+
+            <tr>
+                <td> No Noise Meter Connected
+            </tr>
+        </table>
+    @endif
 
     <hr>
     <br />
