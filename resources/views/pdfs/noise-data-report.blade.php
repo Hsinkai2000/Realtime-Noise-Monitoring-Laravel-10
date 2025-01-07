@@ -5,7 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        Report_{{ $measurementPoint->noiseMeter->serial_number }}_{{ $start_date->format('dmY') }}-{{ $end_date->format('dmY') }}
+
+        @if ($measurementPoint->noiseMeter)
+            Report_{{ $measurementPoint->noiseMeter->serial_number }}_{{ $start_date->format('dmY') }}-{{ $end_date->format('dmY') }}
+        @else
+            Report_{{ $measurementPoint->job_number }}_{{ $start_date->format('dmY') }}-{{ $end_date->format('dmY') }}
+        @endif
     </title>
 
     <link href="{{ asset('css/base.css') }}" rel="stylesheet">
@@ -70,14 +75,19 @@
     <div class="container d-flex flex-column justify-content-center text-center pt-5">
         <div>
             <h1>Noise Data</h1>
-            <h2>{{ strtoupper(
-                $measurementPoint->point_name .
-                    ': ' .
-                    $measurementPoint->noiseMeter->brand .
-                    ' S/N ' .
-                    $measurementPoint->noiseMeter->serial_number,
-            ) }}
-            </h2>
+
+            @if ($measurementPoint->noiseMeter)
+                <h2>{{ strtoupper(
+                    $measurementPoint->point_name .
+                        ': ' .
+                        $measurementPoint->noiseMeter->brand .
+                        ' S/N ' .
+                        $measurementPoint->noiseMeter->serial_number,
+                ) }}
+                </h2>
+            @else
+                <h2>{{ strtoupper($measurementPoint->point_name) }}</h2>
+            @endif
             <h2>Date: {{ \Carbon\Carbon::parse($start_date)->format('d-m-Y') }} -
                 {{ \Carbon\Carbon::parse($end_date)->format('d-m-Y') }}</h2>
         </div>
@@ -95,9 +105,14 @@
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
         <div class="container mt-3" style="page-break-before: always;">
             <div class="text-center">
-                <h1>Noise Data</h1>
-                <h3>Noise Device ID: {{ $measurementPoint->noiseMeter->serial_number }}</h3>
-                <h3>Date: {{ $date->format('d-m-Y') }}</h3>
+                @if ($measurementPoint->noiseMeter)
+                    <h1>Noise Data</h1>
+                    <h3>Noise Device ID: {{ $measurementPoint->noiseMeter->serial_number }}</h3>
+                    <h3>Date: {{ $date->format('d-m-Y') }}</h3>
+                @else
+                    <h1>Noise Data</h1>
+                    <h3>Date: {{ $date->format('d-m-Y') }}</h3>
+                @endif
             </div>
             <div>
                 <br />

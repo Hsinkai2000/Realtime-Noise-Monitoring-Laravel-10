@@ -29,8 +29,8 @@
     </table>
     <hr>
     <br />
-    <h3>Measurement Point Details:</h3>
     @if ($measurementPoint->noiseMeter)
+        <h3>Measurement Point Details:</h3>
         <table class="table-bordered w-100">
             <tr>
                 <th>Noise Meter</th>
@@ -48,20 +48,11 @@
                 <td>{{ $measurementPoint->remarks }}</td>
             </tr>
         </table>
+        <hr>
+        <br />
     @else
-        <table class="table-bordered w-100">
-            <tr>
-                <th>Noise Meter</th>
-            </tr>
-
-            <tr>
-                <td> No Noise Meter Connected
-            </tr>
-        </table>
     @endif
 
-    <hr>
-    <br />
     <h3>Sound Limits:</h3>
     @if ($soundlimit->category == 'Residential')
         <table class="table-bordered w-100">
