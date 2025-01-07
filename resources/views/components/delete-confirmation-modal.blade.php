@@ -42,7 +42,6 @@
 <script>
     var deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
     deleteConfirmationModal.addEventListener('hidden.bs.modal', function(event) {
-        console.log()
         var form = document.getElementById('deleteConfirmationForm');
         form.reset();
         var errorMessages = document.getElementById("error-messages-delete");

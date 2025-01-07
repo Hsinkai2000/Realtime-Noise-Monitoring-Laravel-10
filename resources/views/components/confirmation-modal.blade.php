@@ -30,3 +30,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    var confirmationModal = document.getElementById('confirmationModal');
+    confirmationModal.addEventListener('hidden.bs.modal', function(event) {
+        console.log('hello')
+        var form = document.getElementById('deleteForm');
+        form.reset();
+        var errorMessages = document.getElementById("confirmationError");
+        errorMessages.hidden = true;
+    });
+</script>
