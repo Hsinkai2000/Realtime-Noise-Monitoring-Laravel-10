@@ -1,4 +1,4 @@
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="replacementModal" aria-hidden="true">
+<div class="modal fade" id="confirmationModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">

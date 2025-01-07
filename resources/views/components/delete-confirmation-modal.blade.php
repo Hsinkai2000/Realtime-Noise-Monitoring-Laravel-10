@@ -1,6 +1,5 @@
 @props(['project' => null])
-<div class="modal fade deleteConfirmationModal" id="deleteConfirmationModal" tabindex="-1"
-    aria-labelledby="deleteConfirmationModal" aria-hidden="true" data-type="{{ $type }}">
+<div class="modal fade deleteConfirmationModal" id="deleteConfirmationModal" tabindex="-1" data-type="{{ $type }}">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-dark">

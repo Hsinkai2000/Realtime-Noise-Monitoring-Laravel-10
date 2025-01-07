@@ -1,5 +1,5 @@
 @props(['project' => null])
-<div class="modal fade shadow" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+<div class="modal fade shadow" id="contactModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-dark">

@@ -1,4 +1,4 @@
-<div class="modal fade shadow" id="viewPdfModal" tabindex="-1" aria-labelledby="viewPdfModal" aria-hidden="true">
+<div class="modal fade shadow" id="viewPdfModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-dark">
