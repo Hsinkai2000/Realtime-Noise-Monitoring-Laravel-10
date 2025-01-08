@@ -66,42 +66,42 @@
 
         <div class="measurementPoint-information">
             <div class="row w-100 pb-3">
-                <div class="col-md-2 col-6">
+                <div class="col-md-2 col-sm-4">
                     Point Name:
                 </div>
-                <div class="col-md-10 col-6">
+                <div class="col-md-9 col-6">
                     {{ $measurementPoint->point_name }}
                 </div>
             </div>
             <div class="row w-100 pb-3">
-                <div class="col-md-2 col-6">
+                <div class="col-md-2 col-sm-4">
                     Device Location:
                 </div>
-                <div class="col-md-10 col-6">
+                <div class="col-md-9 col-6">
                     {{ $measurementPoint->device_location }}
                 </div>
             </div>
             <div class="row w-100 pb-3">
-                <div class="col-md-2 col-6">
+                <div class="col-md-2 col-sm-4">
                     Remarks:
                 </div>
-                <div class="col-md-10 col-6">
+                <div class="col-md-9 col-6">
                     {{ $measurementPoint->remarks }}
                 </div>
             </div>
             <div class="row w-100 pb-3">
-                <div class="col-md-2 col-6">
+                <div class="col-md-2 col-sm-4">
                     Category:
                 </div>
-                <div class="col-md-10 col-6">
+                <div class="col-md-9 col-6">
                     {{ $measurementPoint->soundLimit->category }}
                 </div>
             </div>
             <div class="row w-100 pb-3">
-                <div class="col-md-2 col-sm-6">
+                <div class="col-md-2 col-sm-4">
                     Sound Limits:
                 </div>
-                <div class="col-md-10 col-sm-6">
+                <div class="col-md-4 col-sm-8">
                     @if ($measurementPoint->soundLimit->category == 'Residential')
                         <table class="table-bordered w-100">
                             <tr>
