@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
             $mps = MeasurementPoint::all();
             foreach ($mps as $mp) {
                 $result = $mp->check_data_status();
-                if ($result) {
+                if (!$result) {
                     $data = [
                         "jobsite_location" => $mp->project->jobsite_location,
                         "serial_number" => $mp->noiseMeter->serial_number,
@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
                     $mp->send_alert($data);
                 }
             }
-        })->hourly();
+        })->everyMinute();
     }
 
     /**

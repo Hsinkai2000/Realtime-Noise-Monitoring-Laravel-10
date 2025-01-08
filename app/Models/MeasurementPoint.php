@@ -210,7 +210,7 @@ class MeasurementPoint extends Model
         }
     }
 
-    private function send_alert($data)
+    public function send_alert($data)
     {
         $contacts = $this->project->get_contact_details();
 
@@ -236,7 +236,6 @@ class MeasurementPoint extends Model
             try {
                 // Convert a string of emails into an array, if necessary
                 $emailArray = is_string($emails) ? explode(';', $emails) : $emails;
-
                 // Send the email to multiple recipients
                 $email_response = Mail::to($emailArray)->send(new EmailAlert($data));
 
@@ -272,7 +271,8 @@ class MeasurementPoint extends Model
                     $sms_status = "SMS sending";
                 }
             } catch (Exception $e) {
-                \Log::debug("Message not sent", [$e->getMessage()]);
+                \Log::debug("Message not sent");
+                \Log::error($e);
             }
         } else {
             \Log::debug("No Phone Number Found");
@@ -443,15 +443,17 @@ class MeasurementPoint extends Model
 
     public function check_data_status()
     {
-        $last_data = $this->noiseData()->orderBy('received_at', 'desc')->first();
-        if ($last_data) {
-            $receivedAtCarbon = Carbon::parse($last_data->received_at);
-            $currentTime = Carbon::now();
-            $currentTime->addHours(8);
-            $diffInMinutes = $currentTime->diffInMinutes($receivedAtCarbon);
-            return $diffInMinutes <= 45;
+        if ($this->noiseMeter) {
+            $last_data = $this->noiseData()->orderBy('received_at', 'desc')->first();
+            if ($last_data) {
+                $receivedAtCarbon = Carbon::parse($last_data->received_at);
+                $currentTime = Carbon::now();
+                $currentTime->addHours(8);
+                $diffInMinutes = $currentTime->diffInMinutes($receivedAtCarbon);
+                return $diffInMinutes <= 45;
+            }
         }
-        return false;
+        return true;
     }
 
     public function deleteMeasurementPoint()
