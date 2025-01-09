@@ -126,12 +126,12 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <div class="col-md-6 col-sm-12">
+                            <div class="col-md-6 col-sm-12" @if (!Auth::user()->isAdmin()) hidden @endif>
                                 Category
                             </div>
                             <div class="col-md-6 col-sm-12 ">
                                 <select id='selectCategory' name='category' style="width: 100%"
-                                    onchange="populate_soundLimits()">
+                                    @if (!Auth::user()->isAdmin()) hidden @endif onchange="populate_soundLimits()">
                                     <option value="Residential" selected>Residential</option>
                                     <option value="Hospital/Schools">Hospital/Schools</option>
                                     <option value="Others">Others</option>
