@@ -348,10 +348,14 @@ function closeModal(modal) {
     modalInstance.hide();
     location.reload();
 }
-
 function initDatePicker() {
-    document.getElementById("start_date").value = formatDate(new Date());
-    document.getElementById("end_date").value = formatDate(new Date());
+    const today = new Date();
+    const pastWeek = new Date();
+    pastWeek.setDate(today.getDate() - 6);
+
+    document.getElementById("start_date").value = formatDate(pastWeek);
+    document.getElementById("end_date").value = formatDate(today);
+
     dpMin = new AirDatepicker("#start_date", {
         autoClose: true,
         dateFormat: "dd-MM-yyyy",
@@ -388,8 +392,22 @@ function formatDate(date) {
 async function openPdf() {
     var select_start_date = document.getElementById("start_date").value;
     var select_end_date = document.getElementById("end_date").value;
+    const startDate = new Date(
+        select_start_date.split("-").reverse().join("-")
+    );
+    const endDate = new Date(select_end_date.split("-").reverse().join("-"));
+    const diffTime = Math.abs(endDate - startDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (select_start_date <= select_end_date) {
+    if (diffDays > 31) {
+        document.getElementById("error-messages-pdf").hidden = false;
+        document.getElementById("error-messages-pdf").innerText =
+            "The date range should not exceed 31 days.";
+    } else if (select_start_date > select_end_date) {
+        document.getElementById("error-messages-pdf").hidden = false;
+        document.getElementById("error-messages-pdf").innerText =
+            "The start date must be before end date.";
+    } else {
         const newTab = window.open(
             `${baseUri}/pdf/${new URLSearchParams({
                 id: window.measurementPointData.id,
@@ -400,9 +418,6 @@ async function openPdf() {
         );
         newTab.focus();
         closeModal("viewPdfModal");
-    } else {
-        document.getElementById("error-messages-pdf").hidden = false;
-        return false;
     }
 }
 
