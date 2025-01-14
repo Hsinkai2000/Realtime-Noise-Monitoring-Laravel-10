@@ -62,7 +62,7 @@ function set_tables(data) {
                 minWidth: 100,
             },
             {
-                title: "Handphone Number",
+                title: "HP Number",
                 field: "concentrator_hp",
                 headerFilter: "input",
                 minWidth: 100,
@@ -79,8 +79,33 @@ function set_tables(data) {
                 headerFilter: "date",
                 minWidth: 100,
             },
+
             {
-                title: "Last Assigned Ip Address",
+                title: "PJO Number",
+                field: "measurement_point.project.job_number",
+                headerFilter: "input",
+                minWidth: 100,
+            },
+            {
+                title: "Client Name",
+                field: "measurement_point.project.client_name",
+                headerFilter: "input",
+                minWidth: 100,
+            },
+            {
+                title: "Jobsite Location",
+                field: "measurement_point.project.jobsite_location",
+                headerFilter: "input",
+                minWidth: 100,
+            },
+            {
+                title: "Point Name",
+                field: "measurement_point.point_name",
+                headerFilter: "input",
+                minWidth: 100,
+            },
+            {
+                title: "Last Assigned IP Address",
                 field: "last_assigned_ip_address",
                 headerFilter: "input",
                 minWidth: 100,

@@ -15,8 +15,6 @@ class Project extends Model
 
     protected $fillable = ['job_number', 'client_name', 'end_user_name', 'sms_count', 'project_type', 'billing_address', 'project_description', 'jobsite_location', 'bca_reference_number', 'status', 'created_at', 'updated_at', 'completed_at'];
 
-    //references dont want
-
     // Define relationships
 
     public function user(): HasMany

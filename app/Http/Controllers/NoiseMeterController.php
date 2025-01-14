@@ -22,7 +22,8 @@ class NoiseMeterController extends Controller
     public function show()
     {
         try {
-            return view('web.noiseMeters', ["noise_meters" => NoiseMeter::all()]);
+
+            return view('web.noiseMeters', ["noise_meters" => NoiseMeter::with("measurementPoint.project")->get()]);
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }

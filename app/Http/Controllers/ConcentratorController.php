@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Concentrator;
+use App\Models\MeasurementPoint;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -32,7 +33,7 @@ class ConcentratorController extends Controller
     public function show()
     {
         try {
-            return view('web.concentrators', ["concentrators" => Concentrator::all()]);
+            return view('web.concentrators', ["concentrators" => Concentrator::with("measurementPoint.project")->get()]);
         } catch (Exception $e) {
             return render_error($e);
         }
