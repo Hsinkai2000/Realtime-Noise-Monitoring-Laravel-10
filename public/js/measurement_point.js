@@ -238,7 +238,7 @@ function create_empty_option(select, text) {
     var defaultOption = document.createElement("option");
     defaultOption.textContent = text;
     defaultOption.selected = true;
-    defaultOption.disabled = true;
+    defaultOption.value = "";
     select.appendChild(defaultOption);
 }
 

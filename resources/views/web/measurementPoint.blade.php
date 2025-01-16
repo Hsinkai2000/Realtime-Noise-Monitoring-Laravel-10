@@ -239,6 +239,16 @@
 </body>
 
 <script>
+    $(document).ready(function() {
+        $('#selectConcentrator').select2({
+            dropdownParent: $('#measurementPointModal'),
+        });
+
+        $('#selectNoiseMeter').select2({
+            dropdownParent: $('#measurementPointModal'),
+        });
+    });
+
     window.measurementPointData = @json($measurementPoint);
     window.noise_meter = @json($measurementPoint->noiseMeter);
     window.concentrator = @json($measurementPoint->concentrator);
