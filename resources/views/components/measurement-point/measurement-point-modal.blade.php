@@ -44,6 +44,13 @@
                         </br>
                         <h4>Link Devices</h4>
                         <hr>
+                        <div class="row">
+                            <div id="nm_table"></div>
+                        </div>
+                        <div class="row">
+                            <div id="conc_table"></div>
+                        </div>
+
                         <div class="mb-3 row">
                             <div class="col-6">
                                 <div class="col">

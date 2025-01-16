@@ -24,7 +24,20 @@ class ConcentratorController extends Controller
     public function index()
     {
         try {
-            return ["concentrators" => Concentrator::all()];
+            \Log::info("message1");
+            $concentrators = Concentrator::with("measurementPoint.project")->get();
+            \Log::info("message2");
+            foreach ($concentrators as $concentrator) {
+                if ($concentrator->measurementPoint) {
+                    $concentrator['available'] = 0;
+                } else {
+                    $concentrator['available'] = 1;
+                }
+            }
+            \Log::info("message4");
+            \Log::info($concentrators);
+
+            return ["concentrators" => $concentrators];
         } catch (Exception $e) {
             return render_error($e);
         }
@@ -33,7 +46,16 @@ class ConcentratorController extends Controller
     public function show()
     {
         try {
-            return view('web.concentrators', ["concentrators" => Concentrator::with("measurementPoint.project")->get()]);
+            $concentrators = Concentrator::with("measurementPoint.project")->get();
+            foreach ($concentrators as $concentrator) {
+                if ($concentrator->measurementPoint) {
+                    $concentrator['available'] = 0;
+                } else {
+                    $concentrator['available'] = 1;
+                }
+            }
+
+            return view('web.concentrators', ["concentrators" => $concentrator]);
         } catch (Exception $e) {
             return render_error($e);
         }

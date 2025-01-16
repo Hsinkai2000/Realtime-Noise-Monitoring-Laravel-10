@@ -164,7 +164,6 @@ function populateConcentrator() {
         })
         .then((data) => {
             data = data.concentrators;
-
             // Create options from fetched data
             data.forEach((concentrator) => {
                 const option = document.createElement("option");
@@ -183,6 +182,8 @@ function populateConcentrator() {
                 }
                 selectConcentrator.appendChild(option);
             });
+
+            setConcTable(data);
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
@@ -228,10 +229,101 @@ function populateNoiseMeter() {
 
                 selectNoiseMeter.appendChild(option);
             });
+
+            setNoiseMeterTable(data);
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
         });
+}
+
+function setNoiseMeterTable(data) {
+    console.log(data);
+    var contactTable = new Tabulator("#nm_table", {
+        data: data,
+        layout: "fitColumns",
+        placeholder: "No Linked Measurement Points",
+        paginationSize: 8,
+        pagination: "local",
+        paginationCounter: "rows",
+        selectable: 1,
+        columns: [
+            {
+                title: "Serial No.",
+                field: "serial_number",
+                headerSort: false,
+                headerFilter: "input",
+                minWidth: 70,
+                width: 70,
+            },
+            {
+                title: "Label",
+                field: "noise_meter_label",
+                headerSort: false,
+                headerFilter: "input",
+                minWidth: 100,
+            },
+            {
+                title: "Unused",
+                field: "available",
+                minWidth: 80,
+                width: 80,
+                formatter: "tickCross",
+                headerFilter: "tickCross",
+                headerFilterParams: { tristate: true },
+                headerFilterEmptyCheck: function (value) {
+                    return value === undefined || value === null;
+                },
+            },
+        ],
+    });
+    contactTable.on("rowSelectionChanged", function (data, rows) {
+        // contactTableRowChanged(data);
+    });
+}
+
+function setConcTable(data) {
+    var contactTable = new Tabulator("#conc_table", {
+        data: data,
+        layout: "fitColumns",
+        placeholder: "No Linked Measurement Points",
+        paginationSize: 8,
+        pagination: "local",
+        paginationCounter: "rows",
+        selectable: 1,
+        columns: [
+            {
+                title: "Serial No.",
+                field: "device_id",
+                headerSort: false,
+                headerFilter: "input",
+                minWidth: 120,
+                width: 120,
+            },
+            {
+                title: "Label",
+                field: "concentrator_label",
+                headerSort: false,
+                headerFilter: "input",
+                minWidth: 100,
+            },
+            {
+                title: "Unused",
+                field: "available",
+                minWidth: 90,
+                width: 90,
+                formatter: "tickCross",
+                headerFilter: "tickCross",
+                headerFilterParams: { tristate: true },
+                headerFilterEmptyCheck: function (value) {
+                    return value === undefined || value === null;
+                },
+            },
+        ],
+    });
+    contactTable.on("rowSelectionChanged", function (data, rows) {
+        // contactTableRowChanged(data);
+    });
 }
 
 function create_empty_option(select, text) {

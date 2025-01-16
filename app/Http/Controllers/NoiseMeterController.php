@@ -22,7 +22,6 @@ class NoiseMeterController extends Controller
     public function show()
     {
         try {
-
             return view('web.noiseMeters', ["noise_meters" => NoiseMeter::with("measurementPoint.project")->get()]);
         } catch (Exception $e) {
             return render_error($e->getMessage());
@@ -31,7 +30,15 @@ class NoiseMeterController extends Controller
     public function index()
     {
         try {
-            return ["noise_meters" => NoiseMeter::all()];
+            $noiseMeters = NoiseMeter::with("measurementPoint.project")->get();
+            foreach ($noiseMeters as $noiseMeter) {
+                if ($noiseMeter->measurementPoint) {
+                    $noiseMeter['available'] = 0;
+                } else {
+                    $noiseMeter['available'] = 1;
+                }
+            }
+            return ["noise_meters" => $noiseMeters];
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }
