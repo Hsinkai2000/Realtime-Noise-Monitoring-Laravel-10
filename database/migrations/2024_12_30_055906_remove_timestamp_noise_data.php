@@ -21,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('noise_data', function (Blueprint $table) {
+            $table->timestamps();
+        });
     }
 };

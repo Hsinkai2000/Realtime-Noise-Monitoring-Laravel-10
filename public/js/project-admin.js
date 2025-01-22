@@ -276,6 +276,15 @@ function create_users(projectId, csrfToken) {
             project_id: projectId,
             users: userList,
         }),
+    }).then((response) => {
+        if (response.status == 422) {
+            response.json().then((json) => {
+                console.log("users not created");
+            });
+        } else {
+            window.location.reload();
+            return true;
+        }
     });
 }
 
@@ -300,7 +309,6 @@ function submit_project() {
         } else {
             response.json().then((json) => {
                 create_users(json.project_id, csrfToken);
-                window.location.reload();
             });
         }
     });

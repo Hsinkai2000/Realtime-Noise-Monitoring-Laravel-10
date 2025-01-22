@@ -328,6 +328,7 @@ function set_measurement_point_table() {
 }
 
 function update_users(projectId, csrfToken) {
+    console.log("userList");
     console.log(userList);
     fetch(`${baseUri}/user/`, {
         method: "POST",
@@ -340,8 +341,20 @@ function update_users(projectId, csrfToken) {
             project_id: projectId,
             users: userList,
         }),
+    }).then((response) => {
+        console.log("responded");
+        if (response.status == 422) {
+            response.json().then((json) => {
+                console.log("User not updated");
+            });
+        } else {
+            response.json().then((json) => {
+                console.log("responded ok");
+                window.location.reload();
+                return true;
+            });
+        }
     });
-    // });
 }
 
 function submit_project() {
@@ -376,7 +389,7 @@ function submit_project() {
         } else {
             response.json().then((json) => {
                 update_users(inputprojectId, csrfToken);
-                window.location.reload();
+                return true;
             });
         }
     });
@@ -520,6 +533,8 @@ function addUserClicked() {
             li.appendChild(removeBtn);
             curruserList.appendChild(li);
 
+            console.log("userList");
+            console.log(userList);
             // Clear input fields
             usernameField.value = "";
             passwordField.value = "";
@@ -979,6 +994,9 @@ async function create_sound_limits(formDataJson) {
             });
         } else {
             window.location.reload();
+            var form = document.getElementById("measurement_point_form");
+            form.reset();
+            return true;
         }
     });
 }

@@ -24,12 +24,14 @@
     <script src="{{ asset('js/app.js') }}"></script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Cache-Control" content="no-store" />
+
 
 </head>
 
 <body>
 
-    <x-nav.navbar projectId="{{ $project['id'] }}" />
+    <x-nav.navbar projectId="{{ $project->id }}" />
     <div class="container-fluid p-3 p-md-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb mb-0 d-flex align-items-center">
@@ -37,7 +39,7 @@
                     <li class="breadcrumb-item"><a href="{{ route('project.admin') }}">Projects</a></li>
                 @endif
                 <li class="breadcrumb-item d-flex align-items-center"><a href="#"
-                        class="href h3 text-decoration-none">{{ $project['job_number'] }}</a>
+                        class="href h3 text-decoration-none">{{ $project->job_number }}</a>
                 </li>
             </ol>
         </nav>
@@ -181,9 +183,11 @@
     });
 
     window.project = @json($project);
+    console.log(window.project.job_number);
     window.contacts = @json($project->contact);
+    console.log(window.contacts);
     window.admin = @json(Auth::user()->isAdmin());
-    console.log(window.project);
+    console.log(window.admin);
 </script>
 
 </html>

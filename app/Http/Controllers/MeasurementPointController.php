@@ -132,7 +132,7 @@ class MeasurementPointController extends Controller
             if (!$measurement_point) {
                 return render_unprocessable_entity("Unable to find Measurement point with id " . $id);
             }
-            $measurement_point->deleteMeasurementPoint();
+            $measurement_point->delete();
 
             return render_ok(["measurement_point" => $measurement_point]);
         } catch (Exception $e) {
