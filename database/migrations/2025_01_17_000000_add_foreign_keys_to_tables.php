@@ -18,11 +18,6 @@ class AddForeignKeysToTables extends Migration
             $table->foreign('measurement_point_id')->references('id')->on('measurement_points')->onDelete('cascade');
         });
 
-        Schema::table('noise_data', function (Blueprint $table) {
-            $table->unsignedBigInteger('measurement_point_id')->nullable()->change();
-            $table->foreign('measurement_point_id')->references('id')->on('measurement_points')->onDelete('set null');
-        });
-
         Schema::table('measurement_points', function (Blueprint $table) {
             $table->unsignedBigInteger('project_id')->change();
             $table->unsignedBigInteger('noise_meter_id')->nullable()->change();
@@ -45,10 +40,6 @@ class AddForeignKeysToTables extends Migration
         });
 
         Schema::table('sound_limits', function (Blueprint $table) {
-            $table->dropForeign(['measurement_point_id']);
-        });
-
-        Schema::table('noise_data', function (Blueprint $table) {
             $table->dropForeign(['measurement_point_id']);
         });
 
