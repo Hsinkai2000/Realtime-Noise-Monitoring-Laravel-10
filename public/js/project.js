@@ -899,6 +899,9 @@ function set_device_tables() {
         layout: "fitColumns",
         ajaxURL: `${baseUri}/concentrators`,
         placeholder: "No concentrators",
+        pagination: "local",
+        paginationSize: 10,
+        paginationCounter: "rows",
         selectable: 1,
         ajaxResponse: function (url, params, response) {
             // Add an empty row for unlinking at the top
@@ -941,6 +944,9 @@ function set_device_tables() {
         layout: "fitColumns",
         ajaxURL: `${baseUri}/noise_meters`,
         placeholder: "No noise meters",
+        pagination: "local",
+        paginationSize: 10,
+        paginationCounter: "rows",
         selectable: 1,
         ajaxResponse: function (url, params, response) {
             // Add an empty row for unlinking at the top
