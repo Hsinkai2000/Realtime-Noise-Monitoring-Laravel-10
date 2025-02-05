@@ -65,6 +65,9 @@
                     }
                 }
             }
+            .tabulator-selected {
+                background-color: $secondary !important; /* Replace $selected with your desired color */
+            }
         }
     }
 

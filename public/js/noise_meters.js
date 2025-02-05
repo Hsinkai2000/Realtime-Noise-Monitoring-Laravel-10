@@ -37,14 +37,6 @@ function set_tables(data) {
                 headerSort: false,
             },
             {
-                formatter: "rowSelection",
-                titleFormatter: "rowSelection",
-                hozAlign: "center",
-                headerSort: false,
-                frozen: true,
-                width: 30,
-            },
-            {
                 title: "Serial Number",
                 field: "serial_number",
                 headerFilter: "input",

@@ -47,6 +47,9 @@
 #concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr {
   background-color: #e9e2dc;
 }
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-selected {
+  background-color: #fcdb00 !important; /* Replace $selected with your desired color */
+}
 #concentrator_table .tabulator-footer-contents {
   background-color: #fdfcfa;
 }

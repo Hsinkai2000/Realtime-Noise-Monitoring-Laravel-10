@@ -36,14 +36,6 @@ function set_tables(data) {
                 headerSort: false,
             },
             {
-                formatter: "rowSelection",
-                titleFormatter: "rowSelection",
-                hozAlign: "center",
-                headerSort: false,
-                frozen: true,
-                width: 30,
-            },
-            {
                 title: "Device Id",
                 field: "device_id",
                 headerFilter: "input",
