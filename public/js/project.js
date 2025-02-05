@@ -838,10 +838,8 @@ function set_device_tables() {
                 formatter: "tickCross",
                 minWidth: 80,
                 width: 80,
-                headerFilter: "select",
-                headerFilterParams: {
-                    values: { "": "All", true: "✓", false: "✗" }, // Dropdown options
-                },
+                headerFilter: "tickCross",
+                headerFilterParams: { tristate: true },
             },
         ],
     });
@@ -883,10 +881,8 @@ function set_device_tables() {
                 formatter: "tickCross",
                 minWidth: 80,
                 width: 80,
-                headerFilter: "select",
-                headerFilterParams: {
-                    values: { "": "All", true: "✓", false: "✗" },
-                },
+                headerFilter: "tickCross",
+                headerFilterParams: { tristate: true },
             },
         ],
     });
