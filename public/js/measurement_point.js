@@ -439,7 +439,7 @@ async function openPdf() {
         document.getElementById("error-messages-pdf").hidden = false;
         document.getElementById("error-messages-pdf").innerText =
             "The date range should not exceed 31 days.";
-    } else if (select_start_date > select_end_date) {
+    } else if (startDate > endDate) {
         document.getElementById("error-messages-pdf").hidden = false;
         document.getElementById("error-messages-pdf").innerText =
             "The start date must be before end date.";
