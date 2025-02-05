@@ -53,7 +53,7 @@
             <div class="left-group d-flex align-items-center">
                 <h3 class="mb-0 me-2">Measurement Point Information</h3>
                 <button type="button" id="edit-button" class="d-inline btn btn-dark text-light shadow-sm"
-                    data-bs-toggle="modal" data-bs-target="#measurementPointModal">Edit</button>
+                    onclick="openModal('measurementPointModal')">Edit</button>
             </div>
             @if (Auth::user()->isAdmin())
                 <div class="right-groups d-flex align-items-center">
@@ -77,7 +77,7 @@
                 <div class="col-md-2 col-sm-4">
                     Device Location:
                 </div>
-                <div class="col-md-9 col-6">
+                <div class="col-md-9 col-sm-12">
                     {{ $measurementPoint->device_location }}
                 </div>
             </div>
@@ -85,7 +85,7 @@
                 <div class="col-md-2 col-sm-4">
                     Remarks:
                 </div>
-                <div class="col-md-9 col-6">
+                <div class="col-md-9 col-sm-12">
                     {{ $measurementPoint->remarks }}
                 </div>
             </div>
@@ -93,7 +93,7 @@
                 <div class="col-md-2 col-sm-4">
                     Category:
                 </div>
-                <div class="col-md-9 col-6">
+                <div class="col-md-9 col-sm-12">
                     {{ $measurementPoint->soundLimit->category }}
                 </div>
             </div>
@@ -101,7 +101,7 @@
                 <div class="col-md-2 col-sm-4">
                     Sound Limits:
                 </div>
-                <div class="col-md-4 col-sm-8">
+                <div class="col-md-4 col-sm-12">
                     @if ($measurementPoint->soundLimit->category == 'Residential')
                         <table class="table-bordered w-100">
                             <tr>

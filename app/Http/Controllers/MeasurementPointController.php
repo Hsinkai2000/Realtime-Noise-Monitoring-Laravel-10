@@ -101,6 +101,8 @@ class MeasurementPointController extends Controller
     public function update(Request $request)
     {
         $confirmation = $request->get('confirmation');
+        \Log::info($request->get("point_name"));
+
         if (!$confirmation) {
             $this->handleMeasurementPointUpdateValidation($request);
         }

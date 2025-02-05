@@ -31,7 +31,11 @@ class NoiseMeterController extends Controller
     public function index()
     {
         try {
-            return ["noise_meters" => NoiseMeter::all()];
+            $noise_meters = NoiseMeter::all();
+            foreach ($noise_meters as $noise_meter) {
+                $noise_meter['isAvailable'] = $noise_meter->isAvailable();
+            }
+            return $noise_meters;
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }

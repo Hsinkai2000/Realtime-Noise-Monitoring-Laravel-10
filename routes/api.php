@@ -20,4 +20,4 @@ use App\Http\Controllers\UserController;
 Route::post("/input", [PagesController::class, 'input']);
 Route::post("/twilio/callback", [TwilioController::class, 'callback']);
 
-Route::post("/user", [UserController::class, 'create']);
+Route::post("/usercreate", [UserController::class, 'create']);

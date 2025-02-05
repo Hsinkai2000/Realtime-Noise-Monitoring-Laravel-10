@@ -1,6 +1,8 @@
 @import "./colors.scss";
 
-#contacts_table {
+#contacts_table,
+#concentrator_list_table,
+#noiseMeter_list_table {
     background-color: $light;
     border-color: $primary;
     padding: 10px;
@@ -61,6 +63,9 @@
                         }
                     }
                 }
+            }
+            .tabulator-selected {
+                background-color: $secondary !important; /* Replace $selected with your desired color */
             }
         }
     }

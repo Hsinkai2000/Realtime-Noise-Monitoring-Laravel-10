@@ -81,25 +81,24 @@
 
                         @if (Auth::user()->isAdmin())
                             <div class="mb-3 row">
-                                <div class="col-6">
-                                    <div class="col">
-                                        New Device Id:
-                                    </div>
-                                    <div class="col">
-                                        <select id="selectConcentrator" name="concentrator_id" style="width: 80%">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="col">
-                                        New Noise Meter
-                                    </div>
-                                    <div class="col">
-                                        <select id="selectNoiseMeter" name="noise_meter_id" style="width: 80%">
-                                        </select>
-                                    </div>
-                                </div>
+                                <div class="col">Select Concentrator</div>
                             </div>
+                            <div class="mb-2 row">
+                                <div class="col" id="concentrator_list_table"></div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <div class="col">Select Noise Meter</div>
+                            </div>
+                            <div class="mb-2 row">
+                                <div class="col" id="noiseMeter_list_table"></div>
+                            </div>
+                            <input type="text" name="concentrator_id" id="concentratorId"
+                                value="@if ($measurementPoint) {{ old('concentrator_id', $measurementPoint->concentrator ? $measurementPoint->concentrator->id : null) }} @endif"
+                                hidden>
+                            <input type="text" name="noise_meter_id" id="noiseMeterId"
+                                value="@if ($measurementPoint) {{ old('noise_meter_id', $measurementPoint->noiseMeter ? $measurementPoint->noiseMeter->id : null) }} @endif"
+                                hidden>
                         @else
                             <input name="concentrator_id"
                                 value="@if ($measurementPoint) {{ $measurementPoint->concentrator ? $measurementPoint->concentrator->id : '' }} @endif"
