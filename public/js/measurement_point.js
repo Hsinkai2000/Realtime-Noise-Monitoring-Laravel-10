@@ -240,14 +240,14 @@ function set_device_tables() {
         if (data && data.length > 0) {
             document.getElementById("concentratorId").value = data[0].id;
         } else {
-            console.log("test");
-            console.log(document.getElementById("concentratorId").value);
+            document.getElementById("concentratorId").value = null;
         }
     });
     noiseMeter_list_table.on("rowSelectionChanged", function (data, rows) {
         if (data && data.length > 0) {
             document.getElementById("noiseMeterId").value = data[0].id;
         } else {
+            document.getElementById("noiseMeterId").value = null;
         }
     });
 
@@ -774,4 +774,3 @@ window.handle_measurementpoint_submit = handle_measurementpoint_submit;
 
 set_tables();
 set_device_tables();
-// populateSelects();

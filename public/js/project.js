@@ -111,7 +111,6 @@ measurementPointModal.addEventListener("hidden.bs.modal", function (event) {
             errorMessagesDiv.innerHTML = "";
         }
         populate_soundLimits();
-        // populateSelects();
     }
 });
 
@@ -800,100 +799,6 @@ function populate_soundLimits(event, reset_defaults = false) {
         valueMap[selectedCategory].sun_ph_12am_7am_leq12hr;
 }
 
-// function populateSelects() {
-//     if (window.admin) {
-//         populateConcentrator();
-//         populateNoiseMeter();
-//     }
-// }
-
-// function populateConcentrator() {
-//     var selectConcentrator;
-//     var defaultConcentrator;
-//     selectConcentrator = document.getElementById("selectConcentrator");
-
-//     selectConcentrator.innerHTML = "";
-//     create_empty_option(selectConcentrator, "Choose Concentrator...");
-
-//     const url = `${baseUri}/concentrators/`;
-//     fetch(url)
-//         .then((response) => {
-//             if (!response.ok) {
-//                 throw new Error(
-//                     "Network response was not ok " + response.statusText
-//                 );
-//             }
-//             return response.json();
-//         })
-//         .then((data) => {
-//             console.log(data);
-//             data = data.concentrators;
-
-//             // Create options from fetched data
-//             data.forEach((concentrator) => {
-//                 const option = document.createElement("option");
-//                 option.value = concentrator.id;
-//                 option.textContent =
-//                     concentrator.device_id +
-//                     " | " +
-//                     concentrator.concentrator_label;
-
-//                 if (
-//                     defaultConcentrator &&
-//                     concentrator.id == defaultConcentrator.concentrator_id
-//                 ) {
-//                     option.selected = true;
-//                 }
-//                 selectConcentrator.appendChild(option);
-//             });
-//         })
-//         .catch((error) => {
-//             console.error("Error fetching concentrators :", error);
-//         });
-// }
-
-// function populateNoiseMeter() {
-//     var selectNoiseMeter;
-//     var defaultNoiseMeter;
-//     selectNoiseMeter = document.getElementById("selectNoiseMeter");
-//     selectNoiseMeter.innerHTML = "";
-//     create_empty_option(selectNoiseMeter, "Choose Noise Meter...");
-
-//     const url = `${baseUri}/noise_meters`;
-//     fetch(url)
-//         .then((response) => {
-//             if (!response.ok) {
-//                 throw new Error(
-//                     "Network response was not ok " + response.statusText
-//                 );
-//             }
-//             return response.json();
-//         })
-//         .then((data) => {
-//             data = data.noise_meters;
-
-//             data.forEach((noise_meter) => {
-//                 const option = document.createElement("option");
-//                 option.value = noise_meter.id;
-//                 option.textContent =
-//                     noise_meter.serial_number +
-//                     " | " +
-//                     noise_meter.noise_meter_label;
-//                 if (
-//                     defaultNoiseMeter &&
-//                     noise_meter.id == defaultNoiseMeter.noise_meter_id
-//                 ) {
-//                     option.selected = true;
-//                 }
-
-//                 selectNoiseMeter.appendChild(option);
-//             });
-//         })
-//         .catch((error) => {
-//             console.error("Error fetching Noise Meters :", error);
-//         });
-// }
-
 function set_device_tables() {
     concentrator_list_table = new Tabulator("#concentrator_list_table", {
         layout: "fitColumns",
@@ -990,14 +895,14 @@ function set_device_tables() {
         if (data && data.length > 0) {
             document.getElementById("concentratorId").value = data[0].id;
         } else {
-            console.log("test");
-            console.log(document.getElementById("concentratorId").value);
+            document.getElementById("concentratorId").value = null;
         }
     });
     noiseMeter_list_table.on("rowSelectionChanged", function (data, rows) {
         if (data && data.length > 0) {
             document.getElementById("noiseMeterId").value = data[0].id;
         } else {
+            document.getElementById("noiseMeterId").value = null;
         }
     });
 
@@ -1200,7 +1105,6 @@ window.toggle_soundLimits = toggle_soundLimits;
 window.populate_soundLimits = populate_soundLimits;
 window.handle_measurementpoint_submit = handle_measurementpoint_submit;
 
-// populateSelects();
 set_device_tables();
 set_contact_table();
 set_measurement_point_table();
