@@ -94,9 +94,11 @@
                                 <div class="col" id="noiseMeter_list_table"></div>
                             </div>
                             <input type="text" name="concentrator_id" id="concentratorId"
-                                value="@if ($measurementPoint) {{ old('concentrator_id', $measurementPoint->concentrator ? $measurementPoint->concentrator->id : null) }} @endif">
+                                value="@if ($measurementPoint) {{ old('concentrator_id', $measurementPoint->concentrator ? $measurementPoint->concentrator->id : null) }} @endif"
+                                hidden>
                             <input type="text" name="noise_meter_id" id="noiseMeterId"
-                                value="@if ($measurementPoint) {{ old('noise_meter_id', $measurementPoint->noiseMeter ? $measurementPoint->noiseMeter->id : null) }} @endif">
+                                value="@if ($measurementPoint) {{ old('noise_meter_id', $measurementPoint->noiseMeter ? $measurementPoint->noiseMeter->id : null) }} @endif"
+                                hidden>
                         @else
                             <input name="concentrator_id"
                                 value="@if ($measurementPoint) {{ $measurementPoint->concentrator ? $measurementPoint->concentrator->id : '' }} @endif"
