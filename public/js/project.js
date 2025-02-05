@@ -111,7 +111,7 @@ measurementPointModal.addEventListener("hidden.bs.modal", function (event) {
             errorMessagesDiv.innerHTML = "";
         }
         populate_soundLimits();
-        populateSelects();
+        // populateSelects();
     }
 });
 
