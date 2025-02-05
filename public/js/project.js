@@ -16,6 +16,8 @@ if (window.location.port) {
     baseUri += `:${window.location.port}`;
 }
 var inputprojectId = window.project.id;
+var concentrator_list_table;
+var noiseMeter_list_table;
 isSwitchingModal = false;
 
 const valueMap = {
@@ -647,6 +649,15 @@ function openModal(modalName, type = null) {
             document.getElementById("deleteType").innerHTML = type;
             deleteType = "project";
         }
+    } else if (modalName == "measurementPointModal") {
+        concentrator_list_table.deselectRow();
+        noiseMeter_list_table.deselectRow();
+        if (window.concentrator) {
+            concentrator_list_table.selectRow(window.concentrator.id);
+        }
+        if (window.noise_meter) {
+            noiseMeter_list_table.selectRow(window.noise_meter.id);
+        }
     } else {
         contactType = type;
         fetch_contact_data(contactType);
@@ -789,98 +800,215 @@ function populate_soundLimits(event, reset_defaults = false) {
         valueMap[selectedCategory].sun_ph_12am_7am_leq12hr;
 }
 
-function populateSelects() {
-    if (window.admin) {
-        populateConcentrator();
-        populateNoiseMeter();
-    }
-}
+// function populateSelects() {
+//     if (window.admin) {
+//         populateConcentrator();
+//         populateNoiseMeter();
+//     }
+// }
 
-function populateConcentrator() {
-    var selectConcentrator;
-    var defaultConcentrator;
-    selectConcentrator = document.getElementById("selectConcentrator");
+// function populateConcentrator() {
+//     var selectConcentrator;
+//     var defaultConcentrator;
+//     selectConcentrator = document.getElementById("selectConcentrator");
 
-    selectConcentrator.innerHTML = "";
-    create_empty_option(selectConcentrator, "Choose Concentrator...");
+//     selectConcentrator.innerHTML = "";
+//     create_empty_option(selectConcentrator, "Choose Concentrator...");
 
-    const url = `${baseUri}/concentrators/`;
-    fetch(url)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(
-                    "Network response was not ok " + response.statusText
-                );
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log(data);
-            data = data.concentrators;
+//     const url = `${baseUri}/concentrators/`;
+//     fetch(url)
+//         .then((response) => {
+//             if (!response.ok) {
+//                 throw new Error(
+//                     "Network response was not ok " + response.statusText
+//                 );
+//             }
+//             return response.json();
+//         })
+//         .then((data) => {
+//             console.log(data);
+//             data = data.concentrators;
 
-            // Create options from fetched data
-            data.forEach((concentrator) => {
-                const option = document.createElement("option");
-                option.value = concentrator.id;
-                option.textContent =
-                    concentrator.device_id +
-                    " | " +
-                    concentrator.concentrator_label;
+//             // Create options from fetched data
+//             data.forEach((concentrator) => {
+//                 const option = document.createElement("option");
+//                 option.value = concentrator.id;
+//                 option.textContent =
+//                     concentrator.device_id +
+//                     " | " +
+//                     concentrator.concentrator_label;
 
-                if (
-                    defaultConcentrator &&
-                    concentrator.id == defaultConcentrator.concentrator_id
-                ) {
-                    option.selected = true;
-                }
-                selectConcentrator.appendChild(option);
+//                 if (
+//                     defaultConcentrator &&
+//                     concentrator.id == defaultConcentrator.concentrator_id
+//                 ) {
+//                     option.selected = true;
+//                 }
+//                 selectConcentrator.appendChild(option);
+//             });
+//         })
+//         .catch((error) => {
+//             console.error("Error fetching concentrators :", error);
+//         });
+// }
+
+// function populateNoiseMeter() {
+//     var selectNoiseMeter;
+//     var defaultNoiseMeter;
+//     selectNoiseMeter = document.getElementById("selectNoiseMeter");
+//     selectNoiseMeter.innerHTML = "";
+//     create_empty_option(selectNoiseMeter, "Choose Noise Meter...");
+
+//     const url = `${baseUri}/noise_meters`;
+//     fetch(url)
+//         .then((response) => {
+//             if (!response.ok) {
+//                 throw new Error(
+//                     "Network response was not ok " + response.statusText
+//                 );
+//             }
+//             return response.json();
+//         })
+//         .then((data) => {
+//             data = data.noise_meters;
+
+//             data.forEach((noise_meter) => {
+//                 const option = document.createElement("option");
+//                 option.value = noise_meter.id;
+//                 option.textContent =
+//                     noise_meter.serial_number +
+//                     " | " +
+//                     noise_meter.noise_meter_label;
+//                 if (
+//                     defaultNoiseMeter &&
+//                     noise_meter.id == defaultNoiseMeter.noise_meter_id
+//                 ) {
+//                     option.selected = true;
+//                 }
+
+//                 selectNoiseMeter.appendChild(option);
+//             });
+//         })
+//         .catch((error) => {
+//             console.error("Error fetching Noise Meters :", error);
+//         });
+// }
+
+function set_device_tables() {
+    concentrator_list_table = new Tabulator("#concentrator_list_table", {
+        layout: "fitColumns",
+        ajaxURL: `${baseUri}/concentrators`,
+        placeholder: "No concentrators",
+        selectable: 1,
+        ajaxResponse: function (url, params, response) {
+            // Add an empty row for unlinking at the top
+            response.unshift({
+                id: null,
+                device_id: "Unlink",
+                concentrator_label: "",
+                isAvailable: "true",
             });
-        })
-        .catch((error) => {
-            console.error("Error fetching concentrators :", error);
-        });
-}
-
-function populateNoiseMeter() {
-    var selectNoiseMeter;
-    var defaultNoiseMeter;
-    selectNoiseMeter = document.getElementById("selectNoiseMeter");
-    selectNoiseMeter.innerHTML = "";
-    create_empty_option(selectNoiseMeter, "Choose Noise Meter...");
-
-    const url = `${baseUri}/noise_meters`;
-    fetch(url)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(
-                    "Network response was not ok " + response.statusText
-                );
-            }
-            return response.json();
-        })
-        .then((data) => {
-            data = data.noise_meters;
-
-            data.forEach((noise_meter) => {
-                const option = document.createElement("option");
-                option.value = noise_meter.id;
-                option.textContent =
-                    noise_meter.serial_number +
-                    " | " +
-                    noise_meter.noise_meter_label;
-                if (
-                    defaultNoiseMeter &&
-                    noise_meter.id == defaultNoiseMeter.noise_meter_id
-                ) {
-                    option.selected = true;
-                }
-
-                selectNoiseMeter.appendChild(option);
+            return response;
+        },
+        columns: [
+            {
+                title: "Device ID",
+                field: "device_id",
+                minWidth: 120,
+                width: 120,
+                headerFilter: "input",
+            },
+            {
+                title: "Label",
+                field: "concentrator_label",
+                headerFilter: "input",
+                minWidth: 150,
+            },
+            {
+                title: "Unused",
+                field: "isAvailable",
+                formatter: "tickCross",
+                minWidth: 80,
+                width: 80,
+                headerFilter: "select",
+                headerFilterParams: {
+                    values: { "": "All", true: "✓", false: "✗" }, // Dropdown options
+                },
+            },
+        ],
+    });
+    noiseMeter_list_table = new Tabulator("#noiseMeter_list_table", {
+        layout: "fitColumns",
+        ajaxURL: `${baseUri}/noise_meters`,
+        placeholder: "No noise meters",
+        selectable: 1,
+        ajaxResponse: function (url, params, response) {
+            // Add an empty row for unlinking at the top
+            response.unshift({
+                id: null,
+                serial_number: "Unlink",
+                noise_meter_label: "",
+                isAvailable: "true",
             });
-        })
-        .catch((error) => {
-            console.error("Error fetching Noise Meters :", error);
-        });
+            return response;
+        },
+        columns: [
+            {
+                title: "Serial No",
+                field: "serial_number",
+                minWidth: 120,
+                width: 120,
+                headerFilter: "input",
+            },
+            {
+                title: "Label",
+                field: "noise_meter_label",
+                headerFilter: "input",
+                minWidth: 150,
+            },
+            {
+                title: "Unused",
+                field: "isAvailable",
+                formatter: "tickCross",
+                minWidth: 80,
+                width: 80,
+                headerFilter: "select",
+                headerFilterParams: {
+                    values: { "": "All", true: "✓", false: "✗" },
+                },
+            },
+        ],
+    });
+
+    concentrator_list_table.on("rowSelectionChanged", function (data, rows) {
+        if (data && data.length > 0) {
+            document.getElementById("concentratorId").value = data[0].id;
+        } else {
+            console.log("test");
+            console.log(document.getElementById("concentratorId").value);
+        }
+    });
+    noiseMeter_list_table.on("rowSelectionChanged", function (data, rows) {
+        if (data && data.length > 0) {
+            document.getElementById("noiseMeterId").value = data[0].id;
+        } else {
+        }
+    });
+
+    concentrator_list_table.on("tableBuilt", function () {
+        setTimeout(function () {
+            const firstRow = concentrator_list_table.getRows()[0];
+            if (firstRow) {
+                firstRow.select();
+            }
+        }, 200);
+    });
+
+    noiseMeter_list_table.on("tableBuilt", function () {
+        setTimeout(function () {
+            noiseMeter_list_table.selectRow(0);
+        }, 200);
+    });
 }
 
 function create_empty_option(select, text) {
@@ -1066,7 +1194,8 @@ window.toggle_soundLimits = toggle_soundLimits;
 window.populate_soundLimits = populate_soundLimits;
 window.handle_measurementpoint_submit = handle_measurementpoint_submit;
 
-populateSelects();
+// populateSelects();
+set_device_tables();
 set_contact_table();
 set_measurement_point_table();
 // toggleEndUserName();

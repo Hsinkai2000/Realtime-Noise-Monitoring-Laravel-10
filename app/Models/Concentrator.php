@@ -56,4 +56,9 @@ class Concentrator extends Model
     {
         return $date->format('Y-m-d');
     }
+
+    public function isAvailable()
+    {
+        return $this->measurementPoint()->doesntExist();
+    }
 }

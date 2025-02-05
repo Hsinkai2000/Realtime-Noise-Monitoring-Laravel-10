@@ -24,7 +24,11 @@ class ConcentratorController extends Controller
     public function index()
     {
         try {
-            return ["concentrators" => Concentrator::all()];
+            $concentrators = Concentrator::all();
+            foreach ($concentrators as $concentrator) {
+                $concentrator['isAvailable'] = $concentrator->isAvailable();
+            }
+            return $concentrators;
         } catch (Exception $e) {
             return render_error($e);
         }

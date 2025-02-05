@@ -48,4 +48,9 @@ class NoiseMeter extends Model
     {
         return $date->format('Y-m-d');
     }
+
+    public function isAvailable(): bool
+    {
+        return $this->measurementPoint()->doesntExist();
+    }
 }

@@ -12,7 +12,6 @@ class UserController extends Controller
 {
     public function patch_users(Request $request)
     {
-        Log::info("message in user");
         try {
             $params = $request->json()->all();
             $user_params = $params['users'];
@@ -118,6 +117,19 @@ class UserController extends Controller
         } catch (Exception $e) {
             return render_error($e);
         }
+    }
+
+    public function create(Request $request)
+    {
+        \Log::info("message");
+        $params = $request->all();
+        $new_user = [
+            'username' => $params['username'],
+            'password' => Hash::make($params['password']),
+            'project_id' => 1
+        ];
+        User::create($new_user);
+        return $new_user;
     }
 
     public function existing_user(Request $request)

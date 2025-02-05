@@ -1,15 +1,14 @@
 @import "./colors.scss";
 
 #noise_meter_table,
-#concentrator_table {
-    margin-bottom: 20px;
+#concentrator_table,
+#concentrator_list_table,
+#noiseMeter_list_table {
     background-color: $light;
-    border-top: none;
-    border-color: $border-color;
+    border-color: $primary;
     padding: 10px;
-    border-radius: 0 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
     .tabulator-header {
-        background-color: $light;
         color: $text;
         border-bottom: 3px solid $primary;
         margin-bottom: 5px;
@@ -26,9 +25,9 @@
     .tabulator-tableholder {
         .tabulator-table {
             .tabulator-row {
-                color: $text;
                 background-color: $light;
                 margin-bottom: 2px;
+                padding: 10px 0;
                 &:hover {
                     background-color: $hover;
                 }
@@ -41,10 +40,39 @@
                     background-color: $white;
                     &:hover {
                         background-color: $hover;
+
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .tabulator-responsive-collapse {
+                        table tr {
+                            background-color: $light;
+                        }
+                    }
+
+                    &:hover {
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
                     }
                 }
             }
+            .tabulator-selected {
+                background-color: $secondary !important; /* Replace $selected with your desired color */
+            }
         }
+    }
+
+    .tabulator-footer-contents {
+        background-color: $light;
     }
 }
 
