@@ -900,7 +900,7 @@ function set_device_tables() {
         ajaxURL: `${baseUri}/concentrators`,
         placeholder: "No concentrators",
         pagination: "local",
-        paginationSize: 10,
+        paginationSize: 5,
         paginationCounter: "rows",
         selectable: 1,
         ajaxResponse: function (url, params, response) {
@@ -945,7 +945,7 @@ function set_device_tables() {
         ajaxURL: `${baseUri}/noise_meters`,
         placeholder: "No noise meters",
         pagination: "local",
-        paginationSize: 10,
+        paginationSize: 5,
         paginationCounter: "rows",
         selectable: 1,
         ajaxResponse: function (url, params, response) {
