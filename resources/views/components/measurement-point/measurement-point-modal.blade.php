@@ -44,18 +44,7 @@
                         </br>
                         <h4>Link Devices</h4>
                         <hr>
-                        <div class="mb-3 row">
-                            <div class="col-6">
-                                <div class="col">
-                                    Concentrator
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="col">
-                                    Noise Meter
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="mb-3 row" id="existing_devices" @if (!$measurementPoint) hidden @endif>
                             <div class="col-6">
                                 <div class="col">
