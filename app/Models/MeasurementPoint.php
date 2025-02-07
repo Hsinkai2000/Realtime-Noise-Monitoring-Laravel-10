@@ -455,4 +455,22 @@ class MeasurementPoint extends Model
         }
         return true;
     }
+
+    public function getFirstDataOfDay(string $date)
+    {
+        $startTime = Carbon::parse($date . ' 07:00:00');
+        $endTime = Carbon::parse($date . ' 06:59:59')->addDay();
+
+        $noise_data = $this->noiseData()->whereBetween('received_at', [$startTime, $endTime])
+            ->orderBy('received_at', 'asc')
+            ->first();
+        if ($noise_data) {
+            return $noise_data->noise_meter_serial;
+        }
+
+        if ($this->noiseMeter) {
+            return $this->noiseMeter->serial_number;
+        }
+        return null;
+    }
 }

@@ -105,9 +105,10 @@
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
         <div class="container mt-3" style="page-break-before: always;">
             <div class="text-center">
-                @if ($measurementPoint->noiseMeter)
+                <?php $res = $measurementPoint->getFirstDataOfDay($date->format('d-m-Y')); ?>
+                @if ($res)
                     <h1>Noise Data</h1>
-                    <h3>Noise Device ID: {{ $measurementPoint->noiseMeter->serial_number }}</h3>
+                    <h3>Noise Device Serial: {{ $measurementPoint->getFirstDataOfDay($date->format('d-m-Y')) }}</h3>
                     <h3>Date: {{ $date->format('d-m-Y') }}</h3>
                 @else
                     <h1>Noise Data</h1>
