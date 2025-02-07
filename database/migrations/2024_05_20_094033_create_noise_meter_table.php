@@ -22,7 +22,6 @@ return new class extends Migration
             $table->dateTime('created_at')->default(now());
             $table->dateTime('updated_at')->default(now());
         });
-
     }
 
     /**
