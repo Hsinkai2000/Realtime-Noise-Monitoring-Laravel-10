@@ -194,13 +194,13 @@ class MeasurementPoint extends Model
             }
             if ($leq_12_should_alert) {
                 $this->leq_12_hours_last_alert_at = $last_noise_data->received_at;
-                $data["leq_type"] = "12hours";
+                $data["leq_type"] = "12h";
                 $data["exceeded_limit"] = $leq12hlimit;
                 $data["leq_value"] = round($calculated12hLeq, 1);
                 $this->send_alert($data);
             } else if ($leq_1_should_alert) {
                 $this->leq_1_hour_last_alert_at = $last_noise_data->received_at;
-                $data["leq_type"] = "1hour";
+                $data["leq_type"] = "1h";
                 $data["exceeded_limit"] = $leq1hlimit;
                 $data["leq_value"] = round($calculated1hLeq, 1);
                 $this->send_alert($data);

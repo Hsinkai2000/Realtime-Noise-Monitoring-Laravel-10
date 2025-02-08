@@ -29,7 +29,7 @@
                             </label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputClientName" name="client_name"
-                                    value="{{ old('client_name', $project->client_name ?? '') }}">
+                                    maxlength="10" value="{{ old('client_name', $project->client_name ?? '') }}">
                             </div>
                         </div>
 
@@ -48,7 +48,7 @@
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Jobsite
                                 Location</label>
                             <div class="col-sm-8 align-content-center">
-                                <input type="text" class="form-control" id="inputJobsiteLocation"
+                                <input type="text" class="form-control" id="inputJobsiteLocation" maxlength="40"
                                     name='jobsite_location'
                                     value="{{ old('jobsite_location', $project->jobsite_location ?? '') }}">
                             </div>
