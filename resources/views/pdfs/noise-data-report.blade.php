@@ -19,6 +19,10 @@
 
     {{-- @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resource ss/js/app.js']) --}}
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js">
+    </script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -100,8 +104,6 @@
 
     </div>
 
-
-
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
         <div class="container mt-3" style="page-break-before: always;">
             <div class="text-center">
@@ -119,9 +121,14 @@
                 <br />
                 <x-pdfs.partials-report-data :measurementPoint="$measurementPoint" :date="$date" />
             </div>
+            <div>
+                <br>
+                <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date" />
+            </div>
         </div>
     @endfor
     <script src="{{ asset('js/pdf.js') }}" async defer></script>
+
 </body>
 
 </html>

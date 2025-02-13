@@ -24,6 +24,12 @@
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css">
 
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js">
+    </script>
+
     <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/measurement_point.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
@@ -229,6 +235,10 @@
             <button class="btn btn-primary bg-light text-primary px-4 me-3 shadow-sm"
                 onclick="openModal('viewPdfModal')">View Report</button>
         </div>
+        <br>
+
+        <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" />
+
     </div>
 
     <x-confirmation-modal />
