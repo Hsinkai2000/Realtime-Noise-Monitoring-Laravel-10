@@ -38,3 +38,4 @@ class PdfController extends Controller
         // return view('pdfs.noise-data-report', $data);
     }
 }
+71
