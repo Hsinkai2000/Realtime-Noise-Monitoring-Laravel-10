@@ -11,7 +11,6 @@
         end.setMinutes(end.getMinutes() - 1);
 
         for (let time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
-            console.log(time);
             const dayOfWeek = time.getDay();
             const isWeekend = (dayOfWeek === 0);
             const hours = time.getHours();
