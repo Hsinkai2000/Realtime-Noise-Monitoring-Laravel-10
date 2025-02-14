@@ -73,7 +73,6 @@ class ReportIndividualDataComponent extends Component
             if ($date->hour == 7) {
                 $date->hour = 18;
             }
-            Log::info($date);
             if (!empty($noiseData)) {
                 $noiseData = new NoiseData(['received_at' => $date]);
             } else {
@@ -83,9 +82,6 @@ class ReportIndividualDataComponent extends Component
             if ($datenow > $date || $num_blanks == 0) {
                 $leq_data['leq_data'] = 'FIN';
             } else {
-
-                Log::info($calculated_dose_percentage);
-                Log::info($num_blanks);
                 if ($calculated_dose_percentage < 100 && $num_blanks != 12 && $num_blanks != 144) {
                     $missingVal = $decision == '12h' ? 144 : 12;
                     [$leq_5mins_should_alert, $leq5limit] = $this->measurementPoint->leq_5_mins_exceed_and_alert($noiseData);

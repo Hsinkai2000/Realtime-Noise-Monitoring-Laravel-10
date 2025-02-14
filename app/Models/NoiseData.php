@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\MeasurementPoint;
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,7 @@ class NoiseData extends Model
         'measurement_point_id',
         'leq',
         'received_at',
+        'noise_meter_serial'
     ];
 
     protected $casts = [
@@ -24,10 +26,16 @@ class NoiseData extends Model
         'measurement_point_id' => 'integer',
         'leq' => 'float',
         'received_at' => 'datetime',
+        'noise_meter_serial' => 'string'
     ];
 
     public function measurementPoint(): BelongsTo
     {
         return $this->belongsTo(MeasurementPoint::class, 'id', 'measurement_point_id');
+    }
+
+    public function noiseMeters(): BelongsTo
+    {
+        return $this->belongsTo(NoiseMeter::class, "serial_number", "noise_meter_serial");
     }
 }
