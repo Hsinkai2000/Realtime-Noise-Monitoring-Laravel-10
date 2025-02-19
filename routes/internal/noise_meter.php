@@ -9,3 +9,4 @@ Route::patch("/noise_meters/{id}", [NoiseMeterController::class, 'update']);
 Route::delete("/noise_meters/{id}", [NoiseMeterController::class, 'delete']);
 Route::get("/noise_meters/show", [NoiseMeterController::class, 'show'])->name('noise_meter.show');
 Route::get("/noise_meters/{id}", [NoiseMeterController::class, 'get'])->name('noise_meter');
+Route::get("/noise_meters/deletable/{id}", [NoiseMeterController::class, 'deletable'])->name('noise_meter.deletable');

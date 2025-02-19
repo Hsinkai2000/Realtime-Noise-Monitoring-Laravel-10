@@ -159,7 +159,7 @@ class PagesController extends Controller
                 'measurement_point_id' => $geoscanLib->noise_meter()->measurementPoint->id,
                 'leq' => $noise_leq,
                 'received_at' => $time->format('Y-m-d H:i:s'),
-                'noise_meter_serial' => $geoscanLib->noise_serial_number()
+                'noise_meter_id' => $geoscanLib->noise_meter()->id
             ];
 
             return $noise_data;

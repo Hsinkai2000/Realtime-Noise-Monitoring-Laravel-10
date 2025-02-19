@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NoiseData;
 use App\Models\NoiseMeter;
 use Exception;
 use Illuminate\Http\Request;
@@ -85,6 +86,17 @@ class NoiseMeterController extends Controller
         } catch (Exception $e) {
             return render_error($e->getMessage());
         }
+    }
+
+    public function deletable(Request $request)
+    {
+        $id = $request->route('id');
+        $noisedata = NoiseData::where('noise_meter_id', $id)->first();
+
+        if ($noisedata) {
+            return render_unprocessable_entity([false]);
+        }
+        return render_ok([true]);
     }
 
     private function handleValidate(Request $request)

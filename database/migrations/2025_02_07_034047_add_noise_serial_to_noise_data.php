@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('noise_data', function (Blueprint $table) {
-            $table->string('noise_meter_serial')->nullable();
-            $table->index('noise_meter_serial');
+            $table->unsignedBigInteger('noise_meter_id')->nullable();
+            $table->foreign('noise_meter_id')->references('id')->on('noise_meters')->onDelete('no action');
 
             $table->dropUnique('noise_data_measurement_point_id_received_at_unique');
             $table->unsignedBigInteger('measurement_point_id')->nullable()->change();
@@ -28,8 +28,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('noise_data', function (Blueprint $table) {
-            $table->dropIndex(['noise_meter_serial']);
-            $table->dropColumn('noise_meter_serial');
+            $table->dropForeign(['noise_meter_id']);
+            $table->dropColumn('noise_meter_id');
 
             $table->dropForeign('noise_data_measurement_point_id_foreign');
         });
