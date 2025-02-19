@@ -41,7 +41,7 @@
             <a href="#" class="href h3 text-decoration-none">Noise Meters</a>
             <div class="d-flex flex-row mt-3 justify-content-between">
                 <button class="btn btn-light text-danger border shadow-sm" id="deleteButton"
-                    onclick="openModal('deleteConfirmationModal')">Delete</button>
+                    onclick="checkDeletable(event)">Delete</button>
                 <div id="noise_meter_pages"></div>
                 <div>
                     <button class="btn btn-dark text-light px-4 me-3 shadow-sm" id="editButton"
@@ -57,6 +57,8 @@
         </div>
     </div>
 
+    <x-alert.alert-modal title="Delete Noise Meter"
+        text="Selected Noise Meter has existing data and cannot be deleted." />
     <x-noise-meter.noise-meter-modal />
     <x-delete-confirmation-modal type='noise meter' />
 

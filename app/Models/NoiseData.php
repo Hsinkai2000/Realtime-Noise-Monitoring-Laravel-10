@@ -18,7 +18,7 @@ class NoiseData extends Model
         'measurement_point_id',
         'leq',
         'received_at',
-        'noise_meter_serial'
+        'noise_meter_id'
     ];
 
     protected $casts = [
@@ -26,7 +26,7 @@ class NoiseData extends Model
         'measurement_point_id' => 'integer',
         'leq' => 'float',
         'received_at' => 'datetime',
-        'noise_meter_serial' => 'string'
+        'noise_meter_id' => 'integer'
     ];
 
     public function measurementPoint(): BelongsTo
@@ -34,8 +34,8 @@ class NoiseData extends Model
         return $this->belongsTo(MeasurementPoint::class, 'id', 'measurement_point_id');
     }
 
-    public function noiseMeters(): BelongsTo
+    public function noiseMeter(): BelongsTo
     {
-        return $this->belongsTo(NoiseMeter::class, "serial_number", "noise_meter_serial");
+        return $this->belongsTo(NoiseMeter::class, "noise_meter_id", "id");
     }
 }

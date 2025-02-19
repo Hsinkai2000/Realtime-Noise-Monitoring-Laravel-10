@@ -19,7 +19,8 @@
                     @method('DELETE')
                     <label class="mb-4" for="deleteConfirmation">To Delete, Please enter "DELETE"</label>
                     </br>
-                    <input class="mb-4" name="confirmation" id="inputDeleteConfirmation" type="text">
+                    <input class="mb-4" name="confirmation" id="inputDeleteConfirmation" type="text"
+                        value="">
                     </br>
 
                     <!-- Cancel button to dismiss the modal -->
