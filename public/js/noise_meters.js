@@ -211,9 +211,11 @@ function handle_noise_meter_submit(event) {
 }
 
 function handleDelete(event) {
+    console.log("in delete");
     if (event) {
         event.preventDefault();
     }
+
     var csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
@@ -252,12 +254,35 @@ function resetTable(json) {
     set_tables(window.noise_meters);
 }
 
+function checkDeletable(event) {
+    if (event) {
+        event.preventDefault();
+    }
+
+    var csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    fetch(`${baseUri}/noise_meters/deletable/${window.noiseMeter.id} `, {
+        method: "GET",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+    }).then((response) => {
+        if (!response.ok) {
+            openModal("alertModal");
+        } else {
+            openModal("deleteConfirmationModal");
+        }
+    });
+}
+
 function openModal(modalName, type) {
     var modal = new bootstrap.Modal(document.getElementById(modalName));
     modal.toggle();
 
     if (modalName == "deleteConfirmationModal") {
-        console.log(window.noiseMeter.noise_meter_label);
         document.getElementById("deleteType").innerHTML =
             window.noiseMeter.noise_meter_label;
     }
@@ -319,3 +344,4 @@ window.openModal = openModal;
 window.openSecondModal = openSecondModal;
 window.handle_noise_meter_submit = handle_noise_meter_submit;
 window.handleDelete = handleDelete;
+window.checkDeletable = checkDeletable;

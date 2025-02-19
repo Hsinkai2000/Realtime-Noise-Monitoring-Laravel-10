@@ -465,7 +465,7 @@ class MeasurementPoint extends Model
             ->orderBy('received_at', 'asc')
             ->first();
         if ($noise_data) {
-            return $noise_data->noise_meter_serial;
+            return $noise_data->noiseMeter->serial_number;
         }
 
         if ($this->noiseMeter) {
