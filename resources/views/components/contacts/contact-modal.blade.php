@@ -14,7 +14,7 @@
                         <label for="name" class="col-md-3 col-sm-12 text-align-center col-form-label">Name</label>
                         <div class="col-sm-8 align-content-center">
                             <input type="text" class="form-control" id="inputName" name='contact_person_name'
-                                required>
+                                maxlength="10" required>
                         </div>
                     </div>
 
