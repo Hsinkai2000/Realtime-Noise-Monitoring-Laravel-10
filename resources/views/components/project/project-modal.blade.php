@@ -29,7 +29,7 @@
                             </label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputClientName" name="client_name"
-                                    maxlength="10" value="{{ old('client_name', $project->client_name ?? '') }}">
+                                    value="{{ old('client_name', $project->client_name ?? '') }}">
                             </div>
                         </div>
 
