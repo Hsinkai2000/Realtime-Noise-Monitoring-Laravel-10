@@ -9,6 +9,8 @@ use App\Models\SoundLimit;
 use Exception;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 use function PHPSTORM_META\type;
 
@@ -17,128 +19,144 @@ class MeasurementPointController extends Controller
 
     public function show($id)
     {
+        $user = Auth::user();
         $measurement_point = MeasurementPoint::find($id);
-        return view('web.measurementPoint', ['measurementPoint' => $measurement_point])->render();
+        if (Gate::authorize('viewOnlyGuestProject', [$measurement_point->project, $user])) {
+            return view('web.measurementPoint', ['measurementPoint' => $measurement_point])->render();
+        }
     }
 
     public function create(Request $request)
     {
-        $confirmation = $request->get('confirmation');
-        if (!$confirmation) {
-            $this->handleMeasurementPointCreationValidation($request);
+        $user = Auth::user();
+        if (Gate::authorize('adminUser', $user)) {
+            $confirmation = $request->get('confirmation');
+            if (!$confirmation) {
+                $this->handleMeasurementPointCreationValidation($request);
+            }
+
+            $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
+
+            if (!isset($measurement_point_params['concentrator_id'])) {
+                $measurement_point_params['concentrator_id'] = null;
+            }
+            if (!isset($measurement_point_params['noise_meter_id'])) {
+                $measurement_point_params['noise_meter_id'] = null;
+            }
+
+            $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
+
+            $measurement_point_id = MeasurementPoint::insertGetId($measurement_point_params);
+            $measurement_point = MeasurementPoint::find($measurement_point_id);
+            return render_ok(["measurement_point" => $measurement_point]);
         }
-
-        $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
-
-        if (!isset($measurement_point_params['concentrator_id'])) {
-            $measurement_point_params['concentrator_id'] = null;
-        }
-        if (!isset($measurement_point_params['noise_meter_id'])) {
-            $measurement_point_params['noise_meter_id'] = null;
-        }
-
-        $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
-
-        $measurement_point_id = MeasurementPoint::insertGetId($measurement_point_params);
-        $measurement_point = MeasurementPoint::find($measurement_point_id);
-        return render_ok(["measurement_point" => $measurement_point]);
     }
 
     public function index()
     {
-        try {
-            return view("measurement_points", ['measurement_point' => MeasurementPoint::all()]);
-        } catch (Exception $e) {
-            return render_error($e->getMessage());
+        $user = Auth::user();
+        if (Gate::authorize('adminUser', $user)) {
+            try {
+                return view("measurement_points", ['measurement_point' => MeasurementPoint::all()]);
+            } catch (Exception $e) {
+                return render_error($e->getMessage());
+            }
         }
     }
 
     public function get(Request $request)
     {
-        try {
+        if (Auth::user()) {
+            try {
 
-            $id = $request->route('id');
-            $measurementPoint = MeasurementPoint::where('project_id', $id)->with(['noiseMeter', 'concentrator', 'soundLimit'])->get();
-            if (!$measurementPoint) {
-                return render_unprocessable_entity("Unable to find Measurement point with id " . $id);
+                $id = $request->route('id');
+                $measurementPoint = MeasurementPoint::where('project_id', $id)->with(['noiseMeter', 'concentrator', 'soundLimit'])->get();
+                if (!$measurementPoint) {
+                    return render_unprocessable_entity("Unable to find Measurement point with id " . $id);
+                }
+                $data = $measurementPoint->map(function ($measurementPoint) {
+                    $concentrator = $measurementPoint->concentrator;
+                    $noiseMeter = $measurementPoint->noiseMeter;
+
+                    return [
+                        'id' => $measurementPoint->id,
+                        'project_id' => $measurementPoint->project_id,
+                        'noise_meter_id' => $measurementPoint->noise_meter_id,
+                        'concentrator_id' => $measurementPoint->concentrator_id,
+                        'point_name' => $measurementPoint->point_name,
+                        'device_location' => $measurementPoint->device_location,
+                        'remarks' => $measurementPoint->remarks,
+                        'data_status' => $measurementPoint->check_data_status(),
+                        'category' => $measurementPoint->soundLimit->category ?? null,
+                        'concentrator' => $concentrator ? [
+                            'label' => $concentrator->concentrator_label,
+                            'device_id' => $concentrator->device_id,
+                            'battery_voltage' => $concentrator->battery_voltage,
+                            'concentrator_csq' => $concentrator->concentrator_csq,
+                            'last_communication_packet_sent' => $concentrator->last_communication_packet_sent
+                                ? $concentrator->last_communication_packet_sent->format('Y-m-d H:i:s')
+                                : null,
+                        ] : null,
+                        'noise_meter' => $noiseMeter ? [
+                            'noise_meter_label' => $noiseMeter->noise_meter_label,
+                            'serial_number' => $noiseMeter->serial_number,
+                        ] : null,
+                    ];
+                });
+
+                return response()->json($data, 200);
+            } catch (Exception $e) {
+                return render_error($e);
             }
-            $data = $measurementPoint->map(function ($measurementPoint) {
-                $concentrator = $measurementPoint->concentrator;
-                $noiseMeter = $measurementPoint->noiseMeter;
-
-                return [
-                    'id' => $measurementPoint->id,
-                    'project_id' => $measurementPoint->project_id,
-                    'noise_meter_id' => $measurementPoint->noise_meter_id,
-                    'concentrator_id' => $measurementPoint->concentrator_id,
-                    'point_name' => $measurementPoint->point_name,
-                    'device_location' => $measurementPoint->device_location,
-                    'remarks' => $measurementPoint->remarks,
-                    'data_status' => $measurementPoint->check_data_status(),
-                    'category' => $measurementPoint->soundLimit->category ?? null,
-                    'concentrator' => $concentrator ? [
-                        'label' => $concentrator->concentrator_label,
-                        'device_id' => $concentrator->device_id,
-                        'battery_voltage' => $concentrator->battery_voltage,
-                        'concentrator_csq' => $concentrator->concentrator_csq,
-                        'last_communication_packet_sent' => $concentrator->last_communication_packet_sent
-                            ? $concentrator->last_communication_packet_sent->format('Y-m-d H:i:s')
-                            : null,
-                    ] : null,
-                    'noise_meter' => $noiseMeter ? [
-                        'noise_meter_label' => $noiseMeter->noise_meter_label,
-                        'serial_number' => $noiseMeter->serial_number,
-                    ] : null,
-                ];
-            });
-
-            return response()->json($data, 200);
-        } catch (Exception $e) {
-            return render_error($e);
         }
     }
 
     public function update(Request $request)
     {
-        $confirmation = $request->get('confirmation');
-        \Log::info($request->get("point_name"));
+        if (Auth::user()) {
+            $confirmation = $request->get('confirmation');
+            \Log::info($request->get("point_name"));
 
-        if (!$confirmation) {
-            $this->handleMeasurementPointUpdateValidation($request);
-        }
-        $id = $request->route('id');
-        $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
-
-        if (!isset($measurement_point_params['concentrator_id'])) {
-            $measurement_point_params['concentrator_id'] = null;
-        }
-        if (!isset($measurement_point_params['noise_meter_id'])) {
-            $measurement_point_params['noise_meter_id'] = null;
-        }
-
-        $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
-
-        $measurement_point = MeasurementPoint::find($id);
-        if (!$measurement_point) {
-            return render_unprocessable_entity("Unable to find Measurement point with id " . $id);
-        }
-        $measurement_point->update($measurement_point_params);
-        return render_ok(["measurement_point" => $measurement_point]);
-    }
-
-    public function delete(Request $request)
-    {
-        try {
+            if (!$confirmation) {
+                $this->handleMeasurementPointUpdateValidation($request);
+            }
             $id = $request->route('id');
+            $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
+
+            if (!isset($measurement_point_params['concentrator_id'])) {
+                $measurement_point_params['concentrator_id'] = null;
+            }
+            if (!isset($measurement_point_params['noise_meter_id'])) {
+                $measurement_point_params['noise_meter_id'] = null;
+            }
+
+            $this->update_device_usage($measurement_point_params['concentrator_id'], $measurement_point_params['noise_meter_id']);
+
             $measurement_point = MeasurementPoint::find($id);
             if (!$measurement_point) {
                 return render_unprocessable_entity("Unable to find Measurement point with id " . $id);
             }
-            $measurement_point->delete();
-
+            $measurement_point->update($measurement_point_params);
             return render_ok(["measurement_point" => $measurement_point]);
-        } catch (Exception $e) {
-            return render_error($e->getMessage());
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $user = Auth::user();
+        if (Gate::authorize('adminUser', $user)) {
+            try {
+                $id = $request->route('id');
+                $measurement_point = MeasurementPoint::find($id);
+                if (!$measurement_point) {
+                    return render_unprocessable_entity("Unable to find Measurement point with id " . $id);
+                }
+                $measurement_point->delete();
+
+                return render_ok(["measurement_point" => $measurement_point]);
+            } catch (Exception $e) {
+                return render_error($e->getMessage());
+            }
         }
     }
 

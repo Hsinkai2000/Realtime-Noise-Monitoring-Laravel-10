@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\NoiseData;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class NoiseDataController extends Controller
 {
@@ -22,30 +24,39 @@ class NoiseDataController extends Controller
 
     public function index()
     {
-        try {
-            return render_ok(["noise_datas" => NoiseData::all()]);
-        } catch (Exception $e) {
-            return render_error($e->getMessage());
+
+        $user = Auth::user();
+
+        if (Gate::authorize('adminUser', $user)) {
+            try {
+                return render_ok(["noise_datas" => NoiseData::all()]);
+            } catch (Exception $e) {
+                return render_error($e->getMessage());
+            }
         }
     }
 
     public function get(Request $request)
     {
-        try {
-            $id = $request->route('id');
-            $noise_data = NoiseData::find($id);
+
+        $id = $request->route('id');
+        $noise_data = NoiseData::find($id);
+        $user = Auth::user();
+
+        if (Gate::authorize('viewOnlyGuestProject', [$noise_data->measurementPoint->project, $user])) {
             if (!$noise_data) {
                 return render_unprocessable_entity("Unable to find Noise data with id " . $id);
             }
             return render_ok(["noise_data" => $noise_data]);
-        } catch (Exception $e) {
-            return render_error($e->getMessage());
         }
     }
 
     public function update(Request $request)
     {
-        try {
+
+        $user = Auth::user();
+
+        if (Gate::authorize('adminUser', $user)) {
             $id = $request->route('id');
             $noise_data_params = $request->only((new NoiseData)->getFillable());
             $noise_data = NoiseData::find($id);
@@ -58,14 +69,15 @@ class NoiseDataController extends Controller
             }
 
             return render_ok(["noise_data" => $noise_data]);
-        } catch (Exception $e) {
-            render_error($e->getMessage());
         }
     }
 
     public function delete(Request $request)
     {
-        try {
+
+        $user = Auth::user();
+
+        if (Gate::authorize('adminUser', $user)) {
             $id = $request->route('id');
             $noise_data = NoiseData::find($id);
             if (!$noise_data) {
@@ -75,8 +87,6 @@ class NoiseDataController extends Controller
                 throw new Exception("Unable to delete Noise data");
             }
             return render_ok(["noise_data" => $noise_data]);
-        } catch (Exception $e) {
-            return render_error($e->getMessage());
         }
     }
 }
