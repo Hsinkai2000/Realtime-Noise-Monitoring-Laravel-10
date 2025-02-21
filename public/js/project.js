@@ -800,122 +800,131 @@ function populate_soundLimits(event, reset_defaults = false) {
 }
 
 function set_device_tables() {
-    concentrator_list_table = new Tabulator("#concentrator_list_table", {
-        layout: "fitColumns",
-        ajaxURL: `${baseUri}/concentrators`,
-        placeholder: "No concentrators",
-        pagination: "local",
-        paginationSize: 5,
-        paginationCounter: "rows",
-        selectable: 1,
-        ajaxResponse: function (url, params, response) {
-            // Add an empty row for unlinking at the top
-            response.unshift({
-                id: null,
-                device_id: "Unlink",
-                concentrator_label: "",
-                isAvailable: "true",
-            });
-            return response;
-        },
-        columns: [
-            {
-                title: "Device ID",
-                field: "device_id",
-                minWidth: 120,
-                width: 120,
-                headerFilter: "input",
+    if (document.getElementById("concentrator_list_table")) {
+        concentrator_list_table = new Tabulator("#concentrator_list_table", {
+            layout: "fitColumns",
+            ajaxURL: `${baseUri}/concentrators`,
+            placeholder: "No concentrators",
+            pagination: "local",
+            paginationSize: 5,
+            paginationCounter: "rows",
+            selectable: 1,
+            ajaxResponse: function (url, params, response) {
+                // Add an empty row for unlinking at the top
+                response.unshift({
+                    id: null,
+                    device_id: "Unlink",
+                    concentrator_label: "",
+                    isAvailable: "true",
+                });
+                return response;
             },
-            {
-                title: "Label",
-                field: "concentrator_label",
-                headerFilter: "input",
-                minWidth: 150,
-            },
-            {
-                title: "Unused",
-                field: "isAvailable",
-                formatter: "tickCross",
-                minWidth: 80,
-                width: 80,
-                headerFilter: "tickCross",
-                headerFilterParams: { tristate: true },
-            },
-        ],
-    });
-    noiseMeter_list_table = new Tabulator("#noiseMeter_list_table", {
-        layout: "fitColumns",
-        ajaxURL: `${baseUri}/noise_meters`,
-        placeholder: "No noise meters",
-        pagination: "local",
-        paginationSize: 5,
-        paginationCounter: "rows",
-        selectable: 1,
-        ajaxResponse: function (url, params, response) {
-            // Add an empty row for unlinking at the top
-            response.unshift({
-                id: null,
-                serial_number: "Unlink",
-                noise_meter_label: "",
-                isAvailable: "true",
-            });
-            return response;
-        },
-        columns: [
-            {
-                title: "Serial No",
-                field: "serial_number",
-                minWidth: 120,
-                width: 120,
-                headerFilter: "input",
-            },
-            {
-                title: "Label",
-                field: "noise_meter_label",
-                headerFilter: "input",
-                minWidth: 150,
-            },
-            {
-                title: "Unused",
-                field: "isAvailable",
-                formatter: "tickCross",
-                minWidth: 80,
-                width: 80,
-                headerFilter: "tickCross",
-                headerFilterParams: { tristate: true },
-            },
-        ],
-    });
+            columns: [
+                {
+                    title: "Device ID",
+                    field: "device_id",
+                    minWidth: 120,
+                    width: 120,
+                    headerFilter: "input",
+                },
+                {
+                    title: "Label",
+                    field: "concentrator_label",
+                    headerFilter: "input",
+                    minWidth: 150,
+                },
+                {
+                    title: "Unused",
+                    field: "isAvailable",
+                    formatter: "tickCross",
+                    minWidth: 80,
+                    width: 80,
+                    headerFilter: "tickCross",
+                    headerFilterParams: { tristate: true },
+                },
+            ],
+        });
 
-    concentrator_list_table.on("rowSelectionChanged", function (data, rows) {
-        if (data && data.length > 0) {
-            document.getElementById("concentratorId").value = data[0].id;
-        } else {
-            document.getElementById("concentratorId").value = null;
-        }
-    });
-    noiseMeter_list_table.on("rowSelectionChanged", function (data, rows) {
-        if (data && data.length > 0) {
-            document.getElementById("noiseMeterId").value = data[0].id;
-        } else {
-            document.getElementById("noiseMeterId").value = null;
-        }
-    });
-
-    concentrator_list_table.on("tableBuilt", function () {
-        setTimeout(function () {
-            const firstRow = concentrator_list_table.getRows()[0];
-            if (firstRow) {
-                firstRow.select();
+        concentrator_list_table.on(
+            "rowSelectionChanged",
+            function (data, rows) {
+                if (data && data.length > 0) {
+                    document.getElementById("concentratorId").value =
+                        data[0].id;
+                } else {
+                    document.getElementById("concentratorId").value = null;
+                }
             }
-        }, 200);
-    });
+        );
 
-    noiseMeter_list_table.on("tableBuilt", function () {
-        setTimeout(function () {
-            noiseMeter_list_table.selectRow(0);
-        }, 200);
-    });
+        concentrator_list_table.on("tableBuilt", function () {
+            setTimeout(function () {
+                const firstRow = concentrator_list_table.getRows()[0];
+                if (firstRow) {
+                    firstRow.select();
+                }
+            }, 200);
+        });
+    }
+
+    if (document.getElementById("noiseMeter_list_table")) {
+        noiseMeter_list_table = new Tabulator("#noiseMeter_list_table", {
+            layout: "fitColumns",
+            ajaxURL: `${baseUri}/noise_meters`,
+            placeholder: "No noise meters",
+            pagination: "local",
+            paginationSize: 5,
+            paginationCounter: "rows",
+            selectable: 1,
+            ajaxResponse: function (url, params, response) {
+                // Add an empty row for unlinking at the top
+                response.unshift({
+                    id: null,
+                    serial_number: "Unlink",
+                    noise_meter_label: "",
+                    isAvailable: "true",
+                });
+                return response;
+            },
+            columns: [
+                {
+                    title: "Serial No",
+                    field: "serial_number",
+                    minWidth: 120,
+                    width: 120,
+                    headerFilter: "input",
+                },
+                {
+                    title: "Label",
+                    field: "noise_meter_label",
+                    headerFilter: "input",
+                    minWidth: 150,
+                },
+                {
+                    title: "Unused",
+                    field: "isAvailable",
+                    formatter: "tickCross",
+                    minWidth: 80,
+                    width: 80,
+                    headerFilter: "tickCross",
+                    headerFilterParams: { tristate: true },
+                },
+            ],
+        });
+        noiseMeter_list_table.on("rowSelectionChanged", function (data, rows) {
+            if (data && data.length > 0) {
+                document.getElementById("noiseMeterId").value = data[0].id;
+            } else {
+                document.getElementById("noiseMeterId").value = null;
+            }
+        });
+
+        noiseMeter_list_table.on("tableBuilt", function () {
+            setTimeout(function () {
+                noiseMeter_list_table.selectRow(0);
+            }, 200);
+        });
+    }
 }
 
 function create_empty_option(select, text) {
