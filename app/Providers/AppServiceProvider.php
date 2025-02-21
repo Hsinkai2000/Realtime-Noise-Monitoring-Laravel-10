@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 
 use App\Models\User;
+use App\Models\Project;
 use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,8 +24,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('view-project', function (User $user) {
+        Gate::define('adminUser', function (User $user) {
             return $user->isAdmin();
+        });
+
+        Gate::define('viewOnlyGuestProject', function (User $user, Project $project) {
+            return $user->isAdmin() || $project->id == $user->project_id;
         });
     }
 }

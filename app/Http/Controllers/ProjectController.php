@@ -10,35 +10,44 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User as UserModel; // Alias the User model to avoid potential conflicts
 
 class ProjectController extends Controller
 {
 
     public function show_admin()
     {
-        $rental_projects  = Project::where('project_type', 'rental')->get();
-        $sales_projects  = Project::where('project_type', 'sales')->get();
-        $sales_projects = $this->format_projects($sales_projects);
-        return view('web.projects-admin')->with(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
+        $user = Auth::user();
+        if (Gate::authorize('adminUser', $user)) {
+            $rental_projects  = Project::where('project_type', 'rental')->get();
+            $sales_projects  = Project::where('project_type', 'sales')->get();
+            $sales_projects = $this->format_projects($sales_projects);
+            return view('web.projects-admin')->with(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
+        }
     }
 
     public function show_project($id)
     {
+        $user = Auth::user();
         $project = Project::with('user')->find($id);
-        return view('web.project', ['project' => $project]);
+        if (Gate::authorize('viewOnlyGuestProject', [$project, $user])) {
+            return view('web.project', ['project' => $project]);
+        }
     }
 
     public function create(Request $request)
     {
-        $this->handleProjectValidation($request);
-        $project_params = $request->only((new Project)->getFillable());
-        $project_id = Project::insertGetId($project_params);
+        if (Auth::user()) {
+            $this->handleProjectValidation($request);
+            $project_params = $request->only((new Project)->getFillable());
+            $project_id = Project::insertGetId($project_params);
 
-        $rental_projects  = Project::where('project_type', 'rental')->get();
-        $sales_projects  = Project::where('project_type', 'sales')->get();
-        $sales_projects = $this->format_projects($sales_projects);
+            $rental_projects  = Project::where('project_type', 'rental')->get();
+            $sales_projects  = Project::where('project_type', 'sales')->get();
+            $sales_projects = $this->format_projects($sales_projects);
 
-        return render_ok(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects, 'project_id' => $project_id]);
+            return render_ok(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects, 'project_id' => $project_id]);
+        }
     }
 
     private function format_projects($projects)
@@ -81,7 +90,7 @@ class ProjectController extends Controller
     {
         $user = Auth::user();
         $project_type = $request->get('project_type');
-        if (Gate::authorize('view-project', $user)) {
+        if (Gate::authorize('adminUser', $user)) {
             try {
                 $projects = Project::where([['project_type', $project_type]])->get();
                 if ($project_type == 'sales') {
@@ -113,39 +122,44 @@ class ProjectController extends Controller
 
     public function update(Request $request)
     {
-        $this->handleProjectValidation($request);
-        $id = $request->route('id');
-        $project_params = $request->only((new Project)->getFillable());
-        $project = Project::find($id);
-        if (!$project) {
-            return render_unprocessable_entity("Unable to find project with id " . $id);
+        if (Auth::user()) {
+            $this->handleProjectValidation($request);
+            $id = $request->route('id');
+            $project_params = $request->only((new Project)->getFillable());
+            $project = Project::find($id);
+            if (!$project) {
+                return render_unprocessable_entity("Unable to find project with id " . $id);
+            }
+
+            if (!$project->update($project_params)) {
+                throw new Exception("Unable to update project");
+            }
+
+            $rental_projects  = Project::where('project_type', 'rental')->get();
+            $sales_projects  = Project::where('project_type', 'sales')->get();
+            $sales_projects = $this->format_projects($sales_projects);
+
+            return render_ok(["project" => $project, 'rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
         }
-
-        if (!$project->update($project_params)) {
-            throw new Exception("Unable to update project");
-        }
-
-        $rental_projects  = Project::where('project_type', 'rental')->get();
-        $sales_projects  = Project::where('project_type', 'sales')->get();
-        $sales_projects = $this->format_projects($sales_projects);
-
-        return render_ok(["project" => $project, 'rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
     }
 
     public function delete(Request $request)
     {
-        $id = $request->route('id');
-        $project = Project::find($id);
-        if (!$project) {
-            return render_unprocessable_entity("Unable to find project with id " . $id);
+        $user = Auth::user();
+        if (Gate::authorize('adminUser', $user)) {
+            $id = $request->route('id');
+            $project = Project::find($id);
+            if (!$project) {
+                return render_unprocessable_entity("Unable to find project with id " . $id);
+            }
+
+            $project->delete();
+
+            $rental_projects  = Project::where('project_type', 'rental')->get();
+            $sales_projects  = Project::where('project_type', 'sales')->get();
+            $sales_projects = $this->format_projects($sales_projects);
+            return render_ok('project successfully deleted');
         }
-
-        $project->delete();
-
-        $rental_projects  = Project::where('project_type', 'rental')->get();
-        $sales_projects  = Project::where('project_type', 'sales')->get();
-        $sales_projects = $this->format_projects($sales_projects);
-        return render_ok('project successfully deleted');
     }
 
     public function handleProjectValidation(Request $request)

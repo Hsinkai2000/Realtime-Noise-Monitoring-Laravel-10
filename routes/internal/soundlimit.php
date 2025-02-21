@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\SoundLimitController;
 use Illuminate\Support\Facades\Route;
 
