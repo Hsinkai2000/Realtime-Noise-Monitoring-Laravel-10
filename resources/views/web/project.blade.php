@@ -19,6 +19,12 @@
         integrity="sha512-4MvcHwcbqXKUHB6Lx3Zb5CEAVoE9u84qN+ZSMM6s7z8IeJriExrV3ND5zRze9mxNlABJ6k864P/Vl8m0Sd3DtQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
+    <link rel="stylesheet" href="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
+    </link>
+
+
     <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/project.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
@@ -172,16 +178,6 @@
 </body>
 
 <script>
-    $(document).ready(function() {
-        $('#selectConcentrator').select2({
-            dropdownParent: $('#measurementPointModal'),
-        });
-
-        $('#selectNoiseMeter').select2({
-            dropdownParent: $('#measurementPointModal'),
-        });
-    });
-
     window.project = @json($project);
     console.log(window.project.job_number);
     window.contacts = @json($project->contact);

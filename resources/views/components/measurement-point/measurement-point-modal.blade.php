@@ -346,6 +346,97 @@
                             </div>
                         </div>
 
+                        </br>
+                        <h4>Alert Configuration</h4>
+                        <hr>
+                        <div class="mb-3 row" @if (!Auth::user()->isAdmin()) hidden @endif>
+                            <div class="col-md-6 col-sm-12 ">
+                                Alert Mode
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <select id='selectCategory' name='category' style="width: 100%"
+                                    onchange="populate_soundLimits()">
+                                    <option value="0" selected>None</option>
+                                    <option value="1">Email Only</option>
+                                    <option value="2">Both Email and SMS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-md-6 col-sm-12">
+                                Days of Alert
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" value="sun" id="sun"
+                                        name="alert_days[]" checked>
+                                    <label class="form-check-label" for="sun">
+                                        Sun
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" value="mon" id="mon"
+                                        name="alert_days[]" checked>
+                                    <label class="form-check-label" for="mon">
+                                        Mon
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" value="tue" id="tue"
+                                        name="alert_days[]" checked>
+                                    <label class="form-check-label" for="tue">
+                                        Tue
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" value="wed" id="wed"
+                                        name="alert_days[]" checked>
+                                    <label class="form-check-label" for="wed">
+                                        Wed
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" value="thu" id="thu"
+                                        name="alert_days[]" checked>
+                                    <label class="form-check-label" for="thu">
+                                        Thu
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" value="fri" id="fri"
+                                        name="alert_days[]" checked>
+                                    <label class="form-check-label" for="fri">
+                                        Fri
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" value="sat" id="sat"
+                                        name="alert_days[]" checked>
+                                    <label class="form-check-label" for="sat">
+                                        Sat
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row" @if (!Auth::user()->isAdmin()) hidden @endif>
+                            <div class="col-md-6 col-sm-12 ">
+                                Alert Hours
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="alert_start_time">Start Time (24h)</label>
+                                        <input type="text" class="form-control" value="07:00"
+                                            id="alert_start_time" name="alert_start_time">
+                                    </div>
+                                    <div class="col">
+                                        <label for="alert_end_time">End Time (24h)</label>
+                                        <input type="text" class="form-control" id="alert_end_time"
+                                            name="alert_end_time" value="22:00">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </form>
@@ -361,3 +452,19 @@
         </div>
     </div>
 </div>
+<script>
+    $("#alert_start_time").clockpicker({
+        placement: 'top',
+        align: 'left',
+        autoclose: true,
+        default: '07:00'
+    });
+
+
+    $("#alert_end_time").clockpicker({
+        placement: 'top',
+        align: 'left',
+        autoclose: true,
+        default: '22:00'
+    });
+</script>

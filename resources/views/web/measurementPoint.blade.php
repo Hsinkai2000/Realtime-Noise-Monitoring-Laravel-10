@@ -30,6 +30,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js">
     </script>
 
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
+    <link rel="stylesheet" href="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
+    </link>
+
+
     <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/measurement_point.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
@@ -249,16 +255,6 @@
 </body>
 
 <script>
-    $(document).ready(function() {
-        $('#selectConcentrator').select2({
-            dropdownParent: $('#measurementPointModal'),
-        });
-
-        $('#selectNoiseMeter').select2({
-            dropdownParent: $('#measurementPointModal'),
-        });
-    });
-
     window.measurementPointData = @json($measurementPoint);
     window.noise_meter = @json($measurementPoint->noiseMeter);
     window.concentrator = @json($measurementPoint->concentrator);

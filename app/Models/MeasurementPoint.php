@@ -41,6 +41,10 @@ class MeasurementPoint extends Model
         'leq_12_hours_last_alert_at',
         'dose_70_last_alert_at',
         'dose_100_last_alert_at',
+        'alert_start_time',
+        'alert_end_time',
+        'alert_days',
+        'alert_mode',
         'created_at',
         'updated_at',
     ];
@@ -58,6 +62,10 @@ class MeasurementPoint extends Model
         'leq_12_hours_last_alert_at' => 'datetime',
         'dose_70_last_alert_at' => 'datetime',
         'dose_100_last_alert_at' => 'datetime',
+        'alert_start_time' => 'string',
+        'alert_end_time' => 'string',
+        'alert_days' => 'string',
+        'alert_mode' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
