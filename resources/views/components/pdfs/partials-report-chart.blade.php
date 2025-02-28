@@ -1,8 +1,5 @@
-<div>
-    <div>
-        <canvas id="myChart{{ $date->format('d-m-Y') }}" height="80" style="border: 1px solid; padding: 10px;"></canvas>
-    </div>
-
+<div style="height: 80px; width:100%">
+    <canvas id="myChart{{ $date->format('d-m-Y') }}" style="border: 1px solid; padding: 10px;"></canvas>
 </div>
 
 <script async defer>
