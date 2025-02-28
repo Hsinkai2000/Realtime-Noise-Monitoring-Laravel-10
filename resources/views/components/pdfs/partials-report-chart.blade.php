@@ -61,7 +61,7 @@
         console.log(data[0]);
         console.log(new Date('{{ $noiseData[0]->received_at }}'));
         console.log(data[0].x);
-        console.log(data[0].x == new Date('{{ $noiseData[0]->received_at }}'));
+        console.log(data[0].x.getTime() == new Date('{{ $noiseData[0]->received_at }}').getTime());
 
 
         @foreach ($noiseData as $item)
@@ -69,7 +69,7 @@
 
             for (var i = 0; i < data.length; i++) {
 
-                if (data[i].x == receiveAt) {
+                if (data[i].x.getTime() == receiveAt.getTime()) {
                     console.log("repeated");
                     data[i].y = {{ $item->leq }};
                     break;
