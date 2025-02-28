@@ -128,7 +128,6 @@
             <br>
 
             <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
-
         </div>
     @endfor
     <script src="{{ asset('js/pdf.js') }}" async defer></script>
