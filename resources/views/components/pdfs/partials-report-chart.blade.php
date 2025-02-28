@@ -56,8 +56,8 @@
                         "time": {
                             "unit": "hour",
                             "stepSize": 1,
-                            "min": "{{ $date->format('Y-m-d') }}T07:00:00",
-                            "max": "{{ $date->copy()->addDay()->format('Y-m-d') }}T06:55:00",
+                            "min": "{{ $date->format('Y-m-d') }}T07:00:00Z",
+                            "max": "{{ $date->copy()->addDay()->format('Y-m-d') }}T06:55:00Z",
                             "displayFormats": {
                                 "hour": "HH:mm"
                             }
@@ -118,7 +118,9 @@
             }
 
             data.push({
-                x: new Date(time).toISOString(),
+                x: time.getFullYear() + '-' + String(time.getMonth() + 1).padStart(2, '0') + '-' + String(time
+                        .getDate()).padStart(2, '0') + 'T' + String(time.getHours()).padStart(2, '0') + ':' +
+                    String(time.getMinutes()).padStart(2, '0') + ':00',
                 y: yValue
             });
         }
