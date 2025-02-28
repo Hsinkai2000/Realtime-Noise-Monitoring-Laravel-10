@@ -54,17 +54,16 @@
 
         for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
             data.push({
-                x: new Date(time).toISOString(),
+                x: new Date(time),
                 y: NaN
             });
         }
 
         @foreach ($noiseData as $item)
             var receiveAt = new Date('{{ $item->received_at }}');
-            var receiveAtISO = receiveAt.toISOString();
 
             for (var i = 0; i < data.length; i++) {
-                if (data[i].x === receiveAtISO) {
+                if (data[i].x === receiveAt) {
                     data[i].y = {{ $item->leq }};
                     break;
                 }
@@ -90,19 +89,7 @@
                     "steppedLine": true
                 }, {
                     "label": "LAeq 5min",
-                    "data": [{
-                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
-                            y: 60
-                        },
-                        {
-                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
-                            y: 70
-                        },
-                        {
-                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
-                            y: 65
-                        }
-                    ],
+                    "data": generateNoiseData(),
 
                     "borderColor": "rgba(0, 0, 255, 1)",
                     "borderWidth": 2,
