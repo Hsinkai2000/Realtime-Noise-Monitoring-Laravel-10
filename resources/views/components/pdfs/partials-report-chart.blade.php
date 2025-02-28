@@ -26,7 +26,7 @@
             "data": {
                 "datasets": [{
                     "label": 'Limit',
-                    "data": ["January", "February", "March", "April", "May", "June", "July"],
+                    "data": [50, 30, 20, 40, 50, 10],
                     "borderColor": 'rgba(255, 0, 0, 1)',
                     "pointRadius": 0,
                     "borderWidth": 2,
@@ -34,7 +34,7 @@
                     "steppedLine": true
                 }, {
                     "label": 'LAeq 5min',
-                    "data": ["January", "February", "March", "April", "May", "June", "July"],
+                    "data": [50, 30, 20, 40, 50, 10],
                     "borderColor": 'rgba(0, 0, 255, 1)',
                     "borderWidth": 2,
                     "pointRadius": 0,
