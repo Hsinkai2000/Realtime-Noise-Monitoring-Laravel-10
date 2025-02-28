@@ -9,15 +9,15 @@
                 "datasets": [{
                     "label": "Limit",
                     "data": [{
-                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
+                            x: '{{ $date->format('Y-m-d') }}T07:00:00Z',
                             y: 80
                         },
                         {
-                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
+                            x: '{{ $date->format('Y-m-d') }}T08:00:00Z',
                             y: 80
                         },
                         {
-                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
+                            x: '{{ $date->format('Y-m-d') }}T09:00:00Z',
                             y: 80
                         }
                     ],
