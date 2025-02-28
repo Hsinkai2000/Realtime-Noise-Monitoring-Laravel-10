@@ -30,6 +30,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js">
     </script> --}}
 
+    <style>
+        .reportGraph {
+            width: 900px
+        }
+    </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
@@ -267,6 +272,34 @@
 </body>
 
 <script>
+    'use strict';
+    (function(setLineDash) {
+        CanvasRenderingContext2D.prototype.setLineDash = function() {
+            if (!arguments[0].length) {
+                arguments[0] = [1, 0];
+            }
+            // Now, call the original method
+            return setLineDash.apply(this, arguments);
+        };
+    })(CanvasRenderingContext2D.prototype.setLineDash);
+    Function.prototype.bind = Function.prototype.bind || function(thisp) {
+        var fn = this;
+        return function() {
+            return fn.apply(thisp, arguments);
+        };
+    };
+
+
+    $(document).ready(function() {
+        $('#selectConcentrator').select2({
+            dropdownParent: $('#measurementPointModal'),
+        });
+
+        $('#selectNoiseMeter').select2({
+            dropdownParent: $('#measurementPointModal'),
+        });
+    });
+
     window.measurementPointData = @json($measurementPoint);
     window.noise_meter = @json($measurementPoint->noiseMeter);
     window.concentrator = @json($measurementPoint->concentrator);
