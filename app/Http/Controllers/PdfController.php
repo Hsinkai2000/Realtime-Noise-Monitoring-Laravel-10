@@ -39,8 +39,7 @@ class PdfController extends Controller
                 'javascript-delay' => 8000,
                 'margin-bottom' => 8,
                 'footer-spacing' => 0,
-                '
-                no-stop-slow-scripts' => true, // Allow long-running scripts
+                'no-stop-slow-scripts' => true, // Allow long-running scripts
                 'enable-javascript' => true, // Ensure JS execution
                 'debug-javascript' => true, // Debug JS issues
                 'footer-html' => $footerHtml
