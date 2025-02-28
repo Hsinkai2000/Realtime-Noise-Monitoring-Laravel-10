@@ -25,7 +25,7 @@
             const dayOfWeek = time.getDay();
             const isWeekend = (dayOfWeek === 0);
             const hours = time.getHours();
-            let yValue;
+            var yValue;
 
             if (!isWeekend) {
                 if (hours >= 7 && hours < 19) {
