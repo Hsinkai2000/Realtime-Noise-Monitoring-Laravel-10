@@ -1,23 +1,6 @@
 <div class="reportGraph"><canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas></div>
 
 <script>
-    // new Chart(
-    //     document.getElementById("canvas{{ $date->format('d-m-Y') }}"), {
-    //         "responsive": false,
-    //         "type": "line",
-    //         "data": {
-    //             "labels": ["January", "February", "March", "April", "May", "June", "July"],
-    //             "datasets": [{
-    //                 "label": "My First Dataset",
-    //                 "data": [65, 59, 80, 81, 56, 55, 40],
-    //                 "fill": false,
-    //                 "borderColor": "rgb(75, 192, 192)",
-    //                 "lineTension": 0.1
-    //             }]
-    //         },
-    //         "options": {}
-    //     }
-    // );
     new Chart(
         document.getElementById("canvas{{ $date->format('d-m-Y') }}"), {
             "responsive": false,
@@ -26,18 +9,17 @@
                 "datasets": [{
                     "label": "Limit",
                     "data": [{
-                            x: '2025-03-01T07:00:00',
-                            y: 60
+                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
+                            y: 80
                         },
                         {
-                            x: '2025-03-01T07:05:00',
-                            y: 62
+                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
+                            y: 80
                         },
                         {
-                            x: '2025-03-01T07:10:00',
-                            y: 58
-                        },
-
+                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
+                            y: 80
+                        }
                     ],
                     "borderColor": "rgba(255, 0, 0, 1)",
                     "pointRadius": 0,
@@ -47,19 +29,19 @@
                 }, {
                     "label": "LAeq 5min",
                     "data": [{
-                            x: '2025-03-01T07:00:00',
-                            y: 90
+                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
+                            y: 60
                         },
                         {
-                            x: '2025-03-01T07:05:00',
-                            y: 12
+                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
+                            y: 70
                         },
                         {
-                            x: '2025-03-01T07:10:00',
-                            y: 30
-                        },
-
+                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
+                            y: 65
+                        }
                     ],
+
                     "borderColor": "rgba(0, 0, 255, 1)",
                     "borderWidth": 2,
                     "pointRadius": 0,
@@ -96,16 +78,8 @@
                     "display": true
                 }
             }
-        }
-    );
+        });
 </script>
-
-{{-- <div class="reportGraph"> --}}
-{{-- <canvas id="myChart{{ $date->format('d-m-Y') }}"></canvas> --}}
-{{-- {{ $date }}
-    {{ $measurementPoint }}
-</div>
- --}}
 
 <script>
     function generateLimitData() {
