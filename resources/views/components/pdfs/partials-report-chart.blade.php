@@ -17,15 +17,15 @@
                 }, {
                     "label": "LAeq 5min",
                     "data": [{
-                            x: '{{ $date->format('Y-m-d') }}T07:00.000Z',
+                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
                             y: 60
                         },
                         {
-                            x: '{{ $date->format('Y-m-d') }}T08:00.000Z',
+                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
                             y: 70
                         },
                         {
-                            x: '{{ $date->format('Y-m-d') }}T09:00.000Z',
+                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
                             y: 65
                         }
                     ],
@@ -44,8 +44,8 @@
                         "time": {
                             "unit": "hour",
                             "stepSize": 1,
-                            "min": "{{ $date->format('Y-m-d') }}T07:00.000Z",
-                            "max": "{{ $date->copy()->addDay()->format('Y-m-d') }}T06:55.000Z",
+                            "min": "{{ $date->format('Y-m-d') }}T07:00:00",
+                            "max": "{{ $date->copy()->addDay()->format('Y-m-d') }}T06:55:00",
                             "displayFormats": {
                                 "hour": "HH:mm"
                             }
@@ -105,8 +105,10 @@
                 }
             }
 
+            var isoString = new Date(time).toISOString();
+            var formattedString = isoString.substring(0, isoString.length - 4);
             data.push({
-                x: new Date(time).toISOString(),
+                x: formattedString,
                 y: yValue
             });
         }
