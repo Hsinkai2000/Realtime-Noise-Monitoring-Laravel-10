@@ -127,7 +127,7 @@
 
             <br>
 
-            <div class="reportGraph"><canvas id="canvas"></canvas></div>
+            <div class="reportGraph"><canvas id="canvas{{ $date }}"></canvas></div>
             {{-- <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" /> --}}
 
         </div>
@@ -157,7 +157,7 @@
 
         function drawGraphs() {
             new Chart(
-                document.getElementById("canvas"), {
+                document.getElementById("canvas{{ $date }}"), {
                     "responsive": false,
                     "type": "line",
                     "data": {
