@@ -58,11 +58,6 @@
                 y: NaN
             });
         }
-        console.log(data[0]);
-        console.log(new Date('{{ $noiseData[0]->received_at }}'));
-        console.log(data[0].x);
-        console.log(data[0].x.getTime() == new Date('{{ $noiseData[0]->received_at }}').getTime());
-
 
         @foreach ($noiseData as $item)
             var receiveAt = new Date('{{ $item->received_at }}');
