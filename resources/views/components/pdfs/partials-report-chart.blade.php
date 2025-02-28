@@ -105,10 +105,8 @@
                 }
             }
 
-            var isoString = new Date(time).toISOString();
-            var formattedString = isoString.substring(0, isoString.length - 4);
             data.push({
-                x: formattedString,
+                x: new Date(time),
                 y: yValue
             });
         }
