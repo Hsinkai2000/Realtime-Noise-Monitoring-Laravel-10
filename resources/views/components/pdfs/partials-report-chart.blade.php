@@ -17,15 +17,15 @@
                 }, {
                     "label": "LAeq 5min",
                     "data": [{
-                            x: '{{ $date->format('Y-m-d') }}T07:00:00Z',
+                            x: '{{ $date->format('Y-m-d') }}T07:00.000Z',
                             y: 60
                         },
                         {
-                            x: '{{ $date->format('Y-m-d') }}T08:00:00Z',
+                            x: '{{ $date->format('Y-m-d') }}T08:00.000Z',
                             y: 70
                         },
                         {
-                            x: '{{ $date->format('Y-m-d') }}T09:00:00Z',
+                            x: '{{ $date->format('Y-m-d') }}T09:00.000Z',
                             y: 65
                         }
                     ],
@@ -44,8 +44,8 @@
                         "time": {
                             "unit": "hour",
                             "stepSize": 1,
-                            "min": "{{ $date->format('Y-m-d') }}T07:00:00Z",
-                            "max": "{{ $date->copy()->addDay()->format('Y-m-d') }}T06:55:00Z",
+                            "min": "{{ $date->format('Y-m-d') }}T07:00.000Z",
+                            "max": "{{ $date->copy()->addDay()->format('Y-m-d') }}T06:55.000Z",
                             "displayFormats": {
                                 "hour": "HH:mm"
                             }
