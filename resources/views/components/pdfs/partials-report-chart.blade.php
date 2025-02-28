@@ -64,9 +64,9 @@
 
             for (var i = 0; i < data.length; i++) {
                 console.log(receiveAt);
+                console.log(data[i].x);
                 if (data[i].x === receiveAt) {
                     console.log("repeated");
-                    console.log(data[i].x);
                     data[i].y = {{ $item->leq }};
                     break;
                 }
