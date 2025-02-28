@@ -34,7 +34,7 @@
                     "steppedLine": true
                 }, {
                     "label": 'LAeq 5min',
-                    "data": generateNoiseData(),
+                    "data": ["January", "February", "March", "April", "May", "June", "July"],
                     "borderColor": 'rgba(0, 0, 255, 1)',
                     "borderWidth": 2,
                     "pointRadius": 0,
