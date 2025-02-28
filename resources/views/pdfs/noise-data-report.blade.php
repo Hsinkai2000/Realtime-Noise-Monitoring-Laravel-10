@@ -18,32 +18,13 @@
     <script src="{{ asset('js/app.js') }}"></script>
 
     {{-- @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resource ss/js/app.js']) --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"
-        integrity="sha512-k4siP6VHWDrE4iK9tc5xP87gQAXhkOrOVYeOMlkWRe5CjGk+0V6IdO9nVUTByn/LOLXGYp372zWAiHXlvyYttw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"
-        integrity="sha512-XYCKHbo5QmBRv8QwuQIlXqemaOB4edxoQO0Io3jZQt9Zarms1O4wMRrkKhx0IZdBneph+oYmKznIOpM3/As3eA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js">
-    </script>
-    <script>
-        'use strict';
-        (function(setLineDash) {
-            CanvasRenderingContext2D.prototype.setLineDash = function() {
-                if (!arguments[0].length) {
-                    arguments[0] = [1, 0];
-                }
-                // Now, call the original method
-                return setLineDash.apply(this, arguments);
-            };
-        })(CanvasRenderingContext2D.prototype.setLineDash);
-        Function.prototype.bind = Function.prototype.bind || function(thisp) {
-            var fn = this;
-            return function() {
-                return fn.apply(thisp, arguments);
-            };
-        };
-    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <style>
+        .reportGraph {
+            width: 900px
+        }
+    </style>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -94,10 +75,6 @@
     .time_col {
         min-width: 50px;
     }
-
-    .reportGraph {
-        width: 850px
-    }
 </style>
 
 <body>
@@ -129,9 +106,8 @@
 
     </div>
 
-    <div class="reportGraph">
-        <canvas id="canvas"></canvas>
-    </div>
+    <div class="reportGraph"><canvas id="canvas"></canvas></div>
+
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
         <div class="container mt-3" style="page-break-before: always;">
             <div class="text-center">
@@ -157,7 +133,28 @@
         </div>
     @endfor
     <script src="{{ asset('js/pdf.js') }}" async defer></script>
-    <script>
+
+
+    <script type="text/javascript">
+        // wkhtmltopdf 0.12.5 crash fix.
+        // https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3242#issuecomment-518099192
+        'use strict';
+        (function(setLineDash) {
+            CanvasRenderingContext2D.prototype.setLineDash = function() {
+                if (!arguments[0].length) {
+                    arguments[0] = [1, 0];
+                }
+                // Now, call the original method
+                return setLineDash.apply(this, arguments);
+            };
+        })(CanvasRenderingContext2D.prototype.setLineDash);
+        Function.prototype.bind = Function.prototype.bind || function(thisp) {
+            var fn = this;
+            return function() {
+                return fn.apply(thisp, arguments);
+            };
+        };
+
         function drawGraphs() {
             new Chart(
                 document.getElementById("canvas"), {
