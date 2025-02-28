@@ -3,6 +3,8 @@
 </div>
 
 <script async defer>
+    console.log("pdf script running")
+
     function generateLimitData() {
         const data = [];
         const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
