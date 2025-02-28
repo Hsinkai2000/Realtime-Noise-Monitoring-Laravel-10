@@ -6,7 +6,7 @@
 
 <script>
     function drawGraphs() {
-        var canvas = document.getElementById('myChart' + dateStr).getContext('2d');
+        var canvas = document.getElementById("canvas{{ $date->format('Y-m-d') }}").getContext('2d');
         new Chart(
             canvas, {
                 "responsive": false,
