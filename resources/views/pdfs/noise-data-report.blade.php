@@ -40,7 +40,7 @@
     <script>
         function drawGraphs(elem) {
             new Chart(
-                document.getElementById(elem).getContext('2d'), {
+                document.getElementById(elem), {
                     "responsive": false,
                     "type": "line",
                     "data": {
