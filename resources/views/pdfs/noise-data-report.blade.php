@@ -37,6 +37,27 @@
         integrity="sha512-mf78KukU/a8rjr7aBRvCa2Vwg/q0tUjJhLtcK53PHEbFwCEqQ5durlzvVTgQgKpv+fyNMT6ZQT1Aq6tpNqf1mg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        function drawGraphs(elem) {
+            new Chart(
+                document.getElementById(elem).getContext('2d'), {
+                    "responsive": false,
+                    "type": "line",
+                    "data": {
+                        "labels": ["January", "February", "March", "April", "May", "June", "July"],
+                        "datasets": [{
+                            "label": "My First Dataset",
+                            "data": [65, 59, 80, 81, 56, 55, 40],
+                            "fill": false,
+                            "borderColor": "rgb(75, 192, 192)",
+                            "lineTension": 0.1
+                        }]
+                    },
+                    "options": {}
+                }
+            );
+        }
+    </script>
 </head>
 
 <style>
@@ -171,26 +192,6 @@
                 return fn.apply(thisp, arguments);
             };
         };
-
-        function drawGraphs(elem) {
-            new Chart(
-                document.getElementById(elem).getContext('2d'), {
-                    "responsive": false,
-                    "type": "line",
-                    "data": {
-                        "labels": ["January", "February", "March", "April", "May", "June", "July"],
-                        "datasets": [{
-                            "label": "My First Dataset",
-                            "data": [65, 59, 80, 81, 56, 55, 40],
-                            "fill": false,
-                            "borderColor": "rgb(75, 192, 192)",
-                            "lineTension": 0.1
-                        }]
-                    },
-                    "options": {}
-                }
-            );
-        }
     </script>
 </body>
 
