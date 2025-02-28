@@ -63,14 +63,17 @@
             var receiveAt = new Date('{{ $item->received_at }}');
 
             for (var i = 0; i < data.length; i++) {
+                console.log(receiveAt);
                 if (data[i].x === receiveAt) {
+                    console.log("repeated");
+                    console.log(data[i].x));
                     data[i].y = {{ $item->leq }};
                     break;
                 }
             }
         @endforeach
 
-        return data;
+    return data;
     }
 
 
