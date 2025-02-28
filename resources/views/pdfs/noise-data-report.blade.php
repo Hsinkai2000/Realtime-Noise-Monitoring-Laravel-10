@@ -127,7 +127,7 @@
 
             <br>
 
-            {{-- <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" /> --}}
+            <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
 
         </div>
     @endfor
