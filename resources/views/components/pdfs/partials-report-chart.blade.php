@@ -1,10 +1,11 @@
-<div class="reportGraph"><canvas id="canvas{{ $date }}"></canvas></div>
+<div class="reportGraph"><canvas id="canvas{{ $date->format('Y-m-d') }}"></canvas></div>
 
 
 <script>
     function drawGraphs() {
+        var canvas = document.getElementById('myChart' + dateStr).getContext('2d');
         new Chart(
-            document.getElementById("canvas{{ $date }}"), {
+            canvas, {
                 "responsive": false,
                 "type": "line",
                 "data": {
