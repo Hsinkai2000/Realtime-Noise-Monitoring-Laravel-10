@@ -41,8 +41,8 @@ class PdfController extends Controller
                 'footer-html' => $footerHtml
             ]);
 
-            return $pdf->inline();
-            // return view('pdfs.noise-data-report', $data);
+            // return $pdf->inline();
+            return view('pdfs.noise-data-report', $data);
         }
     }
 }
