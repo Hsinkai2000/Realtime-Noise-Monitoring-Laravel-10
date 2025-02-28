@@ -60,6 +60,7 @@
         }
         console.log(data[0]);
         console.log(new Date('{{ $noiseData[0]->received_at }}'));
+        console.log(data[0].x);
         console.log(data[0].x == new Date('{{ $noiseData[0]->received_at }}'));
 
 
