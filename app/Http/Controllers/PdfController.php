@@ -36,9 +36,13 @@ class PdfController extends Controller
             $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
             $pdf->setoptions([
                 'enable-local-file-access' => true,
-                'javascript-delay' => 10000,
+                'javascript-delay' => 8000,
                 'margin-bottom' => 8,
                 'footer-spacing' => 0,
+                '
+                no-stop-slow-scripts' => true, // Allow long-running scripts
+                'enable-javascript' => true, // Ensure JS execution
+                'debug-javascript' => true, // Debug JS issues
                 'footer-html' => $footerHtml
             ]);
 
