@@ -18,24 +18,24 @@
     //         "options": {}
     //     }
     // );
-
     new Chart(
         document.getElementById("canvas{{ $date->format('d-m-Y') }}"), {
             "responsive": false,
             "type": "line",
             "data": {
+                "labels": ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00"],
                 "datasets": [{
-                    "label": 'Limit',
-                    "data": [50, 30, 20, 40, 50, 10],
-                    "borderColor": 'rgba(255, 0, 0, 1)',
+                    "label": "Limit",
+                    "data": [65, 65, 65, 65, 65, 65, 65],
+                    "borderColor": "rgba(255, 0, 0, 1)",
                     "pointRadius": 0,
                     "borderWidth": 2,
                     "fill": false,
                     "steppedLine": true
                 }, {
-                    "label": 'LAeq 5min',
-                    "data": [50, 30, 20, 40, 50, 10],
-                    "borderColor": 'rgba(0, 0, 255, 1)',
+                    "label": "LAeq 5min",
+                    "data": [60, 62, 58, 63, 59, 61, 57],
+                    "borderColor": "rgba(0, 0, 255, 1)",
                     "borderWidth": 2,
                     "pointRadius": 0,
                     "spanGaps": true,
@@ -44,20 +44,6 @@
             },
             "options": {
                 "scales": {
-                    "xAxes": [{
-                        "type": 'time',
-                        "time": {
-                            "unit": 'minute',
-                            "stepSize": 5,
-                            "displayFormats": {
-                                "minute": 'HH:mm'
-                            }
-                        },
-                        "ticks": {
-                            "autoSkip": true,
-                            "maxTicksLimit": 8
-                        }
-                    }],
                     "yAxes": [{
                         "ticks": {
                             "beginAtZero": true,
@@ -69,8 +55,8 @@
                     "display": true
                 }
             }
-
-        });
+        }
+    );
 </script>
 
 {{-- <div class="reportGraph"> --}}
