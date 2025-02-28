@@ -79,56 +79,60 @@
     }
 
     var ctx = document.getElementById('myChart{{ $date->format('d-m-Y') }}').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [{
-                label: 'Leq 5 Limit',
-                data: generateLimitData(),
-                borderColor: 'rgba(255, 99, 132, 1)',
-                pointRadius: 0,
-                borderWidth: 2,
-                fill: false,
-                stepped: true
-            }, {
-                label: 'Leq 5 Min',
-                data: generateNoiseData(),
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2,
-                pointRadius: 0,
-                fill: false,
-                spanGaps: true
-            }],
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'minute',
-                        stepSize: 5,
-                        displayFormats: {
-                            minute: 'HH:mm'
-                        }
-                    },
-                    ticks: {
-                        autoSkip: true,
-                        maxTicksLimit: 8
-                    },
-                    min: '{{ $date->format('Y-m-d') }}T07:00:00',
-                    max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (23 * 60 +
-                        59) * 60 * 1000)).toISOString()
-                },
-                y: {
-                    beginAtZero: true,
-                    max: {{ $measurementPoint->soundLimit->get_max_leq5_limit($date) * 1.2 }}
-                }
+
+    setTimeout(function() {
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Leq 5 Limit',
+                    data: generateLimitData(),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    pointRadius: 0,
+                    borderWidth: 2,
+                    fill: false,
+                    stepped: true
+                }, {
+                    label: 'Leq 5 Min',
+                    data: generateNoiseData(),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false,
+                    spanGaps: true
+                }],
             },
-            plugins: {
-                legend: {
-                    display: true
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'minute',
+                            stepSize: 5,
+                            displayFormats: {
+                                minute: 'HH:mm'
+                            }
+                        },
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: 8
+                        },
+                        min: '{{ $date->format('Y-m-d') }}T07:00:00',
+                        max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (
+                            23 * 60 +
+                            59) * 60 * 1000)).toISOString()
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: {{ $measurementPoint->soundLimit->get_max_leq5_limit($date) * 1.2 }}
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true
+                    }
                 }
             }
-        }
-    });
+        });
+    }, 1000);
 </script>
