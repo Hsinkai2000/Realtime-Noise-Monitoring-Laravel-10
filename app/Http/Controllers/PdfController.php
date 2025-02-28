@@ -14,76 +14,37 @@ use Spatie\Browsershot\Browsershot;
 class PdfController extends Controller
 {
 
-    // public function generatePdf(Request $request)
-    // {
-    //     $measurmentPointId = $request->route('id');
-    //     $measurementPoint = MeasurementPoint::find($measurmentPointId);
-    //     $user = Auth::user();
-    //     if (Gate::authorize('viewOnlyGuestProject', [$measurementPoint->project, $user])) {
-    //         $start_date = Carbon::createFromFormat('d-m-Y', $request->route('start_date'));
-    //         $end_date = Carbon::createFromFormat('d-m-Y', $request->route('end_date'));
-    //         $contacts = Contact::where('project_id', $measurementPoint->project->id)->get();
-
-    //         $data = [
-    //             'measurementPoint' => $measurementPoint,
-    //             'contacts' => $contacts,
-    //             'start_date' => $start_date,
-    //             'end_date' => $end_date,
-    //         ];
-
-    //         $footerHtml = view('pdfs.footer');
-    //         $html = view("pdfs.noise-data-report", $data)->render();
-    //         // $pdf = PDF::loadHTML($html)->setPaper('a4');
-    //         $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
-    //         $pdf->setoptions([
-    //             'enable-local-file-access' => true,
-    //             'margin-bottom' => 8,
-    //             'footer-spacing' => 0,
-    //             'footer-html' => $footerHtml
-    //         ]);
-
-    //         // return $pdf->inline();
-    //         return view('pdfs.noise-data-report', $data);
-    //     }
-    // }
-
     public function generatePdf(Request $request)
     {
-        $measurementPointId = $request->route('id');
-        $measurementPoint = MeasurementPoint::find($measurementPointId);
+        $measurmentPointId = $request->route('id');
+        $measurementPoint = MeasurementPoint::find($measurmentPointId);
         $user = Auth::user();
-
         if (Gate::authorize('viewOnlyGuestProject', [$measurementPoint->project, $user])) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->route('start_date'));
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->route('end_date'));
+            $start_date = Carbon::createFromFormat('d-m-Y', $request->route('start_date'));
+            $end_date = Carbon::createFromFormat('d-m-Y', $request->route('end_date'));
             $contacts = Contact::where('project_id', $measurementPoint->project->id)->get();
 
             $data = [
                 'measurementPoint' => $measurementPoint,
                 'contacts' => $contacts,
-                'start_date' => $startDate,
-                'end_date' => $endDate,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
             ];
 
+            $footerHtml = view('pdfs.footer');
             $html = view("pdfs.noise-data-report", $data)->render();
-
-            // Generate PDF using Browsershot
-            $pdf = Browsershot::html($html)
-                ->margins(8, 8, 8, 8) // Margins (top, right, bottom, left)
-                ->format('A4')
-                ->landscape(false) // Set to true for landscape
-                ->waitUntilNetworkIdle()
-                ->pdf();
-
-            // Return the PDF as a download
-            return response($pdf, 200, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="noise-data-report.pdf"',
+            // $pdf = PDF::loadHTML($html)->setPaper('a4');
+            $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
+            $pdf->setoptions([
+                'enable-local-file-access' => true,
+                'margin-bottom' => 8,
+                'footer-spacing' => 0,
+                'footer-html' => $footerHtml
             ]);
-        }
 
-        // Handle unauthorized access
-        abort(403, 'Unauthorized access.');
+            // return $pdf->inline();
+            return view('pdfs.noise-data-report', $data);
+        }
     }
 
     public function generateChartImage($date, $measurementPointID)
