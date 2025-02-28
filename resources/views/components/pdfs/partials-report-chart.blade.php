@@ -1,5 +1,5 @@
 <div>
-    <canvas id="myChart{{ $date->format('d-m-Y') }}" height="30" style="border: 1px solid; padding: 10px;"></canvas>
+    <canvas id="myChart{{ $date->format('d-m-Y') }}" height="80" style="border: 1px solid; padding: 10px;"></canvas>
 </div>
 
 <script>
