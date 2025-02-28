@@ -1,9 +1,13 @@
 <div>
-    <canvas id="myChart{{ $date->format('d-m-Y') }}" height="80" style="border: 1px solid; padding: 10px;"></canvas>
+    <div>
+        <canvas id="myChart{{ $date->format('d-m-Y') }}" height="80" style="border: 1px solid; padding: 10px;"></canvas>
+        <img id="chartImage{{ $date->format('d-m-Y') }}" style="display: none; width: 100%;" />
+    </div>
+
 </div>
 
 <script async defer>
-    console.log("pdf script running")
+    console.log("pdf script running");
 
     function generateLimitData() {
         const data = [];
@@ -16,6 +20,8 @@
             const dayOfWeek = time.getDay();
             const isWeekend = (dayOfWeek === 0);
             const hours = time.getHours();
+            let yValue;
+
             if (!isWeekend) {
                 if (hours >= 7 && hours < 19) {
                     yValue = {{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min }};
@@ -47,7 +53,6 @@
         return data;
     }
 
-    // Generate second dataset
     function generateNoiseData() {
         const data = [];
         const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
@@ -62,7 +67,6 @@
             });
         }
 
-        // Populate data array with second dataset
         @foreach ($noiseData as $item)
             var receiveAt = new Date('{{ $item->received_at }}');
             var receiveAtISO = receiveAt.toISOString();
@@ -78,7 +82,10 @@
         return data;
     }
 
-    var ctx = document.getElementById('myChart{{ $date->format('d-m-Y') }}').getContext('2d');
+    var dateStr = '{{ $date->format('d-m-Y') }}';
+    var canvas = document.getElementById('myChart' + dateStr);
+    var ctx = canvas.getContext('2d');
+    var img = document.getElementById('chartImage' + dateStr);
 
     var myChart = new Chart(ctx, {
         type: 'line',
@@ -117,8 +124,8 @@
                         maxTicksLimit: 8
                     },
                     min: '{{ $date->format('Y-m-d') }}T07:00:00',
-                    max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (23 * 60 +
-                        59) * 60 * 1000)).toISOString()
+                    max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (
+                        23 * 60 + 59) * 60 * 1000)).toISOString()
                 },
                 y: {
                     beginAtZero: true,
@@ -132,4 +139,13 @@
             }
         }
     });
+
+    // Ensure chart renders before converting to image
+    setTimeout(() => {
+        if (canvas && img) {
+            img.src = canvas.toDataURL("image/png"); // Convert canvas to Base64 image
+            img.style.display = 'block'; // Show the image
+            canvas.style.display = 'none'; // Hide the canvas
+        }
+    }, 1000); // Ensure the chart fully renders before conversion
 </script>
