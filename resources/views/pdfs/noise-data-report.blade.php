@@ -116,7 +116,6 @@
 
     </div>
 
-    <div class="reportGraph"><canvas id="canvas"></canvas></div>
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
         <div class="container mt-3" style="page-break-before: always;">
             <div class="text-center">
@@ -135,8 +134,14 @@
                 <x-pdfs.partials-report-data :measurementPoint="$measurementPoint" :date="$date" />
             </div>
 
+            <div class="reportGraph"><canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas></div>
+            <script>
+                window.onload = function() {
+                    drawGraphs(canvas{{ $date->format('d-m-Y') }});
+                };
+            </script>
             <br>
-            <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
+            {{-- <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" /> --}}
             {{-- <img src="{{ route('chart-image', ['date' => $date, 'measurementPointID' => $measurementPoint->id]) }}"
                 alt="Chart"> --}}
 
@@ -161,9 +166,9 @@
             };
         };
 
-        function drawGraphs() {
+        function drawGraphs(elem) {
             new Chart(
-                document.getElementById("canvas"), {
+                document.getElementById(elem), {
                     "responsive": false,
                     "type": "line",
                     "data": {
@@ -180,9 +185,6 @@
                 }
             );
         }
-        window.onload = function() {
-            drawGraphs();
-        };
     </script>
 </body>
 
