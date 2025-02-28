@@ -23,7 +23,6 @@
 </head>
 
 <body>
-    hello
     <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date" />
 
 

@@ -33,6 +33,7 @@ class PdfController extends Controller
 
             $footerHtml = view('pdfs.footer');
             $html = view("pdfs.noise-data-report", $data)->render();
+
             // $pdf = PDF::loadHTML($html)->setPaper('a4');
             $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
             $pdf->setoptions([
@@ -62,22 +63,14 @@ class PdfController extends Controller
 
         $html = view('pdfs.show-chart', ['measurementPoint' => $measurementPoint, 'date' => $date])->render();
 
-        // Save the HTML to a file
-        $filePath = storage_path('app/browsershot-debug.html');
-        file_put_contents($filePath, $html);
+        try {
+            $image = Browsershot::html($html)->waitUntilNetworkIdle()->setScreenshotType('png')->timeout(3000)->base64Screenshot();
+            $image = base64_decode($image);
 
-        \Log::info("HTML saved to: " . $filePath);
 
-        // try {
-        //     $image = Browsershot::html($html)->waitUntilNetworkIdle()->setScreenshotType('png')->timeout(2000)->base64Screenshot();
-        //     \Log::info("Browsershot image generated");
-        //     $image = base64_decode($image);
-        //     \Log::info("Image decoded");
-
-        //     return response($image)->header('Content-Type', 'image/png');
-        // } catch (\Exception $e) {
-        //     \Log::error("Error generating chart image: " . $e->getMessage());
-        //     return response("Error generating chart image", 500); // Return an error response
-        // }
+            return response($image)->header('Content-Type', 'image/png');
+        } catch (\Exception $e) {
+            return response("Error generating chart image", 500); // Return an error response
+        }
     }
 }
