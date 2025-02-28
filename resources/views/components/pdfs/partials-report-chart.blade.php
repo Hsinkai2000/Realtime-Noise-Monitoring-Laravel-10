@@ -1,4 +1,4 @@
-<div>
+<div class="reportGraph">
     <canvas id="myChart{{ $date->format('d-m-Y') }}" height="80" style="border: 1px solid; padding: 10px;"></canvas>
 </div>
 
@@ -76,8 +76,10 @@
         return data;
     }
 
+
     var ctx = document.getElementById('myChart{{ $date->format('d-m-Y') }}').getContext('2d');
     var myChart = new Chart(ctx, {
+        responsive: false,
         type: 'line',
         data: {
             datasets: [{
@@ -116,7 +118,8 @@
                         maxTicksLimit: 8
                     },
                     min: '{{ $date->format('Y-m-d') }}T07:00:00',
-                    max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (23 * 60 +
+                    max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (23 *
+                        60 +
                         59) * 60 * 1000)).toISOString()
                 },
                 y: {
