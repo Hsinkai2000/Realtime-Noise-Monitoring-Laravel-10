@@ -127,7 +127,6 @@
 
             <br>
 
-            <div class="reportGraph"><canvas id="canvas{{ $date }}"></canvas></div>
             {{-- <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" /> --}}
 
         </div>
@@ -153,29 +152,6 @@
             return function() {
                 return fn.apply(thisp, arguments);
             };
-        };
-
-        function drawGraphs() {
-            new Chart(
-                document.getElementById("canvas{{ $date }}"), {
-                    "responsive": false,
-                    "type": "line",
-                    "data": {
-                        "labels": ["January", "February", "March", "April", "May", "June", "July"],
-                        "datasets": [{
-                            "label": "My First Dataset",
-                            "data": [65, 59, 80, 81, 56, 55, 40],
-                            "fill": false,
-                            "borderColor": "rgb(75, 192, 192)",
-                            "lineTension": 0.1
-                        }]
-                    },
-                    "options": {}
-                }
-            );
-        }
-        window.onload = function() {
-            drawGraphs();
         };
     </script>
 

@@ -1,8 +1,29 @@
-<div style="height: 80px; width:100%">
-    <canvas id="myChart" style="border: 1px solid; padding: 10px;"></canvas>
-</div>
+<div class="reportGraph"><canvas id="canvas{{ $date }}"></canvas></div>
+
 
 <script>
+    function drawGraphs() {
+        new Chart(
+            document.getElementById("canvas{{ $date }}"), {
+                "responsive": false,
+                "type": "line",
+                "data": {
+                    "labels": ["January", "February", "March", "April", "May", "June", "July"],
+                    "datasets": [{
+                        "label": "My First Dataset",
+                        "data": [65, 59, 80, 81, 56, 55, 40],
+                        "fill": false,
+                        "borderColor": "rgb(75, 192, 192)",
+                        "lineTension": 0.1
+                    }]
+                },
+                "options": {}
+            }
+        );
+    }
+    window.onload = function() {
+        drawGraphs();
+    };
     // function generateLimitData() {
     //     const data = [];
     //     const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
@@ -77,81 +98,81 @@
     // }
 
     // var dateStr = '{{ $date->format('d-m-Y') }}';
-    var canvas = document.getElementById('myChart' + dateStr);
-    var ctx = canvas.getContext('2d');
-    var img = document.getElementById('chartImage' + dateStr);
+    // var canvas = document.getElementById('myChart' + dateStr);
+    // var ctx = canvas.getContext('2d');
+    // var img = document.getElementById('chartImage' + dateStr);
 
-    window.onload = function() {
+    // window.onload = function() {
 
-        new Chart(
-            document.getElementById("myChart"), {
-                "responsive": false,
-                "type": "line",
-                "data": {
-                    "labels": ["January", "February", "March", "April", "May", "June", "July"],
-                    "datasets": [{
-                        "label": "My First Dataset",
-                        "data": [65, 59, 80, 81, 56, 55, 40],
-                        "fill": false,
-                        "borderColor": "rgb(75, 192, 192)",
-                        "lineTension": 0.1
-                    }]
-                },
-                "options": {}
-            }
-        );
+    //     new Chart(
+    //         document.getElementById("myChart"), {
+    //             "responsive": false,
+    //             "type": "line",
+    //             "data": {
+    //                 "labels": ["January", "February", "March", "April", "May", "June", "July"],
+    //                 "datasets": [{
+    //                     "label": "My First Dataset",
+    //                     "data": [65, 59, 80, 81, 56, 55, 40],
+    //                     "fill": false,
+    //                     "borderColor": "rgb(75, 192, 192)",
+    //                     "lineTension": 0.1
+    //                 }]
+    //             },
+    //             "options": {}
+    //         }
+    //     );
 
-        // var myChart = new Chart(ctx, {
-        //     type: 'line',
-        //     data: {
-        //         datasets: [{
-        //             label: 'Leq 5 Limit',
-        //             data: generateLimitData(),
-        //             borderColor: 'rgba(255, 99, 132, 1)',
-        //             pointRadius: 0,
-        //             borderWidth: 2,
-        //             fill: false,
-        //             stepped: true
-        //         }, {
-        //             label: 'Leq 5 Min',
-        //             data: generateNoiseData(),
-        //             borderColor: 'rgba(75, 192, 192, 1)',
-        //             borderWidth: 2,
-        //             pointRadius: 0,
-        //             fill: false,
-        //             spanGaps: true
-        //         }],
-        //     },
-        //     options: {
-        //         scales: {
-        //             x: {
-        //                 type: 'time',
-        //                 time: {
-        //                     unit: 'minute',
-        //                     stepSize: 5,
-        //                     displayFormats: {
-        //                         minute: 'HH:mm'
-        //                     }
-        //                 },
-        //                 ticks: {
-        //                     autoSkip: true,
-        //                     maxTicksLimit: 8
-        //                 },
-        //                 min: '{{ $date->format('Y-m-d') }}T07:00:00',
-        //                 max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (
-        //                     23 * 60 + 59) * 60 * 1000)).toISOString()
-        //             },
-        //             y: {
-        //                 beginAtZero: true,
-        //                 max: {{ $measurementPoint->soundLimit->get_max_leq5_limit($date) * 1.2 }}
-        //             }
-        //         },
-        //         plugins: {
-        //             legend: {
-        //                 display: true
-        //             }
-        //         }
-        //     }
-        // });
+    // var myChart = new Chart(ctx, {
+    //     type: 'line',
+    //     data: {
+    //         datasets: [{
+    //             label: 'Leq 5 Limit',
+    //             data: generateLimitData(),
+    //             borderColor: 'rgba(255, 99, 132, 1)',
+    //             pointRadius: 0,
+    //             borderWidth: 2,
+    //             fill: false,
+    //             stepped: true
+    //         }, {
+    //             label: 'Leq 5 Min',
+    //             data: generateNoiseData(),
+    //             borderColor: 'rgba(75, 192, 192, 1)',
+    //             borderWidth: 2,
+    //             pointRadius: 0,
+    //             fill: false,
+    //             spanGaps: true
+    //         }],
+    //     },
+    //     options: {
+    //         scales: {
+    //             x: {
+    //                 type: 'time',
+    //                 time: {
+    //                     unit: 'minute',
+    //                     stepSize: 5,
+    //                     displayFormats: {
+    //                         minute: 'HH:mm'
+    //                     }
+    //                 },
+    //                 ticks: {
+    //                     autoSkip: true,
+    //                     maxTicksLimit: 8
+    //                 },
+    //                 min: '{{ $date->format('Y-m-d') }}T07:00:00',
+    //                 max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (
+    //                     23 * 60 + 59) * 60 * 1000)).toISOString()
+    //             },
+    //             y: {
+    //                 beginAtZero: true,
+    //                 max: {{ $measurementPoint->soundLimit->get_max_leq5_limit($date) * 1.2 }}
+    //             }
+    //         },
+    //         plugins: {
+    //             legend: {
+    //                 display: true
+    //             }
+    //         }
+    //     }
+    // });
     }
 </script>
