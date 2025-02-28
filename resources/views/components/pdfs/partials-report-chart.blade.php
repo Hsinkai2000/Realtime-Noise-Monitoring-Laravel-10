@@ -88,11 +88,11 @@
         end.setDate(end.getDate() + 1);
         end.setMinutes(end.getMinutes() - 1);
 
-        for (let time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
+        for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
             const dayOfWeek = time.getDay();
             const isWeekend = (dayOfWeek === 0);
             const hours = time.getHours();
-            let yValue;
+            var yValue;
 
             if (!isWeekend) {
                 if (hours >= 7 && hours < 19) {
@@ -131,7 +131,7 @@
         end.setDate(end.getDate() + 1);
         end.setMinutes(end.getMinutes() - 1);
 
-        for (let time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
+        for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
             data.push({
                 x: new Date(time).toISOString(),
                 y: NaN
@@ -142,7 +142,7 @@
             var receiveAt = new Date('{{ $item->received_at }}');
             var receiveAtISO = receiveAt.toISOString();
 
-            for (let i = 0; i < data.length; i++) {
+            for (var i = 0; i < data.length; i++) {
                 if (data[i].x === receiveAtISO) {
                     data[i].y = {{ $item->leq }};
                     break;
@@ -152,57 +152,58 @@
 
         return data;
     }
+
+
+    // var ctx = document.getElementById('myChart{{ $date->format('d-m-Y') }}').getContext('2d');
+    // var myChart = new Chart(ctx, {
+    //     responsive: false,
+    //     type: 'line',
+    //     data: {
+    //         datasets: [{
+    //             label: 'Limit',
+    //             data: generateLimitData(),
+    //             borderColor: 'rgba(255, 0, 0, 1)',
+    //             pointRadius: 0,
+    //             borderWidth: 2,
+    //             fill: false,
+    //             steppedLine: true
+    //         }, {
+    //             label: 'LAeq 5min',
+    //             data: generateNoiseData(),
+    //             borderColor: 'rgba(0, 0, 255, 1)',
+    //             borderWidth: 2,
+    //             pointRadius: 0,
+    //             spanGaps: true,
+    //             fill: false
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             xAxes: [{
+    //                 type: 'time',
+    //                 time: {
+    //                     unit: 'minute',
+    //                     stepSize: 5,
+    //                     displayFormats: {
+    //                         minute: 'HH:mm'
+    //                     }
+    //                 },
+    //                 ticks: {
+    //                     autoSkip: true,
+    //                     maxTicksLimit: 8
+    //                 }
+    //             }],
+    //             yAxes: [{
+    //                 ticks: {
+    //                     beginAtZero: true,
+    //                     max: 120
+    //                 }
+    //             }]
+    //         },
+    //         legend: {
+    //             display: true
+    //         }
+    //     }
+
+    // });
 </script>
-
-// var ctx = document.getElementById('myChart{{ $date->format('d-m-Y') }}').getContext('2d');
-// var myChart = new Chart(ctx, {
-// responsive: false,
-// type: 'line',
-// data: {
-// datasets: [{
-// label: 'Limit',
-// data: generateLimitData(),
-// borderColor: 'rgba(255, 0, 0, 1)',
-// pointRadius: 0,
-// borderWidth: 2,
-// fill: false,
-// steppedLine: true
-// }, {
-// label: 'LAeq 5min',
-// data: generateNoiseData(),
-// borderColor: 'rgba(0, 0, 255, 1)',
-// borderWidth: 2,
-// pointRadius: 0,
-// spanGaps: true,
-// fill: false
-// }]
-// },
-// options: {
-// scales: {
-// xAxes: [{
-// type: 'time',
-// time: {
-// unit: 'minute',
-// stepSize: 5,
-// displayFormats: {
-// minute: 'HH:mm'
-// }
-// },
-// ticks: {
-// autoSkip: true,
-// maxTicksLimit: 8
-// }
-// }],
-// yAxes: [{
-// ticks: {
-// beginAtZero: true,
-// max: 120
-// }
-// }]
-// },
-// legend: {
-// display: true
-// }
-// }
-
-// });
