@@ -23,10 +23,9 @@
             "responsive": false,
             "type": "line",
             "data": {
-                "labels": ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00"],
                 "datasets": [{
                     "label": "Limit",
-                    "data": [65, 65, 65, 65, 65, 65, 65],
+                    "data": generateLimitData(),
                     "borderColor": "rgba(255, 0, 0, 1)",
                     "pointRadius": 0,
                     "borderWidth": 2,
@@ -34,7 +33,7 @@
                     "steppedLine": true
                 }, {
                     "label": "LAeq 5min",
-                    "data": [60, 62, 58, 63, 59, 61, 57],
+                    "data": generateNoiseData(),
                     "borderColor": "rgba(0, 0, 255, 1)",
                     "borderWidth": 2,
                     "pointRadius": 0,
@@ -44,6 +43,20 @@
             },
             "options": {
                 "scales": {
+                    "xAxes": [{
+                        "type": "time",
+                        "time": {
+                            "unit": "hour",
+                            "stepSize": 1,
+                            "displayFormats": {
+                                "hour": "HH:mm"
+                            }
+                        },
+                        "ticks": {
+                            "autoSkip": true,
+                            "maxTicksLimit": 24
+                        }
+                    }],
                     "yAxes": [{
                         "ticks": {
                             "beginAtZero": true,
