@@ -12,7 +12,7 @@
         end.setDate(end.getDate() + 1);
         end.setMinutes(end.getMinutes() - 1);
 
-        for (let time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
+        for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
             const dayOfWeek = time.getDay();
             const isWeekend = (dayOfWeek === 0);
             const hours = time.getHours();
@@ -55,7 +55,7 @@
         end.setDate(end.getDate() + 1);
         end.setMinutes(end.getMinutes() - 1);
 
-        for (let time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
+        for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
             data.push({
                 x: new Date(time).toISOString(),
                 y: NaN
@@ -67,7 +67,7 @@
             var receiveAt = new Date('{{ $item->received_at }}');
             var receiveAtISO = receiveAt.toISOString();
 
-            for (let i = 0; i < data.length; i++) {
+            for (var i = 0; i < data.length; i++) {
                 if (data[i].x === receiveAtISO) {
                     data[i].y = {{ $item->leq }};
                     break;
