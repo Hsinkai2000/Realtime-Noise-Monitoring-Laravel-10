@@ -66,14 +66,14 @@
                 console.log(receiveAt);
                 if (data[i].x === receiveAt) {
                     console.log("repeated");
-                    console.log(data[i].x));
+                    console.log(data[i].x);
                     data[i].y = {{ $item->leq }};
                     break;
                 }
             }
         @endforeach
 
-    return data;
+        return data;
     }
 
 
