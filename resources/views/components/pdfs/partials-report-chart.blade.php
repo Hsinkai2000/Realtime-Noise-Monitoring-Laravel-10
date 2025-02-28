@@ -1,5 +1,6 @@
 <div class="reportGraph">
-    <canvas id="myChart{{ $date->format('d-m-Y') }}"></canvas>
+    {{-- <canvas id="myChart{{ $date->format('d-m-Y') }}"></canvas> --}}
+    HELLO
 </div>
 
 <script>
