@@ -31,7 +31,9 @@ class PdfController extends Controller
             ];
 
             $footerHtml = view('pdfs.footer');
-            $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
+            $html = view("pdfs.noise-data-report", $data)->render();
+            $pdf = PDF::loadHTML($html)->setPaper('a4');
+            // $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
             $pdf->setoptions([
                 'margin-bottom' => 8,
                 'footer-spacing' => 0,
