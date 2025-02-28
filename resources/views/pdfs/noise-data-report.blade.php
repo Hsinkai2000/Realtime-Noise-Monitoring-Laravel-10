@@ -114,6 +114,12 @@
         ])
 
 
+        <div class="reportGraph"><canvas id="canvas1"></canvas></div>
+        <script>
+            window.onload = function() {
+                drawGraphs("canvas1");
+            };
+        </script>
     </div>
 
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
@@ -137,7 +143,7 @@
             <div class="reportGraph"><canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas></div>
             <script>
                 window.onload = function() {
-                    drawGraphs(canvas{{ $date->format('d-m-Y') }});
+                    drawGraphs("canvas{{ $date->format('d-m-Y') }}");
                 };
             </script>
             <br>
@@ -168,7 +174,7 @@
 
         function drawGraphs(elem) {
             new Chart(
-                document.getElementById(elem), {
+                document.getElementById(elem).getContext('2d'), {
                     "responsive": false,
                     "type": "line",
                     "data": {
