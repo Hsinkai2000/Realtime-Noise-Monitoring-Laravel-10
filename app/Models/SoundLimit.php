@@ -283,4 +283,13 @@ class SoundLimit extends Model
     {
         return $day == 'mon_sat' ? true : false;
     }
+
+    public function get_max_leq5_limit($date)
+    {
+        $day_of_week = $date->format('w');
+        if ($day_of_week == 0) {
+            return max($this->sun_ph_7am_7pm_leq5min, $this->sun_ph_7pm_10pm_leq5min, $this->sun_ph_10pm_12am_leq5min, $this->sun_ph_12am_7am_leq5min);
+        }
+        return max($this->mon_sat_7am_7pm_leq5min, $this->mon_sat_7pm_10pm_leq5min, $this->mon_sat_10pm_12am_leq5min, $this->mon_sat_12am_7am_leq5min);
+    }
 }
