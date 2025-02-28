@@ -77,6 +77,7 @@
 
     var ctx = document.getElementById('myChart{{ $date->format('d-m-Y') }}').getContext('2d');
     var myChart = new Chart(ctx, {
+        responsive: false,
         type: 'line',
         data: {
             datasets: [{
