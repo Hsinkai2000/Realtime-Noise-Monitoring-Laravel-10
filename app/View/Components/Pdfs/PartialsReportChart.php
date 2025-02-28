@@ -20,6 +20,7 @@ class PartialsReportChart extends Component
         DateTime $date,
         MeasurementPoint $measurementPoint
     ) {
+        \Log::info("inside report chart component");
         //
         $this->date = $date;
         $this->measurementPoint = $measurementPoint;
@@ -39,6 +40,7 @@ class PartialsReportChart extends Component
      */
     public function render(): View|Closure|string
     {
+        \Log::info("displaying report chart component");
         return view('components.pdfs.partials-report-chart');
     }
 }

@@ -137,6 +137,9 @@
 
             <br>
             <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
+            {{-- <img src="{{ route('chart-image', ['date' => $date, 'measurementPointID' => $measurementPoint->id]) }}"
+                onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';"
+                alt="Chart"> --}}
 
         </div>
     @endfor
