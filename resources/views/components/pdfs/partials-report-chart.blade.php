@@ -58,13 +58,14 @@
                 y: NaN
             });
         }
+        console.log(data[0]);
+        console.log(new Date('{{ $noiseData[0]->received_at }}'););
 
         @foreach ($noiseData as $item)
             var receiveAt = new Date('{{ $item->received_at }}');
 
             for (var i = 0; i < data.length; i++) {
-                console.log(receiveAt);
-                console.log(data[i].x);
+
                 if (data[i].x == receiveAt) {
                     console.log("repeated");
                     data[i].y = {{ $item->leq }};
