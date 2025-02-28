@@ -129,6 +129,9 @@
 
     </div>
 
+    <div class="reportGraph">
+        <canvas id="canvas"></canvas>
+    </div>
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
         <div class="container mt-3" style="page-break-before: always;">
             <div class="text-center">
@@ -148,9 +151,6 @@
             </div>
 
             <br>
-            <div class="reportGraph">
-                <canvas id="canvas"></canvas>
-            </div>
 
             {{-- <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" /> --}}
 
