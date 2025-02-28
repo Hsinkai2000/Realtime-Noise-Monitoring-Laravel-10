@@ -8,19 +8,7 @@
             "data": {
                 "datasets": [{
                     "label": "Limit",
-                    "data": [{
-                            x: '{{ $date->format('Y-m-d') }}T07:00:00Z',
-                            y: 80
-                        },
-                        {
-                            x: '{{ $date->format('Y-m-d') }}T08:00:00Z',
-                            y: 80
-                        },
-                        {
-                            x: '{{ $date->format('Y-m-d') }}T09:00:00Z',
-                            y: 80
-                        }
-                    ],
+                    "data": generateLimitData(),
                     "borderColor": "rgba(255, 0, 0, 1)",
                     "pointRadius": 0,
                     "borderWidth": 2,
@@ -29,15 +17,15 @@
                 }, {
                     "label": "LAeq 5min",
                     "data": [{
-                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
+                            x: '{{ $date->format('Y-m-d') }}T07:00:00Z',
                             y: 60
                         },
                         {
-                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
+                            x: '{{ $date->format('Y-m-d') }}T08:00:00Z',
                             y: 70
                         },
                         {
-                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
+                            x: '{{ $date->format('Y-m-d') }}T09:00:00Z',
                             y: 65
                         }
                     ],
@@ -118,9 +106,7 @@
             }
 
             data.push({
-                x: time.getFullYear() + '-' + String(time.getMonth() + 1).padStart(2, '0') + '-' + String(time
-                        .getDate()).padStart(2, '0') + 'T' + String(time.getHours()).padStart(2, '0') + ':' +
-                    String(time.getMinutes()).padStart(2, '0') + ':00',
+                x: new Date(time).toISOString(),
                 y: yValue
             });
         }
