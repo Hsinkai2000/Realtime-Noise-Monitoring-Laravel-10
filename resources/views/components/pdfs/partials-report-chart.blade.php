@@ -59,7 +59,7 @@
             });
         }
         console.log(data[0]);
-        console.log(new Date('{{ $noiseData[0]->received_at }}'););
+        console.log(new Date('{{ $noiseData[0]->received_at }}'));
 
         @foreach ($noiseData as $item)
             var receiveAt = new Date('{{ $item->received_at }}');
