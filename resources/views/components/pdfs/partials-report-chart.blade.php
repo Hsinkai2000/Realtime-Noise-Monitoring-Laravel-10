@@ -14,6 +14,8 @@
             const dayOfWeek = time.getDay();
             const isWeekend = (dayOfWeek === 0);
             const hours = time.getHours();
+            let yValue;
+
             if (!isWeekend) {
                 if (hours >= 7 && hours < 19) {
                     yValue = {{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min }};
@@ -41,11 +43,9 @@
                 y: yValue
             });
         }
-
         return data;
     }
 
-    // Generate second dataset
     function generateNoiseData() {
         const data = [];
         const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
@@ -60,7 +60,6 @@
             });
         }
 
-        // Populate data array with second dataset
         @foreach ($noiseData as $item)
             var receiveAt = new Date('{{ $item->received_at }}');
             var receiveAtISO = receiveAt.toISOString();
@@ -76,10 +75,8 @@
         return data;
     }
 
-
     var ctx = document.getElementById('myChart{{ $date->format('d-m-Y') }}').getContext('2d');
     var myChart = new Chart(ctx, {
-        responsive: false,
         type: 'line',
         data: {
             datasets: [{
@@ -89,22 +86,20 @@
                 pointRadius: 0,
                 borderWidth: 2,
                 fill: false,
-                stepped: true
+                steppedLine: true
             }, {
                 label: 'Noise Data',
                 data: generateNoiseData(),
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 2,
-                cubicInterpolationMode: 'monotone',
-                tension: 0.4,
                 pointRadius: 0,
-                fill: false,
-                spanGaps: true
-            }],
+                spanGaps: true,
+                fill: false
+            }]
         },
         options: {
             scales: {
-                x: {
+                xAxes: [{
                     type: 'time',
                     time: {
                         unit: 'minute',
@@ -116,21 +111,17 @@
                     ticks: {
                         autoSkip: true,
                         maxTicksLimit: 8
-                    },
-                    min: '{{ $date->format('Y-m-d') }}T07:00:00',
-                    max: (new Date(new Date('{{ $date->format('Y-m-d') }}T07:00:00').getTime() + (23 *
-                        60 +
-                        59) * 60 * 1000)).toISOString()
-                },
-                y: {
-                    beginAtZero: true,
-                    max: {{ $measurementPoint->soundLimit->get_max_leq5_limit($date) * 1.2 }}
-                }
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        max: 120
+                    }
+                }]
             },
-            plugins: {
-                legend: {
-                    display: true
-                }
+            legend: {
+                display: true
             }
         }
     });
