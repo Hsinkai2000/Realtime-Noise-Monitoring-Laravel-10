@@ -26,7 +26,7 @@
             "data": {
                 "datasets": [{
                     "label": 'Limit',
-                    "data": generateLimitData(),
+                    "data": ["January", "February", "March", "April", "May", "June", "July"],
                     "borderColor": 'rgba(255, 0, 0, 1)',
                     "pointRadius": 0,
                     "borderWidth": 2,
