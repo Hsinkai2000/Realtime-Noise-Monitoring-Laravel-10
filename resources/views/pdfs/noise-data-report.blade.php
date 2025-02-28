@@ -142,8 +142,6 @@
     @endfor
     <script src="{{ asset('js/pdf.js') }}" async defer></script>
     <script type="text/javascript">
-        // wkhtmltopdf 0.12.5 crash fix.
-        // https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3242#issuecomment-518099192
         'use strict';
         (function(setLineDash) {
             CanvasRenderingContext2D.prototype.setLineDash = function() {
