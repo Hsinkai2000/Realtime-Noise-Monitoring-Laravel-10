@@ -13,7 +13,7 @@ use Illuminate\View\Component;
 class PartialsReportChart extends Component
 {
     public DateTime $date;
-    public Collection|NoiseData $noiseData;
+    public Collection $noiseData;
     public MeasurementPoint $measurementPoint;
     public Collection $limitData;
 
