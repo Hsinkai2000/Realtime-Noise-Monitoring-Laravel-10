@@ -1,4 +1,4 @@
-<div class="reportGraph border border-1 w-100">
+<div class="reportGraph">
     <canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas>
 </div>
 
