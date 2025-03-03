@@ -74,7 +74,7 @@
 
     table td,
     th {
-        padding: 10px;
+        padding: 5px;
     }
 
     .text-danger {
