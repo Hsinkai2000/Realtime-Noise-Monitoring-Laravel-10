@@ -134,27 +134,6 @@
             'contacts' => $contacts,
         ])
 
-
-        <div class="reportGraph"><canvas id="canvas1"></canvas></div>
-        <script>
-            new Chart(
-                document.getElementById("canvas1"), {
-                    "responsive": false,
-                    "type": "line",
-                    "data": {
-                        "labels": ["January", "February", "March", "April", "May", "June", "July"],
-                        "datasets": [{
-                            "label": "My First Dataset",
-                            "data": [65, 59, 80, 81, 56, 55, 40],
-                            "fill": false,
-                            "borderColor": "rgb(75, 192, 192)",
-                            "lineTension": 0.1
-                        }]
-                    },
-                    "options": {}
-                }
-            );
-        </script>
     </div>
 
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
