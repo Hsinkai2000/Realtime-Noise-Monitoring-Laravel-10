@@ -48,7 +48,9 @@
                     "yAxes": [{
                         "ticks": {
                             "beginAtZero": true,
-                            "max": 120
+                            "max": 120,
+                            "stepSize": 10,
+
                         }
                     }]
                 },
