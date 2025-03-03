@@ -1,9 +1,3 @@
-{{-- filepath: /Users/nghsinkai/Documents/Coding Projects/GeoScan/geoscan-backend-10/resources/views/components/pdfs/partials-report-chart.blade.php --}}
-<div class="reportGraph">
-    HELLO
-    <img alt="Google Chart" src="{{ $chartUrl }}" style="width: 800px; height: 400px;">
-</div>
-
 <?php
 $chartData = [
     'Limit' => generateLimitData(),
@@ -93,3 +87,10 @@ $chartParams = [
 
 $chartUrl .= http_build_query($chartParams);
 ?>
+
+
+
+<div class="reportGraph">
+    HELLO
+    <img alt="Google Chart" src="{{ $chartUrl }}" style="width: 800px; height: 400px;">
+</div>
