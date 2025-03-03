@@ -157,10 +157,17 @@
             <br>
             <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
 
-            <img src="{{ route('chart-image', ['date' => $date->format('Y-m-d H:i:s'), 'measurementPointID' => $measurementPoint->id]) }}"
-                alt="Chart">
-            {{-- <img src="{{ route('chart-image', ['date' => $date, 'measurementPointID' => $measurementPoint->id]) }}"
-                alt="Chart"> --}}
+            @php
+                $chartImage = app('App\Http\Controllers\PdfController')->generateChartImage(
+                    $date->copy(),
+                    $measurementPoint->id,
+                );
+            @endphp
+            @if ($chartImage !== 'Error generating chart image')
+                <img src="{{ $chartImage }}" alt="Chart">
+            @else
+                <p>Error generating chart image</p>
+            @endif
 
         </div>
     @endfor
