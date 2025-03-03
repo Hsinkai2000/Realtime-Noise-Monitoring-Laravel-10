@@ -15,6 +15,9 @@ class PartialsReportChart extends Component
     public DateTime $date;
     public Collection $noiseData;
     public MeasurementPoint $measurementPoint;
+    public Collection $limitData;
+    public DateTime $start;
+    public DateTime $end;
 
     public function __construct(
         DateTime $date,
@@ -25,16 +28,19 @@ class PartialsReportChart extends Component
         $this->date = $date;
         $this->measurementPoint = $measurementPoint;
 
+
+        $this->start = $this->date->setTime(7, 0, 0);
+        $this->end = (clone $this->date)->modify('+1 day')->setTime(6, 59, 59);
+
         $this->noiseData = collect($this->getNoiseData());
+        $this->limitData = collect($this->getLimitData());
     }
 
-    private function getNoiseData()
+    private function getLimitData()
     {
-        $currNoiseData = [];
-        $start = $this->date->setTime(7, 0, 0);
-        $end = (clone $this->date)->modify('+1 day')->setTime(6, 59, 59);
+        $currLimitData = [];
 
-        for ($time = clone $start; $time <= $end; $time->modify('+5 minutes')) {
+        for ($time = clone $this->start; $time <= $this->end; $time->modify('+5 minutes')) {
             $dayOfWeek = (int)$time->format('w');
             $isWeekend = ($dayOfWeek === 0);
             $hours = (int)$time->format('H');
@@ -62,13 +68,40 @@ class PartialsReportChart extends Component
                 }
             }
 
-            $currNoiseData[] = [
+            $currLimitData[] = [
                 'x' => $time->format('Y-m-d\TH:i:s'),
                 'y' => $yValue
             ];
         }
 
-        \Log::info($currNoiseData);
+
+        return $currLimitData;
+    }
+
+    private function getNoiseData()
+    {
+        $currNoiseData = [];
+
+        for ($time = clone $this->start; $time <= $this->end; $time->modify('+5 minutes')) {
+            $currNoiseData[] = [
+                'x' => $time->format('Y-m-d\TH:i:s'),
+                'y' => null
+            ];
+        }
+
+        $noiseDataMap = $this->measurementPoint->noiseData()
+            ->whereBetween('received_at', [$this->start, $this->end])
+            ->get()
+            ->keyBy(function ($item) {
+                return $item->received_at->format('Y-m-d\TH:i:s');
+            });
+
+        foreach ($currNoiseData as &$data) {
+            if (isset($noiseDataMap[$data['x']])) {
+                $data['y'] = $noiseDataMap[$data['x']]->leq;
+            }
+        }
+
         return $currNoiseData;
     }
 
