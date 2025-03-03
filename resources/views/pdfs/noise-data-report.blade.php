@@ -18,6 +18,8 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <style>
         .reportGraph {
+            display: flex;
+            justify-content: center;
             width: 900px;
         }
     </style>
