@@ -23,12 +23,8 @@
             width: 900px;
         }
     </style>
-    {{-- @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resource ss/js/app.js']) --}}
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js">
-    </script> --}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
@@ -39,27 +35,6 @@
         integrity="sha512-mf78KukU/a8rjr7aBRvCa2Vwg/q0tUjJhLtcK53PHEbFwCEqQ5durlzvVTgQgKpv+fyNMT6ZQT1Aq6tpNqf1mg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script>
-        function drawGraphs(elem) {
-            new Chart(
-                document.getElementById(elem), {
-                    "responsive": false,
-                    "type": "line",
-                    "data": {
-                        "labels": ["January", "February", "March", "April", "May", "June", "July"],
-                        "datasets": [{
-                            "label": "My First Dataset",
-                            "data": [65, 59, 80, 81, 56, 55, 40],
-                            "fill": false,
-                            "borderColor": "rgb(75, 192, 192)",
-                            "lineTension": 0.1
-                        }]
-                    },
-                    "options": {}
-                }
-            );
-        }
-    </script>
 </head>
 
 <style>
@@ -151,7 +126,7 @@
                     <h3>Date: {{ $date->format('d-m-Y') }}</h3>
                 @endif
             </div>
-            <div>
+            <div style="height: 40%;">
                 <br />
                 <x-pdfs.partials-report-data :measurementPoint="$measurementPoint" :date="$date" />
             </div>
@@ -160,6 +135,8 @@
             <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
         </div>
     @endfor
+
+
     <script src="{{ asset('js/pdf.js') }}" async defer></script>
     <script type="text/javascript">
         'use strict';
