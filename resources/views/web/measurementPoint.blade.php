@@ -260,15 +260,7 @@
         </div>
         <br>
 
-        {{-- <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" /> --}}
-        @php
-            $chartImage = app('App\Http\Controllers\PdfController')->generateChartImage(now(), $measurementPoint->id);
-        @endphp
-        @if ($chartImage !== 'Error generating chart image')
-            <img src="{{ $chartImage }}" alt="Chart">
-        @else
-            <p>Error generating chart image</p>
-        @endif
+        <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" />
     </div>
 
     <x-confirmation-modal />
