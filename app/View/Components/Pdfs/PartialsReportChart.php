@@ -63,7 +63,7 @@ class PartialsReportChart extends Component
             }
 
             $currNoiseData[] = [
-                'x' => $time->format('Y-m-d H:i:s'),
+                'x' => $time->format('Y-m-dTH:i:s'),
                 'y' => $yValue
             ];
         }

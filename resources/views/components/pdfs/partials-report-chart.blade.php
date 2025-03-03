@@ -37,8 +37,8 @@
                         "time": {
                             "unit": "hour",
                             "stepSize": 1,
-                            "min": "{{ $date->format('Y-m-d') }} 07:00:00",
-                            "max": "{{ $date->copy()->addDay()->format('Y-m-d') }} 06:55:00",
+                            "min": "{{ $date->format('Y-m-d') }}T07:00:00",
+                            "max": "{{ $date->copy()->addDay()->format('Y-m-d') }}T06:55:00",
                             "displayFormats": {
                                 "hour": "HH:mm"
                             }
