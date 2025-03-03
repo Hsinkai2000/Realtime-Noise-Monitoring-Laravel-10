@@ -7,7 +7,7 @@ use App\Models\NoiseData;
 use Closure;
 use Illuminate\Contracts\View\View;
 use DateTime;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class PartialsReportChart extends Component
