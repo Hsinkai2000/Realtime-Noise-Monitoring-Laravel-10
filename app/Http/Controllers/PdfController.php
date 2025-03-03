@@ -34,7 +34,6 @@ class PdfController extends Controller
             $footerHtml = view('pdfs.footer');
             $html = view("pdfs.noise-data-report", $data)->render();
 
-            // $pdf = PDF::loadHTML($html)->setPaper('a4');
             $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
             $pdf->setoptions([
                 'enable-local-file-access' => true,
