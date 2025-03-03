@@ -114,7 +114,7 @@
     </div>
 
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
-        <div class="container mt-3" style="page-break-before: always;">
+        <div class="container mt-3 h-100" style="page-break-before: always;">
             <div class="text-center">
                 <?php $res = $measurementPoint->getFirstDataOfDay($date->format('d-m-Y')); ?>
                 @if ($res)
