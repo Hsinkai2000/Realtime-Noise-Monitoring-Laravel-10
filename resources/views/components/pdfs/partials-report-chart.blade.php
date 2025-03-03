@@ -6,93 +6,93 @@
 
 
 <script>
-    function generateLimitData() {
+    // function generateLimitData() {
 
-        const data = [];
-        const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
-        const end = new Date(start);
-        end.setDate(end.getDate() + 1);
-        end.setMinutes(end.getMinutes() - 1);
+    //     const data = [];
+    //     const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
+    //     const end = new Date(start);
+    //     end.setDate(end.getDate() + 1);
+    //     end.setMinutes(end.getMinutes() - 1);
 
-        for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
-            const dayOfWeek = time.getDay();
-            const isWeekend = (dayOfWeek === 0);
-            const hours = time.getHours();
-            var yValue;
+    //     for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
+    //         const dayOfWeek = time.getDay();
+    //         const isWeekend = (dayOfWeek === 0);
+    //         const hours = time.getHours();
+    //         var yValue;
 
-            if (!isWeekend) {
-                if (hours >= 7 && hours < 19) {
-                    yValue = {{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min }};
-                } else if (hours >= 19 && hours < 22) {
-                    yValue = {{ $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq5min }};
-                } else if (hours >= 22 && hours < 24) {
-                    yValue = {{ $measurementPoint->soundLimit->mon_sat_10pm_12am_leq5min }};
-                } else {
-                    yValue = {{ $measurementPoint->soundLimit->mon_sat_12am_7am_leq5min }};
-                }
-            } else {
-                if (hours >= 7 && hours < 19) {
-                    yValue = {{ $measurementPoint->soundLimit->sun_ph_7am_7pm_leq5min }};
-                } else if (hours >= 19 && hours < 22) {
-                    yValue = {{ $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq5min }};
-                } else if (hours >= 22 && hours < 24) {
-                    yValue = {{ $measurementPoint->soundLimit->sun_ph_10pm_12am_leq5min }};
-                } else {
-                    yValue = {{ $measurementPoint->soundLimit->sun_ph_12am_7am_leq5min }};
-                }
-            }
+    //         if (!isWeekend) {
+    //             if (hours >= 7 && hours < 19) {
+    //                 yValue = {{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min }};
+    //             } else if (hours >= 19 && hours < 22) {
+    //                 yValue = {{ $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq5min }};
+    //             } else if (hours >= 22 && hours < 24) {
+    //                 yValue = {{ $measurementPoint->soundLimit->mon_sat_10pm_12am_leq5min }};
+    //             } else {
+    //                 yValue = {{ $measurementPoint->soundLimit->mon_sat_12am_7am_leq5min }};
+    //             }
+    //         } else {
+    //             if (hours >= 7 && hours < 19) {
+    //                 yValue = {{ $measurementPoint->soundLimit->sun_ph_7am_7pm_leq5min }};
+    //             } else if (hours >= 19 && hours < 22) {
+    //                 yValue = {{ $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq5min }};
+    //             } else if (hours >= 22 && hours < 24) {
+    //                 yValue = {{ $measurementPoint->soundLimit->sun_ph_10pm_12am_leq5min }};
+    //             } else {
+    //                 yValue = {{ $measurementPoint->soundLimit->sun_ph_12am_7am_leq5min }};
+    //             }
+    //         }
 
-            data.push({
-                x: new Date(time),
-                y: yValue
-            });
-        }
+    //         data.push({
+    //             x: new Date(time),
+    //             y: yValue
+    //         });
+    //     }
 
-        // return data;
-        return [{
-                x: '{{ $date->format('Y-m-d') }}T07:00:00',
-                y: 80
-            },
-            {
-                x: '{{ $date->format('Y-m-d') }}T08:00:00',
-                y: 80
-            },
-            {
-                x: '{{ $date->format('Y-m-d') }}T09:00:00',
-                y: 80
-            }
-        ];
-    }
+    //     // return data;
+    //     return [{
+    //             x: '{{ $date->format('Y-m-d') }}T07:00:00',
+    //             y: 80
+    //         },
+    //         {
+    //             x: '{{ $date->format('Y-m-d') }}T08:00:00',
+    //             y: 80
+    //         },
+    //         {
+    //             x: '{{ $date->format('Y-m-d') }}T09:00:00',
+    //             y: 80
+    //         }
+    //     ];
+    // }
 
-    function generateNoiseData() {
-        const data = [];
-        const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
-        const end = new Date(start);
-        end.setDate(end.getDate() + 1);
-        end.setMinutes(end.getMinutes() - 1);
+    // function generateNoiseData() {
+    //     const data = [];
+    //     const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
+    //     const end = new Date(start);
+    //     end.setDate(end.getDate() + 1);
+    //     end.setMinutes(end.getMinutes() - 1);
 
-        for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
-            data.push({
-                x: new Date(time),
-                y: NaN
-            });
-        }
+    //     for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
+    //         data.push({
+    //             x: new Date(time),
+    //             y: NaN
+    //         });
+    //     }
 
-        @foreach ($noiseData as $item)
-            var receiveAt = new Date('{{ $item->received_at }}');
+    //     @foreach ($noiseData as $item)
+    //         var receiveAt = new Date('{{ $item->received_at }}');
 
-            for (var i = 0; i < data.length; i++) {
+    //         for (var i = 0; i < data.length; i++) {
 
-                if (data[i].x.getTime() == receiveAt.getTime()) {
-                    console.log("repeated");
-                    data[i].y = {{ $item->leq }};
-                    break;
-                }
-            }
-        @endforeach
+    //             if (data[i].x.getTime() == receiveAt.getTime()) {
+    //                 console.log("repeated");
+    //                 data[i].y = {{ $item->leq }};
+    //                 break;
+    //             }
+    //         }
+    //     @endforeach
 
-        return data;
-    }
+    //     return data;
+    // }
 
 
     new Chart(
@@ -102,7 +102,7 @@
             "data": {
                 "datasets": [{
                     "label": "Limit",
-                    "data": generateLimitData(),
+                    "data": {{ $noiseData }},
                     "borderColor": "rgba(255, 0, 0, 1)",
                     "pointRadius": 0,
                     "borderWidth": 2,
@@ -110,7 +110,7 @@
                     "steppedLine": true
                 }, {
                     "label": "LAeq 5min",
-                    "data": generateNoiseData(),
+                    "data": {{ $noiseData }},
 
                     "borderColor": "rgba(0, 0, 255, 1)",
                     "borderWidth": 2,
