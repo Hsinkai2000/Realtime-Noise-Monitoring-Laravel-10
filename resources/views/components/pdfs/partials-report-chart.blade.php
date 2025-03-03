@@ -33,7 +33,7 @@
                             x: '{{ $date->format('Y-m-d') }}T09:00:00',
                             y: 80
                         }
-                    ];,
+                    ],
 
                     "borderColor": "rgba(0, 0, 255, 1)",
                     "borderWidth": 2,
