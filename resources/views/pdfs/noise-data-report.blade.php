@@ -19,8 +19,6 @@
     <style>
         .reportGraph {
             width: 100%;
-            height: 30%;
-            border: 1px black solid;
         }
     </style>
     {{-- @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resource ss/js/app.js']) --}}
