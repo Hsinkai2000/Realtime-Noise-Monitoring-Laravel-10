@@ -1,7 +1,5 @@
-<div class="reportGraph">
-    HELLO
+<div class="reportGraph border border-1 w-100">
     <canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas>
-
 </div>
 
 
@@ -23,10 +21,10 @@
                     "label": "LAeq 5min",
                     "data": @json($noiseData),
                     "borderColor": "rgba(0, 0, 255, 1)",
-                    "borderWidth": 2,
+                    "borderWidth": 1,
                     "pointRadius": 0,
                     "spanGaps": true,
-                    "fill": false
+                    "lineTension": 0 "fill": false
                 }]
             },
             "options": {
@@ -50,7 +48,8 @@
                     "yAxes": [{
                         "ticks": {
                             "beginAtZero": true,
-                            "max": 120
+                            "max": 120,
+                            "stepSize": 10
                         }
                     }]
                 },
