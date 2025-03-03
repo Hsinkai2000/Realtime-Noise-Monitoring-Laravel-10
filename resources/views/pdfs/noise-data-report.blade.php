@@ -21,6 +21,7 @@
             display: block;
             margin: 0 auto;
             width: 900px;
+            height: 300px;
         }
     </style>
 
@@ -127,10 +128,8 @@
                 @endif
             </div>
 
-            <br />
             <x-pdfs.partials-report-data :measurementPoint="$measurementPoint" :date="$date" />
 
-            <br>
             <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
         </div>
     @endfor
