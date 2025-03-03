@@ -76,22 +76,29 @@ class PartialsReportChart extends Component
 
         return $currLimitData;
     }
-
     private function getNoiseData()
     {
-        $currNoiseData = [];
-
+        // Create array of timestamps first
+        $timestamps = [];
         for ($time = clone $this->start; $time <= $this->end; $time->modify('+5 minutes')) {
-            $noise_data = $this->measurementPoint->noiseData()
-                ->where('received_at', $time->format('Y-m-d H:i:s'))
-                ->first()?->leq;
-            $currNoiseData[] = [
-                'x' => $time->format('Y-m-d\TH:i:s'),
-                'y' => $noise_data ? $noise_data : null
-            ];
+            $timestamps[] = $time->format('Y-m-d\TH:i:s');
         }
 
-        return $currNoiseData;
+        // Get all noise data in one query
+        $noiseDataMap = $this->measurementPoint->noiseData()
+            ->whereBetween('received_at', [$this->start, $this->end])
+            ->get()
+            ->keyBy(function ($item) {
+                return $item->received_at->format('Y-m-d\TH:i:s');
+            });
+
+        // Create final array with all timestamps, putting null for missing data
+        return array_map(function ($timestamp) use ($noiseDataMap) {
+            return [
+                'x' => $timestamp,
+                'y' => $noiseDataMap[$timestamp]->leq ?? null
+            ];
+        }, $timestamps);
     }
 
     /**
