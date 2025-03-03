@@ -30,7 +30,7 @@ Route::get('/font/{path}', function ($path) {
     return response()->file(public_path('font/' . $path));
 })->where('path', '.*');
 
-
+Route::get('/chart-image/{date}/{measurementPointID}', [PdfController::class, 'generateChartImage'])->name('chart-image');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [AuthController::class, 'verify_logged_in'])->name('verify_logged_in');

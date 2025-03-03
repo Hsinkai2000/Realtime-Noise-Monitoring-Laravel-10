@@ -1,6 +1,7 @@
 <div class="reportGraph">
     HELLO
     <canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas>
+
 </div>
 
 
@@ -86,7 +87,19 @@
             "data": {
                 "datasets": [{
                     "label": "Limit",
-                    "data": generateLimitData(),
+                    "data": [{
+                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
+                            y: 80
+                        },
+                        {
+                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
+                            y: 80
+                        },
+                        {
+                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
+                            y: 80
+                        }
+                    ],
                     "borderColor": "rgba(255, 0, 0, 1)",
                     "pointRadius": 0,
                     "borderWidth": 2,
