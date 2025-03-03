@@ -18,7 +18,9 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <style>
         .reportGraph {
-            width: 900px
+            width: 100%;
+            padding: 10px;
+            border: 1px black solid;
         }
     </style>
     {{-- @vite(['resources/scss/pdf.scss', 'resources/js/pdf.js', 'resource ss/js/app.js']) --}}
