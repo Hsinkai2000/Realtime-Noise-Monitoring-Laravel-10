@@ -18,8 +18,8 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <style>
         .reportGraph {
-            display: flex;
-            justify-content: center;
+            display: block;
+            margin: 0 auto;
             width: 900px;
         }
     </style>
