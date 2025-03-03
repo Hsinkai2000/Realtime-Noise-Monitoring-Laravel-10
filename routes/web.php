@@ -31,6 +31,7 @@ Route::get('/font/{path}', function ($path) {
 })->where('path', '.*');
 
 Route::get('/chart-image/{date}/{measurementPointID}', [PdfController::class, 'generateChartImage'])->name('chart-image');
+Route::get('/chart/{filename}', [PdfController::class, 'chartRedirect'])->name('chart.redirect');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [AuthController::class, 'verify_logged_in'])->name('verify_logged_in');
