@@ -13,7 +13,7 @@
             "data": {
                 "datasets": [{
                     "label": "Limit",
-                    "data": @json($noiseData),
+                    "data": @json($limitData),
                     "borderColor": "rgba(255, 0, 0, 1)",
                     "pointRadius": 0,
                     "borderWidth": 2,
@@ -21,20 +21,7 @@
                     "steppedLine": true
                 }, {
                     "label": "LAeq 5min",
-                    "data": [{
-                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
-                            y: 80
-                        },
-                        {
-                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
-                            y: 80
-                        },
-                        {
-                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
-                            y: 80
-                        }
-                    ],
-
+                    "data": @json($noiseData),
                     "borderColor": "rgba(0, 0, 255, 1)",
                     "borderWidth": 2,
                     "pointRadius": 0,
