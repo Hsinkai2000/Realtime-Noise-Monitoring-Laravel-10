@@ -1,4 +1,7 @@
-<div class="reportGraph"><canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas></div>
+<div class="reportGraph">
+    HELLO
+    <canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas>
+</div>
 
 
 <script>
