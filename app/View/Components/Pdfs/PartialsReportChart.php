@@ -82,7 +82,9 @@ class PartialsReportChart extends Component
         $currNoiseData = [];
 
         for ($time = clone $this->start; $time <= $this->end; $time->modify('+5 minutes')) {
-            $noise_data = $this->measurementPoint->noiseData()->where('received_at', $time)->first();
+            $noise_data = $this->measurementPoint->noiseData()
+                ->where('received_at', $time->format('Y-m-d H:i:s'))
+                ->first()?->leq;
             $currNoiseData[] = [
                 'x' => $time->format('Y-m-d\TH:i:s'),
                 'y' => $noise_data ? $noise_data : null
