@@ -21,7 +21,7 @@
             display: block;
             margin: 0 auto;
             width: 900px;
-            height: 300px;
+            height: 200px;
         }
     </style>
 
@@ -40,7 +40,7 @@
 
 <style>
     body {
-        font-size: 14px;
+        font-size: 12px;
         font-family: Arial, Helvetica, sans-serif !important;
     }
 
