@@ -26,7 +26,7 @@ class PartialsReportChart extends Component
         $this->date = $date;
         $this->measurementPoint = $measurementPoint;
 
-        $this->noiseData = $this->getNoiseData();
+        $this->noiseData = collect($this->getNoiseData());
     }
 
     private function getNoiseData()
