@@ -68,6 +68,7 @@ class PartialsReportChart extends Component
             ];
         }
 
+        \Log::info($currNoiseData);
         return $currNoiseData;
     }
 
