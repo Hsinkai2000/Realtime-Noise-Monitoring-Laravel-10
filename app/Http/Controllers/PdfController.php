@@ -38,8 +38,8 @@ class PdfController extends Controller
             $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
             $pdf->setoptions([
                 'enable-local-file-access' => true,
-                'no-stop-slow-scripts' => true,
                 'margin-bottom' => 8,
+                'debug-javascript' => true,
                 'footer-spacing' => 0,
                 'footer-html' => $footerHtml
             ]);
@@ -65,7 +65,7 @@ class PdfController extends Controller
         $html = view('pdfs.show-chart', ['measurementPoint' => $measurementPoint, 'date' => $date])->render();
 
         try {
-            $image = Browsershot::html($html)->setScreenshotType('png')->timeout(5000)->base64Screenshot();
+            $image = Browsershot::html($html)->waitUntilNetworkIdle()->setScreenshotType('png')->timeout(3000)->base64Screenshot();
             $image = base64_decode($image);
 
 
