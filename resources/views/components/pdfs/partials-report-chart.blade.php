@@ -7,6 +7,47 @@
 
 <script>
     function generateLimitData() {
+
+        const data = [];
+        const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
+        const end = new Date(start);
+        end.setDate(end.getDate() + 1);
+        end.setMinutes(end.getMinutes() - 1);
+
+        for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
+            const dayOfWeek = time.getDay();
+            const isWeekend = (dayOfWeek === 0);
+            const hours = time.getHours();
+            var yValue;
+
+            if (!isWeekend) {
+                if (hours >= 7 && hours < 19) {
+                    yValue = {{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min }};
+                } else if (hours >= 19 && hours < 22) {
+                    yValue = {{ $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq5min }};
+                } else if (hours >= 22 && hours < 24) {
+                    yValue = {{ $measurementPoint->soundLimit->mon_sat_10pm_12am_leq5min }};
+                } else {
+                    yValue = {{ $measurementPoint->soundLimit->mon_sat_12am_7am_leq5min }};
+                }
+            } else {
+                if (hours >= 7 && hours < 19) {
+                    yValue = {{ $measurementPoint->soundLimit->sun_ph_7am_7pm_leq5min }};
+                } else if (hours >= 19 && hours < 22) {
+                    yValue = {{ $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq5min }};
+                } else if (hours >= 22 && hours < 24) {
+                    yValue = {{ $measurementPoint->soundLimit->sun_ph_10pm_12am_leq5min }};
+                } else {
+                    yValue = {{ $measurementPoint->soundLimit->sun_ph_12am_7am_leq5min }};
+                }
+            }
+
+            data.push({
+                x: new Date(time),
+                y: yValue
+            });
+        }
+        // return data;
         return [{
                 x: '{{ $date->format('Y-m-d') }}T07:00:00',
                 y: 80
@@ -20,46 +61,6 @@
                 y: 80
             }
         ];
-        // const data = [];
-        // const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
-        // const end = new Date(start);
-        // end.setDate(end.getDate() + 1);
-        // end.setMinutes(end.getMinutes() - 1);
-
-        // for (var time = start; time <= end; time.setMinutes(time.getMinutes() + 5)) {
-        //     const dayOfWeek = time.getDay();
-        //     const isWeekend = (dayOfWeek === 0);
-        //     const hours = time.getHours();
-        //     var yValue;
-
-        //     if (!isWeekend) {
-        //         if (hours >= 7 && hours < 19) {
-        //             yValue = {{ $measurementPoint->soundLimit->mon_sat_7am_7pm_leq5min }};
-        //         } else if (hours >= 19 && hours < 22) {
-        //             yValue = {{ $measurementPoint->soundLimit->mon_sat_7pm_10pm_leq5min }};
-        //         } else if (hours >= 22 && hours < 24) {
-        //             yValue = {{ $measurementPoint->soundLimit->mon_sat_10pm_12am_leq5min }};
-        //         } else {
-        //             yValue = {{ $measurementPoint->soundLimit->mon_sat_12am_7am_leq5min }};
-        //         }
-        //     } else {
-        //         if (hours >= 7 && hours < 19) {
-        //             yValue = {{ $measurementPoint->soundLimit->sun_ph_7am_7pm_leq5min }};
-        //         } else if (hours >= 19 && hours < 22) {
-        //             yValue = {{ $measurementPoint->soundLimit->sun_ph_7pm_10pm_leq5min }};
-        //         } else if (hours >= 22 && hours < 24) {
-        //             yValue = {{ $measurementPoint->soundLimit->sun_ph_10pm_12am_leq5min }};
-        //         } else {
-        //             yValue = {{ $measurementPoint->soundLimit->sun_ph_12am_7am_leq5min }};
-        //         }
-        //     }
-
-        //     data.push({
-        //         x: new Date(time),
-        //         y: yValue
-        //     });
-        // }
-        // return data;
     }
 
     function generateNoiseData() {
