@@ -1,7 +1,7 @@
 <div class="reportGraph">
     HELLO
     <canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas>
-
+    <img alt="something failed" id="lineChart{{ $date->format('d-m-Y') }}">
 </div>
 
 
@@ -94,7 +94,7 @@
     }
 
 
-    new Chart(
+    var lineChartString{{ $date->format('d-m-Y') }} = new Chart(
         document.getElementById("canvas{{ $date->format('d-m-Y') }}"), {
             "responsive": false,
             "type": "line",
@@ -148,4 +148,7 @@
                 }
             }
         });
+
+    document.getElementById("lineChart{{ $date->format('d-m-Y') }}").src = lineChartString{{ $date->format('d-m-Y') }}
+        .toBase64Image();
 </script>

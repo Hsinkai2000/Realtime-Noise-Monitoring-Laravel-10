@@ -156,19 +156,6 @@
 
             <br>
             <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
-
-            @php
-                $chartImage = app('App\Http\Controllers\PdfController')->generateChartImage(
-                    $date->copy(),
-                    $measurementPoint->id,
-                );
-            @endphp
-            @if ($chartImage !== 'Error generating chart image')
-                <img src="{{ $chartImage }}" alt="Chart">
-            @else
-                <p>Error generating chart image</p>
-            @endif
-
         </div>
     @endfor
     <script src="{{ asset('js/pdf.js') }}" async defer></script>

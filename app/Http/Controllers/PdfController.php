@@ -62,15 +62,16 @@ class PdfController extends Controller
         $html = view('pdfs.show-chart', ['measurementPoint' => $measurementPoint, 'date' => $date])->render();
         \Log::info("HTML generated");
 
+        $html = view('pdfs.show-chart', ['measurementPoint' => $measurementPoint, 'date' => $date])->render();
+
         try {
             $image = Browsershot::html($html)->setScreenshotType('png')->timeout(5000)->base64Screenshot();
+            $image = base64_decode($image);
 
-            $dataUri = "data:image/png;base64," . $image; // Create the data URI
 
-            return $dataUri; // Return the data URI
-
+            return response($image)->header('Content-Type', 'image/png');
         } catch (\Exception $e) {
-            return "Error generating chart image"; // Return an error message
+            return response("Error generating chart image", 500); // Return an error response
         }
     }
 }
