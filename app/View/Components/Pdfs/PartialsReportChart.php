@@ -15,7 +15,6 @@ class PartialsReportChart extends Component
     public DateTime $date;
     public Collection $noiseData;
     public MeasurementPoint $measurementPoint;
-    public Collection $limitData;
 
     public function __construct(
         DateTime $date,
