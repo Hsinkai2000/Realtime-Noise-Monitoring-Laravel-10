@@ -13,7 +13,7 @@
             "data": {
                 "datasets": [{
                     "label": "Limit",
-                    "data": {{ $noiseData }},
+                    "data": @json($noiseData),
                     "borderColor": "rgba(255, 0, 0, 1)",
                     "pointRadius": 0,
                     "borderWidth": 2,
