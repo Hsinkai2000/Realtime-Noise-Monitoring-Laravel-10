@@ -65,7 +65,9 @@ class PdfController extends Controller
         try {
             $image = Browsershot::html($html)->setScreenshotType('png')->timeout(5000)->base64Screenshot();
 
-            return $image; // Return the base64 string directly
+            $dataUri = "data:image/png;base64," . $image; // Create the data URI
+
+            return $dataUri; // Return the data URI
 
         } catch (\Exception $e) {
             return "Error generating chart image"; // Return an error message

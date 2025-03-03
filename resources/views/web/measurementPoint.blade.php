@@ -253,8 +253,14 @@
         <br>
 
         {{-- <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" /> --}}
-        <img src="{{ route('chart-image', ['date' => now(), 'measurementPointID' => $measurementPoint->id]) }}"
-            alt="Chart">
+        @php
+            $chartImage = app('App\Http\Controllers\PdfController')->generateChartImage(now(), $measurementPoint->id);
+        @endphp
+        @if ($chartImage !== 'Error generating chart image')
+            <img src="{{ $chartImage }}" alt="Chart">
+        @else
+            <p>Error generating chart image</p>
+        @endif
     </div>
 
     <x-confirmation-modal />
