@@ -24,6 +24,7 @@
 
 <body>
     <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date" />
+    hello from inside show-chart
 
 
     <script type="text/javascript">
