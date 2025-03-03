@@ -260,8 +260,9 @@
         </div>
         <br>
 
-        <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" />
-
+        {{-- <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" /> --}}
+        <img src="{{ route('chart-image', ['date' => now(), 'measurementPointID' => $measurementPoint->id]) }}"
+            alt="Chart">
     </div>
 
     <x-confirmation-modal />
