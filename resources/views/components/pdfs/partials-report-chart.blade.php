@@ -134,6 +134,7 @@
             }
         });
 
-    var canvas = document.getElementById("canvas{{ $date->format('d-m-Y') }}");
-    document.getElementById("lineChart{{ $date->format('d-m-Y') }}").src = canvas.toDataURL();
+
+    document.getElementById("lineChart{{ $date->format('d-m-Y') }}").src = lineChart{{ $date->format('d-m-Y') }}
+        .toBase64Image();
 </script>
