@@ -21,7 +21,19 @@
                     "steppedLine": true
                 }, {
                     "label": "LAeq 5min",
-                    "data": {{ $noiseData }},
+                    "data": [{
+                            x: '{{ $date->format('Y-m-d') }}T07:00:00',
+                            y: 80
+                        },
+                        {
+                            x: '{{ $date->format('Y-m-d') }}T08:00:00',
+                            y: 80
+                        },
+                        {
+                            x: '{{ $date->format('Y-m-d') }}T09:00:00',
+                            y: 80
+                        }
+                    ];,
 
                     "borderColor": "rgba(0, 0, 255, 1)",
                     "borderWidth": 2,
