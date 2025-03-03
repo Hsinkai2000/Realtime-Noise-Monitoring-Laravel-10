@@ -74,7 +74,7 @@
 
     table td,
     th {
-        padding: 5px;
+        padding: 8px;
     }
 
     .text-danger {
@@ -115,7 +115,7 @@
     </div>
 
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
-        <div class="h-100" style="page-break-before: always;">
+        <div class="container h-100" style="page-break-before: always;">
             <div class="text-center">
                 <?php $res = $measurementPoint->getFirstDataOfDay($date->format('d-m-Y')); ?>
                 @if ($res)
@@ -127,9 +127,9 @@
                     <h3>Date: {{ $date->format('d-m-Y') }}</h3>
                 @endif
             </div>
-
+            <br>
             <x-pdfs.partials-report-data :measurementPoint="$measurementPoint" :date="$date" />
-
+            <br>
             <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
         </div>
     @endfor
