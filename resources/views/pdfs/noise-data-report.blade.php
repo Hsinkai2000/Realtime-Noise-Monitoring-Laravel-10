@@ -87,7 +87,7 @@
 </style>
 
 <body>
-    <div class="container d-flex flex-column justify-content-center text-center pt-5">
+    <div class="container d-flex flex-column justify-content-center text-center">
         <div>
             <h1>Noise Data</h1>
 
@@ -115,7 +115,7 @@
     </div>
 
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
-        <div class="container mt-3 h-100" style="page-break-before: always;">
+        <div class="container h-100" style="page-break-before: always;">
             <div class="text-center">
                 <?php $res = $measurementPoint->getFirstDataOfDay($date->format('d-m-Y')); ?>
                 @if ($res)
