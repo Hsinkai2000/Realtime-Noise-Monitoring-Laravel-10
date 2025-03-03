@@ -1,14 +1,11 @@
 <?php
-$chartData = [
-    'Limit' => generateLimitData(),
-    'LAeq 5min' => generateNoiseData(),
-];
 
-function generateLimitData()
-{
+use Carbon\Carbon;
+
+$generateLimitData = function (Carbon $date, $measurementPoint) {
     $data = [];
-    $start = new DateTime(date('Y-m-d', strtotime($date)) . 'T07:00:00');
-    $end = new DateTime(date('Y-m-d', strtotime($date)) . 'T06:59:00 +1 day');
+    $start = new DateTime($date->format('Y-m-d') . 'T07:00:00');
+    $end = new DateTime($date->format('Y-m-d') . 'T06:59:00 +1 day');
 
     $interval = new DateInterval('PT5M');
     $period = new DatePeriod($start, $interval, $end);
@@ -43,13 +40,12 @@ function generateLimitData()
         $data[] = $yValue;
     }
     return $data;
-}
+};
 
-function generateNoiseData()
-{
+$generateNoiseData = function (Carbon $date, $measurementPoint, $noiseData) {
     $data = [];
-    $start = new DateTime(date('Y-m-d', strtotime($date)) . 'T07:00:00');
-    $end = new DateTime(date('Y-m-d', strtotime($date)) . 'T06:59:00 +1 day');
+    $start = new DateTime($date->format('Y-m-d') . 'T07:00:00');
+    $end = new DateTime($date->format('Y-m-d') . 'T06:59:00 +1 day');
 
     $interval = new DateInterval('PT5M');
     $period = new DatePeriod($start, $interval, $end);
@@ -60,7 +56,7 @@ function generateNoiseData()
 
     foreach ($noiseData as $item) {
         $receiveAt = new DateTime($item->received_at);
-        $startTime = new DateTime(date('Y-m-d', strtotime($date)) . 'T07:00:00');
+        $startTime = new DateTime($date->format('Y-m-d') . 'T07:00:00');
         $diff = $receiveAt->getTimestamp() - $startTime->getTimestamp();
         $index = floor($diff / (5 * 60));
 
@@ -70,14 +66,17 @@ function generateNoiseData()
     }
 
     return $data;
-}
+};
+
+$limitData = $generateLimitData($date, $measurementPoint);
+$noiseData = $generateNoiseData($date, $measurementPoint, $noiseData);
 
 // Build the chart URL
 $chartUrl = 'https://chart.googleapis.com/chart?';
 $chartParams = [
     'cht' => 'lc', // Line chart
     'chs' => '800x400', // Chart size
-    'chd' => 't:' . implode(',', $chartData['Limit']) . '|' . implode(',', $chartData['LAeq 5min']), // Chart data
+    'chd' => 't:' . implode(',', $limitData) . '|' . implode(',', $noiseData), // Chart data
     'chxl' => '0:|7:00|8:00|9:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|0:00|1:00|2:00|3:00|4:00|5:00|6:00', // X-axis labels
     'chxt' => 'x,y', // Axis to display
     'chco' => 'FF0000,0000FF', // Line colors (Red, Blue)
@@ -87,8 +86,6 @@ $chartParams = [
 
 $chartUrl .= http_build_query($chartParams);
 ?>
-
-
 
 <div class="reportGraph">
     HELLO
