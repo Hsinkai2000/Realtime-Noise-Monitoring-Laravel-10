@@ -82,23 +82,11 @@ class PartialsReportChart extends Component
         $currNoiseData = [];
 
         for ($time = clone $this->start; $time <= $this->end; $time->modify('+5 minutes')) {
+            $noise_data = $this->measurementPoint->noiseData()->where('received_at', $time)->first();
             $currNoiseData[] = [
                 'x' => $time->format('Y-m-d\TH:i:s'),
-                'y' => null
+                'y' => $noise_data ? $noise_data : null
             ];
-        }
-
-        $noiseDataMap = $this->measurementPoint->noiseData()
-            ->whereBetween('received_at', [$this->start, $this->end])
-            ->get()
-            ->keyBy(function ($item) {
-                return $item->received_at->format('Y-m-d\TH:i:s');
-            });
-
-        foreach ($currNoiseData as &$data) {
-            if (isset($noiseDataMap[$data['x']])) {
-                $data['y'] = $noiseDataMap[$data['x']]->leq;
-            }
         }
 
         return $currNoiseData;
