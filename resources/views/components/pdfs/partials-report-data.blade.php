@@ -1,8 +1,8 @@
 @php
     $date = $date->format('d-m-Y');
 @endphp
-<div style="max-height: 50vh; overflow-y: auto;">
-    <table class="table-bordered" style="width: 100%;">
+<div class="h-50">
+    <table class="table-bordered h-100">
         <thead>
             <tr>
                 <td rowspan="2" class="w-10">Day</td>
