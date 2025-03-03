@@ -2,7 +2,7 @@
     $date = $date->format('d-m-Y');
 @endphp
 <div>
-    <table class="table-bordered" style="height: 80vh">
+    <table class="table-bordered" style="height:50vh">
         <thead>
             <tr>
                 <td rowspan="2" class="w-10">Day</td>

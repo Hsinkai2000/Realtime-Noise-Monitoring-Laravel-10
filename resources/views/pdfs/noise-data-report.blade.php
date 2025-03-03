@@ -126,7 +126,7 @@
                     <h3>Date: {{ $date->format('d-m-Y') }}</h3>
                 @endif
             </div>
-            <div style="height: 40%;">
+            <div>
                 <br />
                 <x-pdfs.partials-report-data :measurementPoint="$measurementPoint" :date="$date" />
             </div>
