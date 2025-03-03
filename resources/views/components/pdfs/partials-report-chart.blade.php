@@ -24,6 +24,7 @@
                     "borderWidth": 2,
                     "pointRadius": 0,
                     "spanGaps": true,
+                    "tension": 0,
                     "fill": false
                 }]
             },
