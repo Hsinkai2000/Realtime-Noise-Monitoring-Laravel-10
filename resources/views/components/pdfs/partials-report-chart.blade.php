@@ -4,10 +4,8 @@
     <img alt="something failed" id="lineChart{{ $date->format('d-m-Y') }}">
 </div>
 
-
 <script>
     function generateLimitData() {
-
         const data = [];
         const start = new Date('{{ $date->format('Y-m-d') }}T07:00:00');
         const end = new Date(start);
@@ -47,20 +45,7 @@
                 y: yValue
             });
         }
-        // return data;
-        return [{
-                x: '{{ $date->format('Y-m-d') }}T07:00:00',
-                y: 80
-            },
-            {
-                x: '{{ $date->format('Y-m-d') }}T08:00:00',
-                y: 80
-            },
-            {
-                x: '{{ $date->format('Y-m-d') }}T09:00:00',
-                y: 80
-            }
-        ];
+        return data;
     }
 
     function generateNoiseData() {
@@ -94,7 +79,7 @@
     }
 
 
-    var lineChartString{{ $date->format('d-m-Y') }} = new Chart(
+    var lineChart{{ $date->format('d-m-Y') }} = new Chart(
         document.getElementById("canvas{{ $date->format('d-m-Y') }}"), {
             "responsive": false,
             "type": "line",
@@ -149,6 +134,6 @@
             }
         });
 
-    document.getElementById("lineChart{{ $date->format('d-m-Y') }}").src = lineChartString{{ $date->format('d-m-Y') }}
-        .toBase64Image();
+    var canvas = document.getElementById("canvas{{ $date->format('d-m-Y') }}");
+    document.getElementById("lineChart{{ $date->format('d-m-Y') }}").src = canvas.toDataURL();
 </script>
