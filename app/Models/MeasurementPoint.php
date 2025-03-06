@@ -133,19 +133,15 @@ class MeasurementPoint extends Model
         return false;
     }
 
-    public function check_last_data_for_alert($last_noise_data = null)
+    public function check_last_data_for_alert($last_noise_data = null, $sendAlert = false)
     {
-        $sendAlert = false;
+
         $num_blanks = 0;
         $leq_12_should_alert = false;
         $leq_1_should_alert = false;
         $dose_100_should_alert = false;
         $dose_70_should_alert = false;
         $calculated_dose_percentage = null;
-        if ($last_noise_data == null) {
-            $sendAlert = true;
-            $last_noise_data = $this->getLastLeqData();
-        }
 
         $soundLimit = $this->soundLimit;
 
@@ -169,53 +165,104 @@ class MeasurementPoint extends Model
         if (!$sendAlert) {
             return $decision == '12h' ? [$calculated_dose_percentage, $num_blanks, $leq12hlimit, $decision] : [$calculated_dose_percentage, $num_blanks, $leq1hlimit, $decision];
         } else {
-            $data = [
-                "jobsite_location" => $this->project->jobsite_location,
-                "serial_number" => $this->noiseMeter->serial_number,
-                "leq_value" => null,
-                "exceeded_limit" => null,
-                "leq_type" => null,
-                "exceeded_time" => $last_noise_data->received_at,
-                "type" => 'dose',
-                "dose_limit" => null,
-                "calculated_dose" => $calculated_dose_percentage,
-                "measurement_point_name" => $this->point_name,
-            ];
+            $alert_status = $this->check_alert_status($last_noise_data->received_at);
+            if ($alert_status) {
+                $data = [
+                    "jobsite_location" => $this->project->jobsite_location,
+                    "serial_number" => $this->noiseMeter->serial_number,
+                    "leq_value" => null,
+                    "exceeded_limit" => null,
+                    "leq_type" => null,
+                    "exceeded_time" => $last_noise_data->received_at,
+                    "type" => 'dose',
+                    "dose_limit" => null,
+                    "calculated_dose" => $calculated_dose_percentage,
+                    "measurement_point_name" => $this->point_name,
+                    "email_alert" => $alert_status["email_alert"],
+                    "sms_alert" => $alert_status["sms_alert"]
+                ];
 
-            if ($dose_100_should_alert) {
-                $data["dose_limit"] = '100';
-                $this->dose_100_last_alert_at = $last_noise_data->received_at;
-                $this->send_alert($data);
-            } else if ($dose_70_should_alert) {
-                $data["dose_limit"] = '70';
-                $this->dose_70_last_alert_at = $last_noise_data->received_at;
-                $this->send_alert($data);
-            }
+                if ($dose_100_should_alert) {
+                    $data["dose_limit"] = '100';
+                    if ($this->dose_100_last_alert_at < $last_noise_data->received_at)
+                        $this->dose_100_last_alert_at = $last_noise_data->received_at;
+                    $this->send_alert($data);
+                } else if ($dose_70_should_alert) {
+                    $data["dose_limit"] = '70';
+                    if ($this->dose_70_last_alert_at < $last_noise_data->received_at)
+                        $this->dose_70_last_alert_at = $last_noise_data->received_at;
+                    $this->send_alert($data);
+                }
 
-            $data["type"] = 'leq';
-            if ($leq_5mins_should_alert) {
-                $this->leq_5_mins_last_alert_at = $last_noise_data->received_at;
-                $data["leq_type"] = "5min";
-                $data["exceeded_limit"] = $leq5limit;
-                $data["leq_value"] = $last_noise_data->leq;
-                $this->send_alert($data);
-            }
-            if ($leq_12_should_alert) {
-                $this->leq_12_hours_last_alert_at = $last_noise_data->received_at;
-                $data["leq_type"] = "12h";
-                $data["exceeded_limit"] = $leq12hlimit;
-                $data["leq_value"] = round($calculated12hLeq, 1);
-                $this->send_alert($data);
-            } else if ($leq_1_should_alert) {
-                $this->leq_1_hour_last_alert_at = $last_noise_data->received_at;
-                $data["leq_type"] = "1h";
-                $data["exceeded_limit"] = $leq1hlimit;
-                $data["leq_value"] = round($calculated1hLeq, 1);
-                $this->send_alert($data);
-            }
+                $data["type"] = 'leq';
+                if ($leq_5mins_should_alert) {
+                    if ($this->leq_5_mins_last_alert_at < $last_noise_data->received_at)
+                        $this->leq_5_mins_last_alert_at = $last_noise_data->received_at;
+                    $data["leq_type"] = "5min";
+                    $data["exceeded_limit"] = $leq5limit;
+                    $data["leq_value"] = $last_noise_data->leq;
+                    $this->send_alert($data);
+                }
+                if ($leq_12_should_alert) {
+                    if ($this->leq_12_hours_last_alert_at < $last_noise_data->received_at)
+                        $this->leq_12_hours_last_alert_at = $last_noise_data->received_at;
+                    $data["leq_type"] = "12h";
+                    $data["exceeded_limit"] = $leq12hlimit;
+                    $data["leq_value"] = round($calculated12hLeq, 1);
+                    $this->send_alert($data);
+                } else if ($leq_1_should_alert) {
+                    if ($this->leq_1_hour_last_alert_at < $last_noise_data->received_at)
+                        $this->leq_1_hour_last_alert_at = $last_noise_data->received_at;
+                    $data["leq_type"] = "1h";
+                    $data["exceeded_limit"] = $leq1hlimit;
+                    $data["leq_value"] = round($calculated1hLeq, 1);
+                    $this->send_alert($data);
+                }
 
-            $this->save();
+                $this->save();
+            }
         }
+    }
+
+    private function check_alert_time($received_at)
+    {
+        $received_at_timing = $received_at->format('H:i');
+        $alertStartTime = Carbon::createFromFormat('H:i', $this->alert_start_time, 'Asia/Singapore');
+        $alertEndTime = Carbon::createFromFormat('H:i', $this->alert_end_time, 'Asia/Singapore');
+        return $received_at_timing >= $alertStartTime->format('H:i') && $received_at_timing <= $alertEndTime->format('H:i');
+    }
+
+    private function check_alert_day($received_at)
+    {
+        $currentDay = $received_at->format('D');
+        $alert_days_array = explode(', ', $this->alert_days);
+        return in_array($currentDay, $alert_days_array);
+    }
+
+    private function check_alert_type()
+    {
+        switch ($this->alert_mode) {
+            case 1:
+                return [
+                    "email_alert" => true,
+                    "sms_alert" => false
+                ];
+            case 2:
+                return [
+                    "email_alert" => true,
+                    "sms_alert" => true
+                ];
+            default:
+                return [];
+        }
+    }
+
+    private function check_alert_status($received_at)
+    {
+        if ($this->check_alert_day($received_at) && $this->check_alert_time($received_at)) {
+            return $this->check_alert_type();
+        }
+        return [];
     }
 
     public function send_alert($data)
@@ -224,8 +271,17 @@ class MeasurementPoint extends Model
 
         foreach ($contacts as $contact) {
             $data["client_name"] = $contact['contact_person_name'];
-            [$email_messageid, $email_messagedebug] = $this->send_email($data, $contact['email']);
-            [$sms_messageid, $sms_status] = $this->send_sms($data, $contact['phone_number']);
+            $email_messageid = null;
+            $email_messagedebug = null;
+            $sms_messageid = null;
+            $sms_status = null;
+
+            if ($data['email_alert']) {
+                [$email_messageid, $email_messagedebug] = $this->send_email($data, $contact['email']);
+            }
+            if ($data['sms_alert']) {
+                [$sms_messageid, $sms_status] = $this->send_sms($data, $contact['phone_number']);
+            }
 
             DB::table('alert_logs')->insert([
                 'event_timestamp' => $data["exceeded_time"],
@@ -433,8 +489,11 @@ class MeasurementPoint extends Model
     private function last_alert_allowed($freq_last_alert_at, $last_received_datetime)
     {
 
-        if (!is_null($freq_last_alert_at) && ($last_received_datetime->getTimestamp() - $freq_last_alert_at->getTimestamp()) <= 3 * 3600) {
-            return false;
+        if (!is_null($freq_last_alert_at)) {
+            $timeDifference = abs($last_received_datetime->getTimestamp() - $freq_last_alert_at->getTimestamp());
+            if ($timeDifference <= 3 * 3600) {
+                return false;
+            }
         }
         return true;
     }

@@ -374,57 +374,57 @@
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="sun" id="sun"
+                                    <input class="form-check-input" type="checkbox" value="Sun" id="sun"
                                         name="alert_days[]"
-                                        @if ($measurementPoint && in_array('sun', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        @if ($measurementPoint && in_array('Sun', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
                                     <label class="form-check-label" for="sun">
                                         Sun
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="mon" id="mon"
+                                    <input class="form-check-input" type="checkbox" value="Mon" id="mon"
                                         name="alert_days[]"
-                                        @if ($measurementPoint && in_array('mon', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        @if ($measurementPoint && in_array('Mon', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
                                     <label class="form-check-label" for="mon">
                                         Mon
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="tue" id="tue"
+                                    <input class="form-check-input" type="checkbox" value="Tue" id="tue"
                                         name="alert_days[]"
-                                        @if ($measurementPoint && in_array('tue', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        @if ($measurementPoint && in_array('Tue', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
                                     <label class="form-check-label" for="tue">
                                         Tue
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="wed" id="wed"
+                                    <input class="form-check-input" type="checkbox" value="Wed" id="wed"
                                         name="alert_days[]"
-                                        @if ($measurementPoint && in_array('wed', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        @if ($measurementPoint && in_array('Wed', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
                                     <label class="form-check-label" for="wed">
                                         Wed
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="thu" id="thu"
+                                    <input class="form-check-input" type="checkbox" value="Thu" id="thu"
                                         name="alert_days[]"
-                                        @if ($measurementPoint && in_array('thu', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        @if ($measurementPoint && in_array('Thu', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
                                     <label class="form-check-label" for="thu">
                                         Thu
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="fri" id="fri"
+                                    <input class="form-check-input" type="checkbox" value="Fri" id="fri"
                                         name="alert_days[]"
-                                        @if ($measurementPoint && in_array('fri', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        @if ($measurementPoint && in_array('Fri', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
                                     <label class="form-check-label" for="fri">
                                         Fri
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="sat" id="sat"
+                                    <input class="form-check-input" type="checkbox" value="Sat" id="sat"
                                         name="alert_days[]"
-                                        @if ($measurementPoint && in_array('sat', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        @if ($measurementPoint && in_array('Sat', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
                                     <label class="form-check-label" for="sat">
                                         Sat
                                     </label>
