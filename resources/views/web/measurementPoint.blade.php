@@ -32,9 +32,7 @@
 
     <style>
         .reportGraph {
-            margin: 0 auto;
-            width: 50%;
-            height: 50%;
+            width: 100%;
         }
     </style>
 
@@ -259,8 +257,11 @@
                 onclick="openModal('viewPdfModal')">View Report</button>
         </div>
         <br>
-
-        <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" />
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 col-md-6 ">
+                <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" />
+            </div>
+        </div>
     </div>
 
     <x-confirmation-modal />
