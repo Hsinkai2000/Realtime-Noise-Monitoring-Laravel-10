@@ -36,7 +36,6 @@ class MeasurementPointController extends Controller
             }
 
             $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
-
             if (!isset($measurement_point_params['concentrator_id'])) {
                 $measurement_point_params['concentrator_id'] = null;
             }

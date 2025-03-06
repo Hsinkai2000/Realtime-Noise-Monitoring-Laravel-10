@@ -936,18 +936,26 @@ function create_empty_option(select, text) {
 }
 
 async function handle_measurementpoint_submit(confirmation = false) {
-    console.log("in submit");
     var csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
     var form = document.getElementById("measurement_point_form");
 
     var formData = new FormData(form);
+    var checkedBoxes = document.querySelectorAll(
+        'input[name="alert_days[]"]:checked'
+    );
 
+    var alertDays = [];
+    checkedBoxes.forEach((checkedBox) => {
+        alertDays.push(checkedBox.value);
+    });
     var formDataJson = {};
     formData.forEach((value, key) => {
         formDataJson[key] = value;
     });
+
+    formDataJson["alert_days"] = alertDays.join(", ");
 
     formDataJson["confirmation"] = confirmation;
 

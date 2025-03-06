@@ -594,13 +594,21 @@ async function handle_measurementpoint_submit(confirmation = false) {
 
     var formData = new FormData(form);
 
+    var checkedBoxes = document.querySelectorAll(
+        'input[name="alert_days[]"]:checked'
+    );
+
+    var alertDays = [];
+    checkedBoxes.forEach((checkedBox) => {
+        alertDays.push(checkedBox.value);
+    });
+
     var formDataJson = {};
     formData.forEach((value, key) => {
         formDataJson[key] = value;
     });
-
+    formDataJson["alert_days"] = alertDays.join(", ");
     formDataJson["confirmation"] = confirmation;
-    console.log(formDataJson);
 
     return fetch(
         `${baseUri}/measurement_points/${window.measurementPointData.id}`,
