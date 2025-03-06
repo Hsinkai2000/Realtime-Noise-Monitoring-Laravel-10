@@ -46,6 +46,12 @@
         integrity="sha512-mf78KukU/a8rjr7aBRvCa2Vwg/q0tUjJhLtcK53PHEbFwCEqQ5durlzvVTgQgKpv+fyNMT6ZQT1Aq6tpNqf1mg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
+    <link rel="stylesheet" href="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
+    </link>
+
+
     <link href="{{ asset('css/base.css') }}" rel="stylesheet">
     <link href="{{ asset('css/measurement_point.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
@@ -280,17 +286,6 @@
             return fn.apply(thisp, arguments);
         };
     };
-
-
-    $(document).ready(function() {
-        $('#selectConcentrator').select2({
-            dropdownParent: $('#measurementPointModal'),
-        });
-
-        $('#selectNoiseMeter').select2({
-            dropdownParent: $('#measurementPointModal'),
-        });
-    });
 
     window.measurementPointData = @json($measurementPoint);
     window.noise_meter = @json($measurementPoint->noiseMeter);

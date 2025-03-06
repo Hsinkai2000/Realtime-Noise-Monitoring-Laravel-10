@@ -71,7 +71,7 @@ class PagesController extends Controller
 
                 $ndevice_params = $this->prepareNdeviceParams($noise_data, $measurement_point);
                 $this->update_measurement_point($measurement_point, $ndevice_params);
-                $measurement_point->check_last_data_for_alert();
+                $measurement_point->check_last_data_for_alert($noise_data, true);
                 Log::debug('Record Successfully updated', ['noise_data' => $noise_data]);
                 render_ok("Record Successfully updated");
             } catch (Exception $e) {

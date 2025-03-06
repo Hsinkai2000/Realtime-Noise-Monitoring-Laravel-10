@@ -43,8 +43,34 @@ class PdfController extends Controller
                 'footer-html' => $footerHtml
             ]);
 
-            return $pdf->inline();
-            // return view('pdfs.noise-data-report', $data);
+            // return $pdf->inline();
+            return view('pdfs.noise-data-report', $data);
+        }
+    }
+
+    public function generateChartImage($date, $measurementPointID)
+    {
+        \Log::info("Generating chart image for date: " . $date . ", measurementPointID: " . $measurementPointID);
+
+        $date = Carbon::parse($date);
+        \Log::info("Parsed date: " . $date);
+
+        $measurementPoint = MeasurementPoint::find($measurementPointID);
+        \Log::info("MeasurementPoint: " . json_encode($measurementPoint));
+
+        $html = view('pdfs.show-chart', ['measurementPoint' => $measurementPoint, 'date' => $date])->render();
+        \Log::info("HTML generated");
+
+        $html = view('pdfs.show-chart', ['measurementPoint' => $measurementPoint, 'date' => $date])->render();
+
+        try {
+            $image = Browsershot::html($html)->waitUntilNetworkIdle()->setScreenshotType('png')->timeout(3000)->base64Screenshot();
+            $image = base64_decode($image);
+
+
+            return response($image)->header('Content-Type', 'image/png');
+        } catch (\Exception $e) {
+            return response("Error generating chart image", 500); // Return an error response
         }
     }
 }
