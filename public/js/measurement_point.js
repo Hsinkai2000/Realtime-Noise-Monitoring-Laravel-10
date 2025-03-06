@@ -608,7 +608,7 @@ async function handle_measurementpoint_submit(confirmation = false) {
         formDataJson[key] = value;
     });
     formDataJson["alert_days"] = alertDays.join(", ");
-    console.log(formDataJson);
+    console.log(formDataJson["alert_days"]);
     formDataJson["confirmation"] = confirmation;
 
     return fetch(
