@@ -32,7 +32,8 @@
 
     <style>
         .reportGraph {
-            width: 100%;
+            margin: 0 auto;
+            width: 50%;
             height: 50%;
         }
     </style>
