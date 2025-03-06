@@ -37,11 +37,6 @@ class MeasurementPointController extends Controller
 
             $measurement_point_params = $request->only((new MeasurementPoint)->getFillable());
 
-<<<<<<< HEAD
-            \Log::info($measurement_point_params);
-
-=======
->>>>>>> 8ee2455 (Refactor authorization logic in controllers and add new gate definitions for project access)
             if (!isset($measurement_point_params['concentrator_id'])) {
                 $measurement_point_params['concentrator_id'] = null;
             }
