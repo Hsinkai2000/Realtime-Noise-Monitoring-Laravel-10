@@ -58,7 +58,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="col">
-                                    Existing Noise Meter
+                                    Existing Noise Meter:
                                 </div>
                                 <div class="col" id="existing_serial">
                                     @if ($measurementPoint)
