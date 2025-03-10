@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
         Schema::dropIfExists('concentrators');
         Schema::create('concentrators', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->string('device_id', 255)->unique();
             $table->string('concentrator_label', 255)->nullable();
             $table->integer('concentrator_csq')->nullable();
@@ -23,8 +22,7 @@ return new class extends Migration
             $table->dateTime('last_communication_packet_sent')->nullable();
             $table->string('last_assigned_ip_address', 255)->nullable();
             $table->string('remarks', 255)->nullable();
-            $table->dateTime('created_at')->default(now());
-            $table->dateTime('updated_at')->default(now());
+            $table->timestamps();
         });
     }
 
@@ -33,7 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
         Schema::dropIfExists('concentrators');
     }
 };

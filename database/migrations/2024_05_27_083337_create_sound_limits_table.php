@@ -57,8 +57,7 @@ return new class extends Migration
 
             // $table->float('sun_ph_10pm_7am_leq12hr')->default(140);
 
-            $table->dateTime('created_at')->default(now());
-            $table->dateTime('updated_at')->default(now());
+            $table->timestamps();
         });
     }
 

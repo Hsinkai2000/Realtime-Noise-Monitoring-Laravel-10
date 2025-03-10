@@ -23,8 +23,7 @@ return new class extends Migration
             $table->string('bca_reference_number', 255)->nullable();
             $table->string('status', 255)->nullable()->default('Draft');
             $table->integer('sms_count')->nullable()->default(0);
-            $table->dateTime('created_at')->default(now());
-            $table->dateTime('updated_at')->default(now());
+            $table->timestamps();
             $table->dateTime('completed_at')->nullable();
         });
     }

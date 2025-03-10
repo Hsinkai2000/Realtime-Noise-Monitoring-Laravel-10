@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('sms_messageId', 255)->nullable();
             $table->dateTime('sms_status_updated')->nullable();
             $table->string('sms_status', 255)->nullable();
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->timestamps();
         });
     }
 
