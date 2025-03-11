@@ -155,7 +155,6 @@ class UserController extends Controller
         $new_user = [
             'username' => $params['username'],
             'password' => Hash::make($params['password']),
-            'project_id' => 1
         ];
         User::create($new_user);
         return $new_user;
