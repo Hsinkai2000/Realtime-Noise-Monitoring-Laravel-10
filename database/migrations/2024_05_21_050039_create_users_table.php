@@ -26,8 +26,8 @@ return new class extends Migration
             $table->dateTime('last_sign_in_at')->nullable();
             $table->string('current_sign_in_ip', 255)->nullable();
             $table->string('last_sign_in_ip', 255)->nullable();
-            $table->dateTime('created_at')->default(now());
-            $table->dateTime('updated_at')->default(now());
+            $table->timestamp('created_at')->useCurrent()->timezone('Asia/Singapore');
+            $table->timestamp('updated_at')->useCurrent()->timezone('Asia/Singapore');
 
             // Define the foreign key constraint
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');

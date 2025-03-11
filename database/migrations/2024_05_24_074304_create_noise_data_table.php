@@ -18,8 +18,8 @@ return new class extends Migration
                 $table->integer('measurement_point_id');
                 $table->float('leq');
                 $table->dateTime('received_at');
-                $table->dateTime('created_at')->default(now());
-                $table->dateTime('updated_at')->default(now());
+                $table->timestamp('created_at')->useCurrent()->timezone('Asia/Singapore');
+                $table->timestamp('updated_at')->useCurrent()->timezone('Asia/Singapore');
 
                 $table->unique(['measurement_point_id', 'received_at']);
                 $table->index('measurement_point_id');

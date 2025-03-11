@@ -28,8 +28,8 @@ return new class extends Migration
             $table->dateTime('leq_12_hours_last_alert_at')->nullable();
             $table->dateTime('dose_70_last_alert_at')->nullable();
             $table->dateTime('dose_100_last_alert_at')->nullable();
-            $table->dateTime('created_at')->default(now());
-            $table->dateTime('updated_at')->default(now());
+            $table->timestamp('created_at')->useCurrent()->timezone('Asia/Singapore');
+            $table->timestamp('updated_at')->useCurrent()->timezone('Asia/Singapore');
 
             $table->unique(['point_name', 'project_id']);
             $table->index('point_name');

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('brand', 255);
             $table->date('last_calibration_date');
             $table->string('remarks', 255)->nullable();
-            $table->dateTime('created_at')->default(now());
-            $table->dateTime('updated_at')->default(now());
+            $table->timestamp('created_at')->useCurrent()->timezone('Asia/Singapore');
+            $table->timestamp('updated_at')->useCurrent()->timezone('Asia/Singapore');
         });
     }
 

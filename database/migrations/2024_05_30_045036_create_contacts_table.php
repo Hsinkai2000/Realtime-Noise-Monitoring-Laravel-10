@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('email', 255)->nullable();
             $table->string('contact_person_code', 255)->nullable();
             $table->string('office_tel', 255)->nullable();
-            $table->dateTime('created_at')->default(now());
-            $table->dateTime('updated_at')->default(now());
+            $table->timestamp('created_at')->useCurrent()->timezone('Asia/Singapore');
+            $table->timestamp('updated_at')->useCurrent()->timezone('Asia/Singapore');
         });
     }
 
