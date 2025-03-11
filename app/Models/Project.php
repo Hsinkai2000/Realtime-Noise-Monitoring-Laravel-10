@@ -13,7 +13,21 @@ class Project extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['job_number', 'client_name', 'end_user_name', 'sms_count', 'project_type', 'billing_address', 'project_description', 'jobsite_location', 'bca_reference_number', 'status', 'created_at', 'updated_at', 'completed_at'];
+    protected $fillable = [
+        'job_number',
+        'client_name',
+        'end_user_name',
+        'sms_count',
+        'project_type',
+        'billing_address',
+        'project_description',
+        'jobsite_location',
+        'bca_reference_number',
+        'status',
+        'created_at',
+        'updated_at',
+        'completed_at'
+    ];
 
     // Define relationships
 

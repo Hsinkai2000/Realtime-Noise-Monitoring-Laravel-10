@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('brand', 255);
             $table->date('last_calibration_date');
             $table->string('remarks', 255)->nullable();
-            $table->timestamps();
+            $table->dateTime('created_at')->default(now());
+            $table->dateTime('updated_at')->default(now());
         });
     }
 
