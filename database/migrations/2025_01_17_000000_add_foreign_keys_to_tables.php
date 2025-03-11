@@ -8,10 +8,6 @@ class AddForeignKeysToTables extends Migration
 {
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('project_id')->change();
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
 
         Schema::table('sound_limits', function (Blueprint $table) {
             $table->unsignedBigInteger('measurement_point_id')->change();

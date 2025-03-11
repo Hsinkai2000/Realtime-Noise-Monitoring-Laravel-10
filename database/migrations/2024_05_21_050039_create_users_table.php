@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('user_type', 255)->default('normal');
-            $table->integer('project_id')->nullable();
+            $table->unsignedBigInteger('project_id')->nullable(); // Make project_id nullable
             $table->string('username', 255);
             $table->string('password', 255);
             $table->string('reset_password_token', 255)->nullable();
@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('current_sign_in_ip', 255)->nullable();
             $table->string('last_sign_in_ip', 255)->nullable();
             $table->timestamps();
+
+            // Define the foreign key constraint
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
     }
 

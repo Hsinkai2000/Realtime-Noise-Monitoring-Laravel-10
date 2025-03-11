@@ -14,7 +14,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'id' => 'integer',
-        'project_id' => 'integer',
+        'project_id' => 'integer', // Ensure project_id is cast as integer
         'sign_in_count' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -26,7 +26,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'user_type',
-        'project_id',
+        'project_id', // Ensure project_id is fillable
         'username',
         'password',
         'reset_password_token',
