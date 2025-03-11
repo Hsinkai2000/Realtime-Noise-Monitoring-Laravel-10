@@ -149,17 +149,17 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        if (Gate::authorize('adminUser', $user)) {
-            \Log::info("message");
-            $params = $request->all();
-            $new_user = [
-                'username' => $params['username'],
-                'password' => Hash::make($params['password']),
-                'project_id' => 1
-            ];
-            User::create($new_user);
-            return $new_user;
-        }
+        // if (Gate::authorize('adminUser', $user)) {
+        \Log::info("message");
+        $params = $request->all();
+        $new_user = [
+            'username' => $params['username'],
+            'password' => Hash::make($params['password']),
+            'project_id' => 1
+        ];
+        User::create($new_user);
+        return $new_user;
+        // }
     }
 
     public function existing_user(Request $request)
