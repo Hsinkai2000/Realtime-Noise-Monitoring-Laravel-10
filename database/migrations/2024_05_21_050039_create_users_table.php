@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('user_type', 255)->default('normal');
-            $table->integer('project_id');
+            $table->integer('project_id')->nullable();
             $table->string('username', 255);
             $table->string('password', 255);
             $table->string('reset_password_token', 255)->nullable();
