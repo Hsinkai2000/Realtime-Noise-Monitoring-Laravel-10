@@ -283,6 +283,16 @@ function create_users(projectId, csrfToken) {
             });
         } else {
             window.location.reload();
+            userList = [];
+            curruserList.innerHTML = "";
+            var form = document.getElementById("projectForm");
+            form.reset();
+            console.log("form resetted");
+
+            var errorMessagesDiv = document.getElementById("error-messages");
+            if (errorMessagesDiv) {
+                errorMessagesDiv.innerHTML = "";
+            }
             return true;
         }
     });
