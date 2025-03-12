@@ -511,7 +511,6 @@ class MeasurementPoint extends Model
     public function check_data_status()
     {
         if ($this->noiseMeter) {
-            \Log::info("noise meter present");
             $last_data = $this->noiseData()->orderBy('received_at', 'desc')->first();
             if ($last_data) {
                 $receivedAtCarbon = Carbon::parse($last_data->received_at);
