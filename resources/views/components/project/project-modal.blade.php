@@ -48,7 +48,7 @@
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Jobsite
                                 Location</label>
                             <div class="col-sm-8 align-content-center">
-                                <input type="text" class="form-control" id="inputJobsiteLocation" maxlength="40"
+                                <input type="text" class="form-control" id="inputJobsiteLocation"
                                     name='jobsite_location'
                                     value="{{ old('jobsite_location', $project->jobsite_location ?? '') }}">
                             </div>

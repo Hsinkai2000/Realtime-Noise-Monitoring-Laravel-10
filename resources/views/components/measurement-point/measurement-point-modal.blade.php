@@ -37,7 +37,7 @@
                                 class="col-md-3 col-sm-12 text-align-center col-form-label">Device Location</label>
                             <div class="col-sm-8 align-content-center">
                                 <input type="text" class="form-control" id="inputDeviceLocation"
-                                    name="device_location"
+                                    name="device_location" maxlength="40"
                                     @if ($measurementPoint) value="{{ old('device_location', $measurementPoint ? $measurementPoint->device_location : '') }}" @endif>
                             </div>
                         </div>
