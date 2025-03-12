@@ -515,7 +515,6 @@ class MeasurementPoint extends Model
             if ($last_data) {
                 $receivedAtCarbon = Carbon::parse($last_data->received_at);
                 $currentTime = Carbon::now();
-                $currentTime->addHours(8);
                 $diffInMinutes = $currentTime->diffInMinutes($receivedAtCarbon);
                 return $diffInMinutes <= 45;
             }
