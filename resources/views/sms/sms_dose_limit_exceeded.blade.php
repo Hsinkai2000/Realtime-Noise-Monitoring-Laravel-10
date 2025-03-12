@@ -1,5 +1,5 @@
 User {{ $data['client_name'] }},
-Location: {{ $data['jobsite_location'] }}
+Location: {{ $data['device_location'] }}
 Noise Meter S/N: {{ $data['serial_number'] }}
 Dose (%): {{ $data['calculated_dose'] }}%@if ($data['calculated_dose'] < 100)
     > {{ $data['dose_limit'] }}%

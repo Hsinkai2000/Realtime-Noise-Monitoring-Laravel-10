@@ -168,7 +168,7 @@ class MeasurementPoint extends Model
             $alert_status = $this->check_alert_status($last_noise_data->received_at);
             if ($alert_status) {
                 $data = [
-                    "jobsite_location" => $this->project->jobsite_location,
+                    "device_location" => $this->device_location,
                     "serial_number" => $this->noiseMeter->serial_number,
                     "leq_value" => null,
                     "exceeded_limit" => null,
