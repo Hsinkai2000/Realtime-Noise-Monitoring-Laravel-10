@@ -121,7 +121,7 @@
                                                 placeholder="Username">
                                         </div>
                                         <div class="col-6">
-                                            <input type="password" id="password" class="form-control"
+                                            <input type="text" id="password" class="form-control"
                                                 placeholder="Password" autocomplete="new-password">
                                         </div>
                                     </div>
