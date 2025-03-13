@@ -267,7 +267,7 @@ class MeasurementPoint extends Model
         }
     }
 
-    private function check_alert_status($received_at = null)
+    public function check_alert_status($received_at = null)
     {
         if ($this->check_alert_day($received_at) && $this->check_alert_time($received_at)) {
             return $this->check_alert_type();
@@ -304,7 +304,7 @@ class MeasurementPoint extends Model
             ]);
         }
     }
-    private function send_email($data, $emails)
+    public function send_email($data, $emails)
     {
         if (!empty($emails)) {
             try {
@@ -526,7 +526,7 @@ class MeasurementPoint extends Model
                 $receivedAtCarbon = Carbon::parse($last_data->received_at);
                 $currentTime = Carbon::now();
                 $diffInMinutes = $currentTime->diffInMinutes($receivedAtCarbon);
-                return $diffInMinutes <= 45;
+                return $diffInMinutes <= 60;
             }
         }
         return true;

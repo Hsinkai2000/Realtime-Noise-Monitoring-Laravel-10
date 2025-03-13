@@ -20,8 +20,6 @@ class EmailAlert extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
-        \Log::info('3');
-        \Log::info($data);
     }
 
     /**
@@ -49,21 +47,17 @@ class EmailAlert extends Mailable
      */
     public function content(): Content
     {
-        \Log::info('4');
-        \Log::info($this->data);
         if ($this->data['type'] == 'leq') {
             return new Content(
                 view: 'emails.mail_leq_limit_exceeded',
             );
         } else if ($this->data['type'] == 'dose') {
-            \Log::info('dose');
             return new Content(
                 view: "emails.mail_dose_limit_exceeded",
             );
         } else if ($this->data['type'] == 'missing_data') {
-            \Log::info('missing');
             return new Content(
-                view: "emails.mail_missing_data_45_mins"
+                view: "emails.mail_missing_data_60_mins"
             );
         }
     }
