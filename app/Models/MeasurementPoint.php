@@ -226,7 +226,12 @@ class MeasurementPoint extends Model
 
     private function check_alert_time($received_at)
     {
-        $received_at_timing = $received_at->format('H:i');
+        $received_at_timing = null;
+        if ($received_at) {
+            $received_at_timing = $received_at->format('H:i');
+        } else {
+            $received_at_timing = now()->format('H:i');
+        }
         $alertStartTime = Carbon::createFromFormat('H:i', $this->alert_start_time, 'Asia/Singapore');
         $alertEndTime = Carbon::createFromFormat('H:i', $this->alert_end_time, 'Asia/Singapore');
         return $received_at_timing >= $alertStartTime->format('H:i') && $received_at_timing <= $alertEndTime->format('H:i');
@@ -234,7 +239,12 @@ class MeasurementPoint extends Model
 
     private function check_alert_day($received_at)
     {
-        $currentDay = $received_at->format('D');
+        $currentDay = null;
+        if ($received_at) {
+            $currentDay = $received_at->format('D');
+        } else {
+            $currentDay = now()->format('D');
+        }
         $alert_days_array = explode(', ', $this->alert_days);
         return in_array($currentDay, $alert_days_array);
     }
@@ -257,7 +267,7 @@ class MeasurementPoint extends Model
         }
     }
 
-    private function check_alert_status($received_at)
+    private function check_alert_status($received_at = null)
     {
         if ($this->check_alert_day($received_at) && $this->check_alert_time($received_at)) {
             return $this->check_alert_type();
@@ -518,7 +528,6 @@ class MeasurementPoint extends Model
                 $diffInMinutes = $currentTime->diffInMinutes($receivedAtCarbon);
                 return $diffInMinutes <= 45;
             }
-            return false;
         }
         return true;
     }

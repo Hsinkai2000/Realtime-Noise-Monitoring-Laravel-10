@@ -18,9 +18,10 @@ class Kernel extends ConsoleKernel
             $mps = MeasurementPoint::all();
             foreach ($mps as $mp) {
                 $result = $mp->check_data_status();
-                if (!$result) {
+                $alert_status = $mp->check_alert_status();
+                if (!$result && $alert_status) {
                     $data = [
-                        "jobsite_location" => $mp->project->jobsite_location,
+                        "device_location" => $mp->device_location,
                         "serial_number" => $mp->noiseMeter->serial_number,
                         "leq_value" => null,
                         "exceeded_limit" => null,
@@ -30,6 +31,8 @@ class Kernel extends ConsoleKernel
                         "dose_limit" => null,
                         "calculated_dose" => null,
                         "measurement_point_name" => $mp->point_name,
+                        "email_alert" => $alert_status["email_alert"],
+                        "sms_alert" => $alert_status["sms_alert"]
                     ];
                     $mp->send_alert($data);
                 }
