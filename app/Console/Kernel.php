@@ -46,6 +46,8 @@ class Kernel extends ConsoleKernel
                         'updated_at' => now(),
                     ]);
                 }
+
+                sleep(5);
             }
         })->hourly()->runInBackground();
     }
