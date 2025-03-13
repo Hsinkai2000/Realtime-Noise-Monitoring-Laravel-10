@@ -1,4 +1,4 @@
-<p>Dear {{ $data['client_name'] }},</p>
+<p>Dear Geoscan R&D Dept,</p>
 <br>
 <p>Your Device: {{ $data['serial_number'] }}</p>
 <p>Located at: {{ $data['device_location'] }}</p>

@@ -24,13 +24,8 @@ class Kernel extends ConsoleKernel
                     $data = [
                         "device_location" => $mp->device_location,
                         "serial_number" => $mp->noiseMeter->serial_number,
-                        "leq_value" => null,
-                        "exceeded_limit" => null,
-                        "leq_type" => null,
                         "exceeded_time" => Carbon::now(),
                         "type" => 'missing_data',
-                        "dose_limit" => null,
-                        "calculated_dose" => null,
                         "measurement_point_name" => $mp->point_name,
                     ];
 
@@ -49,7 +44,7 @@ class Kernel extends ConsoleKernel
 
                 sleep(5);
             }
-        })->hourly()->runInBackground();
+        })->hourly();
     }
 
     /**
