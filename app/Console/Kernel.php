@@ -45,13 +45,9 @@ class Kernel extends ConsoleKernel
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
-
-                    \Log::info("FAILED", [$mp]);
-                } else {
-                    \Log::info("PASSED", [$mp]);
                 }
             }
-        })->hourly();
+        })->hourly()->runInBackground();
     }
 
     /**
