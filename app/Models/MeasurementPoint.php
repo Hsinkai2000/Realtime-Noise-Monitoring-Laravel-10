@@ -41,6 +41,7 @@ class MeasurementPoint extends Model
         'leq_12_hours_last_alert_at',
         'dose_70_last_alert_at',
         'dose_100_last_alert_at',
+        'missing_data_last_alert_at',
         'alert_start_time',
         'alert_end_time',
         'alert_days',
@@ -62,6 +63,7 @@ class MeasurementPoint extends Model
         'leq_12_hours_last_alert_at' => 'datetime',
         'dose_70_last_alert_at' => 'datetime',
         'dose_100_last_alert_at' => 'datetime',
+        'missing_data_last_alert_at' => 'datetime',
         'alert_start_time' => 'string',
         'alert_end_time' => 'string',
         'alert_days' => 'string',
@@ -548,5 +550,14 @@ class MeasurementPoint extends Model
             return $this->noiseMeter->serial_number;
         }
         return null;
+    }
+
+    public function check_last_missing_data()
+    {
+        $currDate = Carbon::now();
+        if ($this->missing_data_last_alert_at) {
+            return $currDate->isSameDay($this->missing_data_last_alert_at);
+        }
+        return false;
     }
 }

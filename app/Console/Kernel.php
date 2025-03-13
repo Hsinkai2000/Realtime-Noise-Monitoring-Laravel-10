@@ -19,8 +19,8 @@ class Kernel extends ConsoleKernel
             $mps = MeasurementPoint::all();
             foreach ($mps as $mp) {
                 $result = $mp->check_data_status();
-
-                if (!$result) {
+                $last_missing_data_on_same_day = $mp->check_last_missing_data();
+                if (!$result && !$last_missing_data_on_same_day) {
                     $data = [
                         "device_location" => $mp->device_location,
                         "serial_number" => $mp->noiseMeter->serial_number,
@@ -40,9 +40,10 @@ class Kernel extends ConsoleKernel
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+                    $mp->missing_data_last_alert_at = now();
+                    $mp->save();
+                    sleep(5);
                 }
-
-                sleep(5);
             }
         })->hourly();
     }
