@@ -363,7 +363,9 @@
                                     </option>
                                     <option value="1" @if ($measurementPoint && $measurementPoint->alert_mode == 1) selected @endif>Email
                                         Only</option>
-                                    <option value="2" @if ($measurementPoint && $measurementPoint->alert_mode == 2) selected @endif>Both
+                                    <option value="2"
+                                        @if ($measurementPoint && $measurementPoint->alert_mode == 2) selected @elseif (!$measurementPoint) selected @endif>
+                                        Both
                                         Email and SMS</option>
                                 </select>
                             </div>

@@ -24,27 +24,6 @@
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css">
 
-    {{-- 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js">
-    </script> --}}
-
-    <style>
-        .reportGraph {
-            width: 100%;
-        }
-    </style>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css"
-        integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
-        integrity="sha512-mf78KukU/a8rjr7aBRvCa2Vwg/q0tUjJhLtcK53PHEbFwCEqQ5durlzvVTgQgKpv+fyNMT6ZQT1Aq6tpNqf1mg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
     <link rel="stylesheet" href="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
@@ -255,12 +234,6 @@
         <div class="d-flex justify-content-center">
             <button class="btn btn-primary bg-light text-primary px-4 me-3 shadow-sm"
                 onclick="openModal('viewPdfModal')">View Report</button>
-        </div>
-        <br>
-        <div class="row d-flex justify-content-center">
-            <div class="col-12 col-md-6 ">
-                <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="now()" />
-            </div>
         </div>
     </div>
 
