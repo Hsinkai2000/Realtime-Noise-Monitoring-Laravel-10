@@ -348,108 +348,110 @@
                                 </div>
                             </div>
                         </div>
-
-                        </br>
-                        <h4>Alert Configuration</h4>
-                        <hr>
-                        <div class="mb-3 row" @if (!Auth::user()->isAdmin()) hidden @endif>
-                            <div class="col-md-6 col-sm-12 ">
-                                Alert Mode
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <select id='selectAlertMode' name='alert_mode' style="width: 100%"
-                                    onchange="populate_soundLimits()">
-                                    <option value="0" @if ($measurementPoint && $measurementPoint->alert_mode == 0) selected @endif>None
-                                    </option>
-                                    <option value="1" @if ($measurementPoint && $measurementPoint->alert_mode == 1) selected @endif>Email
-                                        Only</option>
-                                    <option value="2"
-                                        @if ($measurementPoint && $measurementPoint->alert_mode == 2) selected @elseif (!$measurementPoint) selected @endif>
-                                        Both
-                                        Email and SMS</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <div class="col-md-6 col-sm-12">
-                                Days of Alert
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="Sun" id="sun"
-                                        name="alert_days[]"
-                                        @if ($measurementPoint && in_array('Sun', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
-                                    <label class="form-check-label" for="sun">
-                                        Sun
-                                    </label>
+                        <div @if (!Auth::user()->isAdmin()) hidden @endif>
+                            </br>
+                            <h4>Alert Configuration</h4>
+                            <hr>
+                            <div class="mb-3 row">
+                                <div class="col-md-6 col-sm-12 ">
+                                    Alert Mode
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="Mon" id="mon"
-                                        name="alert_days[]"
-                                        @if ($measurementPoint && in_array('Mon', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
-                                    <label class="form-check-label" for="mon">
-                                        Mon
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="Tue" id="tue"
-                                        name="alert_days[]"
-                                        @if ($measurementPoint && in_array('Tue', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
-                                    <label class="form-check-label" for="tue">
-                                        Tue
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="Wed" id="wed"
-                                        name="alert_days[]"
-                                        @if ($measurementPoint && in_array('Wed', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
-                                    <label class="form-check-label" for="wed">
-                                        Wed
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="Thu" id="thu"
-                                        name="alert_days[]"
-                                        @if ($measurementPoint && in_array('Thu', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
-                                    <label class="form-check-label" for="thu">
-                                        Thu
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="Fri" id="fri"
-                                        name="alert_days[]"
-                                        @if ($measurementPoint && in_array('Fri', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
-                                    <label class="form-check-label" for="fri">
-                                        Fri
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="Sat" id="sat"
-                                        name="alert_days[]"
-                                        @if ($measurementPoint && in_array('Sat', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
-                                    <label class="form-check-label" for="sat">
-                                        Sat
-                                    </label>
+                                <div class="col-md-6 col-sm-12">
+                                    <select id='selectAlertMode' name='alert_mode' style="width: 100%"
+                                        onchange="populate_soundLimits()">
+                                        <option value="0" @if ($measurementPoint && $measurementPoint->alert_mode == 0) selected @endif>None
+                                        </option>
+                                        <option value="1" @if ($measurementPoint && $measurementPoint->alert_mode == 1) selected @endif>
+                                            Email
+                                            Only</option>
+                                        <option value="2"
+                                            @if ($measurementPoint && $measurementPoint->alert_mode == 2) selected @elseif (!$measurementPoint) selected @endif>
+                                            Both
+                                            Email and SMS</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="mb-3 row" @if (!Auth::user()->isAdmin()) hidden @endif>
-                            <div class="col-md-6 col-sm-12 ">
-                                Alert Hours
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="alert_start_time">Start Time (24h)</label>
-                                        <input type="text" class="form-control"
-                                            value="@if ($measurementPoint) {{ $measurementPoint->alert_start_time }} @else 07:00 @endif"
-                                            id="alert_start_time" name="alert_start_time">
+                            <div class="mb-3 row">
+                                <div class="col-md-6 col-sm-12">
+                                    Days of Alert
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" value="Sun"
+                                            id="sun" name="alert_days[]"
+                                            @if ($measurementPoint && in_array('Sun', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        <label class="form-check-label" for="sun">
+                                            Sun
+                                        </label>
                                     </div>
-                                    <div class="col">
-                                        <label for="alert_end_time">End Time (24h)</label>
-                                        <input type="text" class="form-control" id="alert_end_time"
-                                            name="alert_end_time"
-                                            value="@if ($measurementPoint) {{ $measurementPoint->alert_end_time }} @else 22:00 @endif">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" value="Mon"
+                                            id="mon" name="alert_days[]"
+                                            @if ($measurementPoint && in_array('Mon', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        <label class="form-check-label" for="mon">
+                                            Mon
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" value="Tue"
+                                            id="tue" name="alert_days[]"
+                                            @if ($measurementPoint && in_array('Tue', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        <label class="form-check-label" for="tue">
+                                            Tue
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" value="Wed"
+                                            id="wed" name="alert_days[]"
+                                            @if ($measurementPoint && in_array('Wed', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        <label class="form-check-label" for="wed">
+                                            Wed
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" value="Thu"
+                                            id="thu" name="alert_days[]"
+                                            @if ($measurementPoint && in_array('Thu', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        <label class="form-check-label" for="thu">
+                                            Thu
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" value="Fri"
+                                            id="fri" name="alert_days[]"
+                                            @if ($measurementPoint && in_array('Fri', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        <label class="form-check-label" for="fri">
+                                            Fri
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" value="Sat"
+                                            id="sat" name="alert_days[]"
+                                            @if ($measurementPoint && in_array('Sat', explode(', ', $measurementPoint->alert_days))) checked @elseif ($measurementPoint) @else checked @endif>
+                                        <label class="form-check-label" for="sat">
+                                            Sat
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-md-6 col-sm-12 ">
+                                    Alert Hours
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="alert_start_time">Start Time (24h)</label>
+                                            <input type="text" class="form-control"
+                                                value="@if ($measurementPoint) {{ $measurementPoint->alert_start_time }} @else 07:00 @endif"
+                                                id="alert_start_time" name="alert_start_time">
+                                        </div>
+                                        <div class="col">
+                                            <label for="alert_end_time">End Time (24h)</label>
+                                            <input type="text" class="form-control" id="alert_end_time"
+                                                name="alert_end_time"
+                                                value="@if ($measurementPoint) {{ $measurementPoint->alert_end_time }} @else 22:00 @endif">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
