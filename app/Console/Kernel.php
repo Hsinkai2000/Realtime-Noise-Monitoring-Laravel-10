@@ -48,7 +48,6 @@ class Kernel extends ConsoleKernel
         })->hourly();
 
         $schedule->call(function () {
-            \Log::info("call ran");
             $currentTime = Carbon::today();
             $startTime = $currentTime->copy()->setHour(7)->setMinute(0);
             $endTime = $currentTime->copy()->setHour(12)->setMinute(0);
@@ -64,10 +63,8 @@ class Kernel extends ConsoleKernel
                 $alert_status = $mp->check_alert_status($endTime);
 
                 if (!$last_noise_data || !$alert_status) {
-                    \Log::info("no trigger");
                     continue;
                 }
-                \Log::info("trigger");
                 [$leq_12_should_alert, $leq12hlimit, $calculated12hLeq, $num_blanks] =
                     $mp->leq_12_hours_exceed_and_alert($endTime, $last_noise_data);
 
@@ -100,13 +97,12 @@ class Kernel extends ConsoleKernel
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);
-                        \Log::info("mail sent");
                     }
                 }
 
                 sleep(5);
             }
-        })->dailyAt("12:08");
+        })->dailyAt("12:00");
     }
 
     /**
