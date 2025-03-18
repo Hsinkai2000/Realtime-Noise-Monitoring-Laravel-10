@@ -325,12 +325,25 @@ function set_tables() {
                 field: "concentrator_csq",
                 headerSort: false,
                 minWidth: 100,
+                formatter: function (cell) {
+                    const value = cell.getValue();
+                    if (value <= 70) {
+                        return `<strong style="color: green">-${value}dBm</strong>`;
+                    } else if (value <= 85) {
+                        return `<strong style="color: yellow">-${value}dBm</strong>`;
+                    } else if (value <= 100) {
+                        return `<strong style="color: orange">-${value}dBm</strong>`;
+                    } else {
+                        return `<strong style="color: red">-${value}dBm</strong>`;
+                    }
+                },
             },
             {
-                title: "Handphone Number",
+                title: "SIM IMSI",
                 field: "concentrator_hp",
                 headerSort: false,
                 minWidth: 100,
+                formatter: (cell) => "525016" + cell.getValue(),
             },
             {
                 title: "Battery Voltage",
