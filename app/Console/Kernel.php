@@ -46,6 +46,64 @@ class Kernel extends ConsoleKernel
                 }
             }
         })->hourly();
+
+        $schedule->call(function () {
+            $currentTime = Carbon::today();
+            $startTime = $currentTime->copy()->setHour(7)->setMinute(0);
+            $endTime = $currentTime->copy()->setHour(12)->setMinute(0);
+
+            // Eager load relationships to prevent N+1 queries
+            $mps = MeasurementPoint::with(['noiseData' => function ($query) use ($startTime, $endTime) {
+                $query->whereBetween('received_at', [$startTime, $endTime])
+                    ->latest('received_at');
+            }, 'noiseMeter', 'project.contact', 'soundLimit'])->get();
+
+            foreach ($mps as $mp) {
+                $last_noise_data = $mp->noiseData->first();
+                $alert_status = $mp->check_alert_status($endTime);
+
+                if (!$last_noise_data || !$alert_status) {
+                    continue;
+                }
+
+                [$leq_12_should_alert, $leq12hlimit, $calculated12hLeq, $num_blanks] =
+                    $mp->leq_12_hours_exceed_and_alert($endTime, $last_noise_data);
+
+                $calculated_dose_percentage = $mp->soundLimit->calculate_dose_perc(
+                    $calculated12hLeq,
+                    $leq12hlimit,
+                    $num_blanks,
+                    144
+                );
+
+                $base_data = [
+                    "device_location" => $mp->device_location,
+                    "serial_number" => $mp->noiseMeter->serial_number,
+                    "dose_perc" => $calculated_dose_percentage,
+                    "type" => 'noon_check',
+                    "measurement_point_name" => $mp->point_name,
+                ];
+
+                if ($alert_status["email_alert"]) {
+                    foreach ($mp->project->contact as $contact) {
+                        $base_data["client_name"] = $contact['contact_person_name'];
+                        [$email_messageid, $email_messagedebug] = $mp->send_email($base_data, $contact['email']);
+
+                        DB::table('alert_logs')->insert([
+                            'event_timestamp' => $endTime,
+                            'email_messageId' => $email_messageid,
+                            'email_debug' => $email_messagedebug,
+                            'sms_messageId' => null,
+                            'sms_status' => null,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+
+                sleep(5);
+            }
+        })->dailyAt("12:00");
     }
 
     /**

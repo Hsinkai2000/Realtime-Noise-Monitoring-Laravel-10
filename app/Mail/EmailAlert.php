@@ -39,6 +39,10 @@ class EmailAlert extends Mailable
             return new Envelope(
                 subject: "Data not recorded",
             );
+        } else if ($this->data['type'] == 'noon_check') {
+            return new Envelope(
+                subject: "Noise Device Dose Daily Noon Check for SN:" . $this->data["serial_number"]
+            );
         }
     }
 
@@ -58,6 +62,10 @@ class EmailAlert extends Mailable
         } else if ($this->data['type'] == 'missing_data') {
             return new Content(
                 view: "emails.mail_missing_data_60_mins"
+            );
+        } else if ($this->data['type'] == 'noon_check') {
+            return new Content(
+                view: "emails.mail_noon_check"
             );
         }
     }
