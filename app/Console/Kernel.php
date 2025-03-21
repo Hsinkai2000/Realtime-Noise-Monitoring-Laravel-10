@@ -83,6 +83,30 @@ class Kernel extends ConsoleKernel
                     "measurement_point_name" => $mp->point_name,
                 ];
 
+
+                [$day, $time_range] = $mp->soundLimit->getTimeRage($endTime);
+
+                if ($day == 'sun_ph') {
+                    $base_data['leq5_7am_7pm'] = $mp->soundLimit->sun_ph_7am_7pm_leq5min;
+                    $base_data['leq12_7am_7pm'] = $mp->soundLimit->sun_ph_7am_7pm_leq12hr;
+                } else {
+                    $base_data['leq5_7am_7pm'] = $mp->soundLimit->mon_sat_7am_7pm_leq5min;
+                    $base_data['leq12_7am_7pm'] = $mp->soundLimit->mon_sat_7am_7pm_leq12hr;
+                }
+
+                if ($calculated_dose_percentage < 100) {
+                    if ($calculated_dose_percentage < 100 && $num_blanks != 12 && $num_blanks != 144) {
+                        $missingVal = 144;
+                        [$leq_5mins_should_alert, $leq5limit] = $mp->leq_5_mins_exceed_and_alert($last_noise_data);
+
+                        $sum = round(convert_to_db((1 - ($calculated_dose_percentage / 100)) * ((linearise_leq($base_data['leq5_7am_7pm']) * $missingVal) / $num_blanks)), 1);
+
+                        $leq_data['leq5max'] = min([$sum, $leq5limit]);
+                    } else {
+                        $leq_data['leq5max'] = 'N.A.';
+                    }
+                }
+
                 if ($alert_status["email_alert"]) {
                     foreach ($mp->project->contact as $contact) {
                         $base_data["client_name"] = $contact['contact_person_name'];
