@@ -178,7 +178,7 @@ function manage_measurement_point_columns() {
                             return `<strong style="color: red">-${value}dBm</strong>`;
                         }
                     }
-                    return "-";
+                    return null;
                 },
             },
             {

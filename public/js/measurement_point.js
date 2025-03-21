@@ -338,7 +338,7 @@ function set_tables() {
                             return `<strong style="color: red">-${value}dBm</strong>`;
                         }
                     }
-                    return "-";
+                    return null;
                 },
             },
             {
@@ -351,7 +351,7 @@ function set_tables() {
                     if (value) {
                         return "525016" + cell.getValue();
                     }
-                    return "-";
+                    return null;
                 },
             },
             {
