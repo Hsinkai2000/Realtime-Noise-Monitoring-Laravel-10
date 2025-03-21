@@ -76,6 +76,10 @@
   background-color: #e9e2dc;
 }
 
+.tabulator-tree-level-0 {
+  background-color: #c4ada4 !important;
+}
+
 .tabulator-data-tree-control {
   visibility: hidden;
 }

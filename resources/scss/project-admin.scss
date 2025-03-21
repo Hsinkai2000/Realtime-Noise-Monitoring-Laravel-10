@@ -100,6 +100,10 @@
     background-color: $hover;
 }
 
+.tabulator-tree-level-0 {
+    background-color: $header-color !important;
+}
+
 // .modal:nth-of-type(even) {
 //     z-index: 1052 !important;
 // }
