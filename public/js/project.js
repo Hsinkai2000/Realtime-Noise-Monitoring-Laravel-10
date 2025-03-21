@@ -171,9 +171,9 @@ function manage_measurement_point_columns() {
                         if (value <= 70) {
                             return `<strong style="color: green">-${value}dBm</strong>`;
                         } else if (value <= 85) {
-                            return `<strong style="color: #FFC300">-${value}dBm</strong>`;
+                            return `<strong style="color:rgb(189, 180, 11)">-${value}dBm</strong>`;
                         } else if (value <= 100) {
-                            return `<strong style="color: orange">-${value}dBm</strong>`;
+                            return `<strong style="color: #F28C28">-${value}dBm</strong>`;
                         } else {
                             return `<strong style="color: red">-${value}dBm</strong>`;
                         }
