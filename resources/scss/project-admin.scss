@@ -107,6 +107,10 @@
 //     z-index: 1051 !important;
 // }
 
+.tabulator-data-tree-control {
+    visibility: hidden;
+}
+
 @media only screen and (min-width: 992px) {
     #example-table {
         height: 78vh;
