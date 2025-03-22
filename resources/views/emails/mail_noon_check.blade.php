@@ -12,6 +12,7 @@
 <p>Today's noise limits from 7am to 7pm are {{ $data['leq5_7am_7pm'] }}dB LAeq5min, and
     {{ $data['leq12_7am_7pm'] }}dB
     LAeq12h.</p>
+<br>
 @if ($data['dose_perc'] < 100)
     <p>Please be reminded to keep the Laeq 5min below {{ $data['leq5max'] }}dB until 7pm.</p>
 @elseif ($data['dose_perc'] >= 100)

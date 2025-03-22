@@ -9,5 +9,10 @@
 </p>
 <p>Exceeded Limit at: {{ \Carbon\Carbon::parse($data['exceeded_time'])->format('Y-m-d H:i') }}</p>
 <br>
+
 <p>Regards,</p>
-<p>Geoscan</p>
+<p>Geoscan Pte Ltd</p>
+
+<br>
+
+<p>This is an automatic email, please do not reply.</p>

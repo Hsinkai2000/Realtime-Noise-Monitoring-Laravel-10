@@ -5,5 +5,10 @@
 <p>Leq{{ $data['leq_type'] }}: {{ $data['leq_value'] }} dB > {{ $data['exceeded_limit'] }} dB</p>
 <p>Exceeded Limit at: {{ \Carbon\Carbon::parse($data['exceeded_time'])->format('Y-m-d H:i') }}</p>
 <br>
+
 <p>Regards,</p>
-<p>Geoscan</p>
+<p>Geoscan Pte Ltd</p>
+
+<br>
+
+<p>This is an automatic email, please do not reply.</p>
