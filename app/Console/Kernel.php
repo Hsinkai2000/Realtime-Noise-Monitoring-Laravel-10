@@ -119,7 +119,7 @@ class Kernel extends ConsoleKernel
 
                 sleep(5);
             }
-        })->everyThirtySeconds();
+        })->dailyAt("12:00");
     }
 
     /**
