@@ -65,17 +65,11 @@ class Kernel extends ConsoleKernel
                 if (!$last_noise_data || !$alert_status) {
                     continue;
                 }
-                [$leq_12_should_alert, $leq12hlimit, $calculated12hLeq, $num_blanks] =
-                    $mp->leq_12_hours_exceed_and_alert($endTime, $last_noise_data);
 
-                $calculated_dose_percentage = $mp->soundLimit->calculate_dose_perc(
-                    $calculated12hLeq,
-                    $leq12hlimit,
-                    $num_blanks,
-                    144
-                );
+                [$calculated_dose_percentage, $num_blanks, $limit, $decision] = $mp->check_last_data_for_alert($last_noise_data);
 
                 $base_data = [
+                    "point_name" => $mp->point_name,
                     "device_location" => $mp->device_location,
                     "serial_number" => $mp->noiseMeter->serial_number,
                     "dose_perc" => $calculated_dose_percentage,
@@ -84,7 +78,7 @@ class Kernel extends ConsoleKernel
                 ];
 
 
-                [$day, $time_range] = $mp->soundLimit->getTimeRage($endTime);
+                [$day, $time_range] = $mp->soundLimit->getTimeRange($endTime);
 
                 if ($day == 'sun_ph') {
                     $base_data['leq5_7am_7pm'] = $mp->soundLimit->sun_ph_7am_7pm_leq5min;
@@ -99,11 +93,10 @@ class Kernel extends ConsoleKernel
                         $missingVal = 144;
                         [$leq_5mins_should_alert, $leq5limit] = $mp->leq_5_mins_exceed_and_alert($last_noise_data);
 
-                        $sum = round(convert_to_db((1 - ($calculated_dose_percentage / 100)) * ((linearise_leq($base_data['leq5_7am_7pm']) * $missingVal) / $num_blanks)), 1);
-
-                        $leq_data['leq5max'] = min([$sum, $leq5limit]);
+                        $sum = round(convert_to_db((1 - ($calculated_dose_percentage / 100)) * ((linearise_leq($limit) * $missingVal) / $num_blanks)), 1);
+                        $base_data['leq5max'] = $decision == '12h' ? min([$sum, $leq5limit]) : $sum;
                     } else {
-                        $leq_data['leq5max'] = 'N.A.';
+                        $base_data['leq5max'] = 'N.A.';
                     }
                 }
 
@@ -126,7 +119,7 @@ class Kernel extends ConsoleKernel
 
                 sleep(5);
             }
-        })->dailyAt("12:00");
+        })->everyThirtySeconds();
     }
 
     /**
