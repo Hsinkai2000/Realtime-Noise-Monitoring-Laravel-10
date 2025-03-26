@@ -21,7 +21,7 @@
 <br>
 
 <p>Noise Dose percentage is the noise exposure expressed as a percentage of the LAeq12h Noise Limit from 7am to 7pm.
-    Noise Dose percentage is accumulated over time and will reach 100% when the noise exposure is exceeded the
+    Noise Dose percentage is accumulated over time and will reach 100% when the noise exposure exceeds the
     limit.
 </p>
 
