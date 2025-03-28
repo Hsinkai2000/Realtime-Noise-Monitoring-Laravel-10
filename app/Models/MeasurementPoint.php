@@ -466,23 +466,6 @@ class MeasurementPoint extends Model
         return 0;
     }
 
-    public function calc_laeq5_max(DateTime $time = null, string $type)
-    {
-        if ($type == 1) {
-            $leqs = $this->get_timeslot_to_now_leq($time);
-        } else if ($type == 2) {
-            $leqs = $this->get_hour_to_now_leq($time);
-        }
-
-        $max = 0;
-        foreach ($leqs as $leq) {
-            if ($leq->leq > $max) {
-                $max = $leq->leq;
-            }
-        }
-        return $max;
-    }
-
     public function calc_12_hour_leq(DateTime $time = null)
     {
         $timeslot_to_now_leqs = $this->get_timeslot_to_now_leq($time);
