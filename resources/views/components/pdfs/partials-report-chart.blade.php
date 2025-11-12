@@ -2,7 +2,6 @@
     <canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas>
 </div>
 
-
 <script>
     new Chart(
         document.getElementById("canvas{{ $date->format('d-m-Y') }}"), {
@@ -57,6 +56,9 @@
                 },
                 "legend": {
                     "display": true
+                },
+                "animation": {
+                    "duration": 0
                 }
             }
         });

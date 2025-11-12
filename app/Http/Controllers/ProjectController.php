@@ -19,8 +19,8 @@ class ProjectController extends Controller
     {
         $user = Auth::user();
         if (Gate::authorize('adminUser', $user)) {
-            $rental_projects  = Project::where('project_type', 'rental')->get();
-            $sales_projects  = Project::where('project_type', 'sales')->get();
+            $rental_projects  = Project::where('project_type', 'rental')->orderBy('job_number', 'desc')->get();
+            $sales_projects  = Project::where('project_type', 'sales')->orderBy('job_number', 'desc')->get();
             $sales_projects = $this->format_projects($sales_projects);
             return view('web.projects-admin')->with(['rental_projects' => $rental_projects, 'sales_projects' => $sales_projects]);
         }

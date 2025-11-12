@@ -24,15 +24,13 @@ class PagesController extends Controller
         }
         switch ($geoscanLib->message_type()) {
             case 0x00:
-                \Log::debug("message 0");
                 $this->message_0_callback($request, $geoscanLib);
                 break;
             case 0x01:
-                \Log::debug("message 1");
                 $this->message_1_callback($request, $geoscanLib);
                 break;
             default:
-                \Log::debug("message default");
+                render_unprocessable_entity("Incorrect Endpoint");
                 break;
         }
     }
@@ -268,7 +266,10 @@ class PagesController extends Controller
     private function check_params_valid(GeoscanLib $geoscanLib)
     {
         if ($geoscanLib->params_not_valid()) {
-            render_unprocessable_entity('Not enough parameters in the request');
+            response()->json(["Unprocessable Entity" => 'Not enough parameters in the request'], Response::HTTP_UNPROCESSABLE_ENTITY)->send();
+            
+            //render_unprocessable_entity('Not enough parameters in the request');
+            
             return false;
         }
         return true;

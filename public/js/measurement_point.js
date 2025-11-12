@@ -405,7 +405,8 @@ function closeModal(modal) {
 function initDatePicker() {
     const today = new Date();
     const pastWeek = new Date();
-    pastWeek.setDate(today.getDate() - 6);
+    //pastWeek.setDate(today.getDate() - 6);
+    
 
     document.getElementById("start_date").value = formatDate(pastWeek);
     document.getElementById("end_date").value = formatDate(today);
