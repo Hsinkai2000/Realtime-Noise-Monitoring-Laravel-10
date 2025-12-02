@@ -8,7 +8,6 @@ use DateTime;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Spatie\Fork\Fork;
 
 class PdfDataPreparationService
 {
@@ -48,7 +47,7 @@ class PdfDataPreparationService
     }
 
     /**
-     * Prepare all data for all days using multi-threading (with fallback)
+     * Prepare all data for all days (sequential processing)
      */
     public function prepareAllDaysData(Carbon $startDate, Carbon $endDate): array
     {
@@ -57,76 +56,10 @@ class PdfDataPreparationService
             $dates[] = $date->copy();
         }
 
-        // Check if multi-threading is available
-        if ($this->isMultiThreadingAvailable()) {
-            return $this->prepareAllDaysDataParallel($dates);
-        } else {
-            Log::info("Multi-threading not available, using sequential processing");
-            return $this->prepareAllDaysDataSequential($dates);
-        }
+        // Use sequential processing (multi-threading requires PHP 8.2+)
+        return $this->prepareAllDaysDataSequential($dates);
     }
 
-    /**
-     * Check if multi-threading is available
-     */
-    private function isMultiThreadingAvailable(): bool
-    {
-        // Check if pcntl extension is loaded
-        if (!extension_loaded('pcntl')) {
-            return false;
-        }
-
-        // Check if pcntl_fork function exists and is callable
-        if (!function_exists('pcntl_fork')) {
-            return false;
-        }
-
-        // Try to detect if we're in a web server context where pcntl might be disabled
-        if (php_sapi_name() !== 'cli') {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Prepare data using multi-threading (parallel processing)
-     */
-    private function prepareAllDaysDataParallel(array $dates): array
-    {
-        // Split dates into chunks for parallel processing
-        $chunks = array_chunk($dates, max(1, ceil(count($dates) / 4)));
-
-        Log::info("Processing " . count($dates) . " days across " . count($chunks) . " threads (parallel)");
-
-        try {
-            // Process chunks in parallel using Spatie Fork
-            $results = Fork::new()
-                ->before(fn() => app('db')->reconnect())
-                ->run(
-                    ...array_map(function ($chunk) {
-                        return function () use ($chunk) {
-                            $chunkResults = [];
-                            foreach ($chunk as $date) {
-                                $chunkResults[$date->format('Y-m-d')] = $this->prepareDayData($date);
-                            }
-                            return $chunkResults;
-                        };
-                    }, $chunks)
-                );
-
-            // Merge all results
-            $allData = [];
-            foreach ($results as $result) {
-                $allData = array_merge($allData, $result);
-            }
-
-            return $allData;
-        } catch (\Exception $e) {
-            Log::warning("Multi-threading failed, falling back to sequential: " . $e->getMessage());
-            return $this->prepareAllDaysDataSequential($dates);
-        }
-    }
 
     /**
      * Prepare data sequentially (fallback when multi-threading not available)
