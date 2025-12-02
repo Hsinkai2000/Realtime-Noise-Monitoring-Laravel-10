@@ -13,16 +13,20 @@ class PartialsReportData extends Component
     public MeasurementPoint $measurementPoint;
 
     public DateTime $date;
+    
+    public array $preparedData;
+    
     /**
      * Create a new component instance.
      */
     public function __construct(
         MeasurementPoint $measurementPoint,
-        DateTime $date
+        DateTime $date,
+        array $preparedData = []
     ) {
         $this->measurementPoint = $measurementPoint;
-
         $this->date = $date;
+        $this->preparedData = $preparedData;
     }
 
     /**

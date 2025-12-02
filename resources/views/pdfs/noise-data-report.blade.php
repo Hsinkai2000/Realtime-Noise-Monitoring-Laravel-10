@@ -117,10 +117,10 @@
     @for ($date = \Carbon\Carbon::parse($start_date); $date->lte(\Carbon\Carbon::parse($end_date)); $date->addDay())
         <div class="container h-100" style="page-break-before: always;">
             <div class="text-center">
-                <?php $res = $measurementPoint->getFirstDataOfDay($date->format('d-m-Y')); ?>
-                @if ($res)
+                <?php $firstDataOfDay = $measurementPoint->getFirstDataOfDay($date->format('d-m-Y')); ?>
+                @if ($firstDataOfDay)
                     <h1>Noise Data</h1>
-                    <h3>Noise Device Serial: {{ $measurementPoint->getFirstDataOfDay($date->format('d-m-Y')) }}</h3>
+                    <h3>Noise Device Serial: {{ $firstDataOfDay }}</h3>
                     <h3>Date: {{ $date->format('d-m-Y') }}</h3>
                 @else
                     <h1>Noise Data</h1>
@@ -128,7 +128,7 @@
                 @endif
             </div>
             <br>
-            <x-pdfs.partials-report-data :measurementPoint="$measurementPoint" :date="$date" />
+            <x-pdfs.partials-report-data :measurementPoint="$measurementPoint" :date="$date" :prepared-data="$preparedData" />
             <br>
             <x-pdfs.partials-report-chart :measurementPoint="$measurementPoint" :date="$date->copy()" />
         </div>
