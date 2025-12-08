@@ -67,15 +67,27 @@ class ReportIndividualDataComponent extends Component
         $timeKey = $this->slotDate->format('Y-m-d H:i:s');
         $hour = (int)$this->slotDate->format('H');
 
-        if (!isset($this->preparedData[$dateKey])) {
+        // Check if we need to look at the previous day's data
+        // A "day" runs from 7am to 6:55am next day, so 00:00-06:55 belongs to the previous day
+        $actualDateKey = $dateKey;
+        $actualHour = $hour;
+        
+        if ($hour < 7) {
+            // This is morning time (00:00-06:55), which belongs to the previous calendar day
+            $previousDay = (new DateTime($dateKey))->modify('-1 day');
+            $actualDateKey = $previousDay->format('Y-m-d');
+            $actualHour = 24 + $hour; // Offset by 24 to get the correct index (24-30)
+        }
+
+        if (!isset($this->preparedData[$actualDateKey])) {
             return view('components.report-individual-data-component', $leq_data);
         }
 
-        $dayData = $this->preparedData[$dateKey];
+        $dayData = $this->preparedData[$actualDateKey];
 
         if ($this->type == '1hLeq') {
-            if (isset($dayData['hourly'][$hour])) {
-                $leq_data = $dayData['hourly'][$hour];
+            if (isset($dayData['hourly'][$actualHour])) {
+                $leq_data = $dayData['hourly'][$actualHour];
             }
         } else if ($this->type == '12hLeq') {
             $period = $hour >= 7 && $hour < 19 ? 'morning' : 'evening';
@@ -84,13 +96,13 @@ class ReportIndividualDataComponent extends Component
             }
         } else if ($this->type == 'dose') {
             // Use hour index directly (dose is calculated for every hour at XX:55:00)
-            if (isset($dayData['dose'][$hour])) {
-                $leq_data = $dayData['dose'][$hour];
+            if (isset($dayData['dose'][$actualHour])) {
+                $leq_data = $dayData['dose'][$actualHour];
             }
         } else if ($this->type == 'max') {
             // Use hour index directly (max is calculated for every hour at XX:55:00)
-            if (isset($dayData['max'][$hour])) {
-                $leq_data = $dayData['max'][$hour];
+            if (isset($dayData['max'][$actualHour])) {
+                $leq_data = $dayData['max'][$actualHour];
             }
         } else {
             // 5-minute slot data

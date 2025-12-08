@@ -37,50 +37,86 @@ class PdfController extends Controller
             $start_date = Carbon::createFromFormat('d-m-Y', $request->route('start_date'));
             $end_date = Carbon::createFromFormat('d-m-Y', $request->route('end_date'));
             
+            // // Invalidate cache for the date range (to refresh with new extended data format)
+            // $cacheDate = $start_date->copy();
+            // while ($cacheDate->lte($end_date)) {
+            //     $dateKey = $cacheDate->format('Ymd');
+            //     Cache::forget("pdf_data_{$measurmentPointId}_{$dateKey}");
+            //     $cacheDate->addDay();
+            // }
+            
             // Fetch contacts once
             $contacts = Contact::where('project_id', $measurementPoint->project->id)->get();
 
-            // Cache data per day instead of per date range
-            // A "day" in this system runs from 7:00 AM to 6:55 AM next day
             $now = Carbon::now();
+
             $preparedData = [];
-            
-            // Adjust end_date to include the next day since a "day" spans into the next calendar day
-            $adjustedEndDate = $end_date->copy()->addDay();
-            
-            // Loop through each day in the range
+            $uncachedDates = [];
             $currentDate = $start_date->copy();
+
+            // First pass: check cache and collect uncached dates
             while ($currentDate->lte($end_date)) {
                 $dateKey = $currentDate->format('Ymd');
-                
-                // Check if this "day" is still ongoing
-                // A day starts at 7 AM and ends at 6:55 AM the next day
                 $dayStart = $currentDate->copy()->setTime(7, 0, 0);
                 $dayEnd = $currentDate->copy()->addDay()->setTime(6, 55, 0);
                 $isCurrentDay = $now->between($dayStart, $dayEnd);
-                
-                // For data preparation, we need to include the next calendar day
-                // because the "day" extends from 7 AM to 6:55 AM next day
-                $dataEndDate = $currentDate->copy()->addDay();
-                
+
                 if ($isCurrentDay) {
-                    // Don't use cache for current day - always fetch fresh data
-                    $dataService = new PdfDataPreparationService($measurementPoint);
-                    $dataService->loadNoiseData($currentDate, $dataEndDate);
-                    $dayData = $dataService->prepareAllDaysData($currentDate, $dataEndDate);
-                    $preparedData = array_merge($preparedData, $dayData);
-                } else {
-                    // Use cache for past days (cache for 24 hours)
+                    // Current day - always fetch fresh (no cache)
+                    $uncachedDates[] = $currentDate->copy();
+                } else if ($dayEnd < $now){
                     $cacheKey = "pdf_data_{$measurmentPointId}_{$dateKey}";
-                    $dayData = Cache::remember($cacheKey, 86400, function () use ($measurementPoint, $currentDate, $dataEndDate) {
-                        $dataService = new PdfDataPreparationService($measurementPoint);
-                        $dataService->loadNoiseData($currentDate, $dataEndDate);
-                        return $dataService->prepareAllDaysData($currentDate, $dataEndDate);
-                    });
-                    $preparedData = array_merge($preparedData, $dayData);
+                    $dayData = Cache::get($cacheKey, null);
+                    
+                    if ($dayData == null) {
+                        // Not in cache - add to query list
+                        $uncachedDates[] = $currentDate->copy();
+                    } else {
+                        // In cache - use it
+                        $preparedData = array_merge($preparedData, $dayData);
+                    }
                 }
-                
                 $currentDate->addDay();
+            }
+
+            // Handle uncached data - load all at once, prepare all at once
+            if (!empty($uncachedDates)) {
+                // Load all noise data for the entire range in one query
+                // Extend by 2 days to ensure we get data for days that span past midnight
+                $queryStartDate = $uncachedDates[0];
+                $queryEndDate = $uncachedDates[count($uncachedDates)-1]->copy()->addDays(2);
+                
+                $dataService = new PdfDataPreparationService($measurementPoint);
+                $dataService->loadNoiseData($queryStartDate, $queryEndDate);
+                
+                // Prepare only the actual days requested (not the extended range)
+                // prepareAllDaysData will handle the fact that each "day" extends to next calendar day
+                $actualStartDate = $uncachedDates[0];
+                $actualEndDate = $uncachedDates[count($uncachedDates)-1];
+                $allDaysData = $dataService->prepareAllDaysData($actualStartDate, $actualEndDate);
+                
+                // Extract and cache each day's data
+                foreach ($uncachedDates as $date) {
+                    $dateKey = $date->format('Ymd');
+                    $dateString = $date->format('Y-m-d');
+                    
+                    // Extract this day's data from the result
+                    $singleDayData = [
+                        $dateString => $allDaysData[$dateString] ?? []
+                    ];
+                    
+                    // Cache the data for future use (skip caching for current day)
+                    $dayStart = $date->copy()->setTime(7, 0, 0);
+                    $dayEnd = $date->copy()->addDay()->setTime(6, 55, 0);
+                    $isCurrentDay = $now->between($dayStart, $dayEnd);
+                    
+                    if (!$isCurrentDay) {
+                        $cacheKey = "pdf_data_{$measurmentPointId}_{$dateKey}";
+                        Cache::put($cacheKey, $singleDayData, 60*60*8); // cache for 8 hours
+                    }
+                    
+                    $preparedData = array_merge($preparedData, $singleDayData);
+                }
             }
 
             Log::info("PDF data preparation completed in " . round(microtime(true) - $startTime, 2) . " seconds");
@@ -96,12 +132,16 @@ class PdfController extends Controller
             $footerHtml = view('pdfs.footer');
 
             $pdf = PDF::loadView('pdfs.noise-data-report', $data)->setPaper('a4');
+
+            Log::info("PDF rendered in " . round(microtime(true) - $startTime, 2) . " seconds");
+            
             $pdf->setoptions([
                 'enable-local-file-access' => true,
                 'margin-bottom' => 8,
-                'debug-javascript' => true,
                 'footer-spacing' => 0,
-                'footer-html' => $footerHtml
+                'footer-html' => $footerHtml,
+                'no-stop-slow-scripts' => true,
+                'javascript-delay' => 500,
             ]);
 
             Log::info("PDF generation completed in " . round(microtime(true) - $startTime, 2) . " seconds");

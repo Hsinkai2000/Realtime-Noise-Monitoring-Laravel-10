@@ -14,6 +14,8 @@ class PdfDataPreparationService
     private MeasurementPoint $measurementPoint;
     private Collection $allNoiseData;
     private array $noiseDataByTimestamp;
+    private array $noiseDataByDate;
+    private array $noiseDataByDateHour; // Group by date AND hour for faster 1-hour queries
 
     public function __construct(MeasurementPoint $measurementPoint)
     {
@@ -25,6 +27,7 @@ class PdfDataPreparationService
      */
     public function loadNoiseData(Carbon $startDate, Carbon $endDate): void
     {
+        $startTime = microtime(true);
         // Extend the range to include the previous day (for 12h calculations that span midnight)
         $extendedStart = $startDate->copy()->subDay();
         $extendedEnd = $endDate->copy()->addDay();
@@ -38,12 +41,30 @@ class PdfDataPreparationService
 
         // Index by timestamp for O(1) lookups
         $this->noiseDataByTimestamp = [];
+        $this->noiseDataByDate = [];
+        $this->noiseDataByDateHour = [];
+        
         foreach ($this->allNoiseData as $data) {
             $key = $data->received_at->format('Y-m-d H:i:s');
+            $dateKey = $data->received_at->format('Y-m-d');
+            $dateHourKey = $data->received_at->format('Y-m-d H');
+            
             $this->noiseDataByTimestamp[$key] = $data;
+            
+            // Group by date for faster range queries
+            if (!isset($this->noiseDataByDate[$dateKey])) {
+                $this->noiseDataByDate[$dateKey] = [];
+            }
+            $this->noiseDataByDate[$dateKey][] = $data;
+            
+            // Group by date-hour for even faster 1-hour queries
+            if (!isset($this->noiseDataByDateHour[$dateHourKey])) {
+                $this->noiseDataByDateHour[$dateHourKey] = [];
+            }
+            $this->noiseDataByDateHour[$dateHourKey][] = $data;
         }
 
-        Log::info("Loaded {$this->allNoiseData->count()} noise data records for PDF generation");
+        Log::info("Loaded {$this->allNoiseData->count()} noise data records for PDF generation in " . round(microtime(true) - $startTime, 2) . " seconds");
     }
 
     /**
@@ -78,9 +99,12 @@ class PdfDataPreparationService
 
     /**
      * Prepare data for a single day (all time slots)
+     * A "day" runs from 7am to 6:55am next day, so we need slots from current day + next day until 6:55am
      */
     public function prepareDayData(Carbon $date): array
     {
+        $startTime = microtime(true);
+        
         $dayData = [
             'slots' => [],
             'hourly' => [],
@@ -89,7 +113,10 @@ class PdfDataPreparationService
             '12h' => []
         ];
 
-        // Generate all 5-minute slots for the day (288 slots)
+        // Generate all 5-minute slots for the day (288 slots spanning two calendar dates)
+        $slotStart = microtime(true);
+        
+        // Current day: 00:00 to 23:55
         for ($hour = 0; $hour < 24; $hour++) {
             for ($minute = 0; $minute < 60; $minute += 5) {
                 $slotDate = new DateTime($date->format('Y-m-d') . sprintf(' %02d:%02d:00', $hour, $minute));
@@ -103,6 +130,30 @@ class PdfDataPreparationService
             $hourDate = new DateTime($date->format('Y-m-d') . sprintf(' %02d:00:00', $hour));
             $dayData['hourly'][$hour] = $this->calculate1HourLeq($hourDate);
         }
+        
+        // Next day: 00:00 to 06:55 (to complete the "day" which ends at 06:55)
+        $nextDay = $date->copy()->addDay();
+        for ($hour = 0; $hour < 7; $hour++) {
+            for ($minute = 0; $minute < 60; $minute += 5) {
+                // Only go up to 06:55
+                if ($hour == 6 && $minute == 55) {
+                    $slotDate = new DateTime($nextDay->format('Y-m-d') . ' 06:55:00');
+                    $key = $slotDate->format('Y-m-d H:i:s');
+                    $dayData['slots'][$key] = $this->get5MinuteData($slotDate);
+                    break;
+                }
+                
+                $slotDate = new DateTime($nextDay->format('Y-m-d') . sprintf(' %02d:%02d:00', $hour, $minute));
+                $key = $slotDate->format('Y-m-d H:i:s');
+                $dayData['slots'][$key] = $this->get5MinuteData($slotDate);
+            }
+            
+            // Calculate hourly Leq for next day hours (0-6)
+            $hourDate = new DateTime($nextDay->format('Y-m-d') . sprintf(' %02d:00:00', $hour));
+            $dayData['hourly'][24 + $hour] = $this->calculate1HourLeq($hourDate);
+        }
+        
+        Log::info("  - Slots + Hourly: " . round((microtime(true) - $slotStart) * 1000, 2) . "ms");
 
         // Calculate 12-hour Leq for 7am and 7pm
         $morning = new DateTime($date->format('Y-m-d') . ' 07:00:00');
@@ -113,16 +164,32 @@ class PdfDataPreparationService
 
         // Calculate dose percentages for EVERY hour (using XX:55:00 timestamp)
         // This matches the view logic where $slotDate is the last 5-min slot of each hour
+        $doseStart = microtime(true);
         for ($hour = 0; $hour < 24; $hour++) {
             $hourTime = new DateTime($date->format('Y-m-d') . sprintf(' %02d:55:00', $hour));
             $dayData['dose'][$hour] = $this->calculateDose($hourTime);
         }
+        // Dose for next day hours (0-6)
+        for ($hour = 0; $hour < 7; $hour++) {
+            $hourTime = new DateTime($nextDay->format('Y-m-d') . sprintf(' %02d:55:00', $hour));
+            $dayData['dose'][24 + $hour] = $this->calculateDose($hourTime);
+        }
+        Log::info("  - Dose: " . round((microtime(true) - $doseStart) * 1000, 2) . "ms");
 
         // Calculate max values for EVERY hour (using XX:55:00 timestamp)
+        $maxStart = microtime(true);
         for ($hour = 0; $hour < 24; $hour++) {
             $hourTime = new DateTime($date->format('Y-m-d') . sprintf(' %02d:55:00', $hour));
             $dayData['max'][$hour] = $this->calculateMax($hourTime);
         }
+        // Max for next day hours (0-6)
+        for ($hour = 0; $hour < 7; $hour++) {
+            $hourTime = new DateTime($nextDay->format('Y-m-d') . sprintf(' %02d:55:00', $hour));
+            $dayData['max'][24 + $hour] = $this->calculateMax($hourTime);
+        }
+        Log::info("  - Max: " . round((microtime(true) - $maxStart) * 1000, 2) . "ms");
+
+        Log::info("Day {$date->format('Y-m-d')} processed in " . round((microtime(true) - $startTime) * 1000, 2) . "ms");
 
         return $dayData;
     }
@@ -239,6 +306,16 @@ class PdfDataPreparationService
             );
         }
 
+        // Return '-' if all data is missing (no real calculation possible)
+        $maxBlanks = $decision == '12h' ? 144 : 12;
+        if ($num_blanks >= $maxBlanks) {
+            return [
+                'leq_data' => '-',
+                'should_alert' => false,
+                'decision' => $decision
+            ];
+        }
+
         return [
             'leq_data' => number_format($calculated_dose_percentage, 2),
             'should_alert' => $calculated_dose_percentage >= 70,
@@ -290,30 +367,57 @@ class PdfDataPreparationService
             ];
         }
 
-        return ['leq_data' => 'N.A.', 'should_alert' => false];
+        return ['leq_data' => '-', 'should_alert' => false];
     }
 
     /**
      * Get data between two timestamps from pre-fetched collection
-     * OPTIMIZED: Uses early termination since data is sorted
+     * OPTIMIZED: Uses date-hour indexing for 1-hour queries, date indexing for longer periods
      */
     private function getDataBetween(DateTime $start, DateTime $end): Collection
     {
         $startKey = $start->format('Y-m-d H:i:s');
         $endKey = $end->format('Y-m-d H:i:s');
-
-        // Optimize by using early termination - data is already sorted by received_at
+        
+        // Check if this is a 1-hour query (most common case)
+        $duration = $end->getTimestamp() - $start->getTimestamp();
+        if ($duration <= 3660) { // 1 hour + 1 minute buffer
+            // Use hour-level index for fast lookup (only scan ~12 records instead of ~288)
+            $dateHourKey = $start->format('Y-m-d H');
+            if (isset($this->noiseDataByDateHour[$dateHourKey])) {
+                $result = [];
+                foreach ($this->noiseDataByDateHour[$dateHourKey] as $data) {
+                    $dataKey = $data->received_at->format('Y-m-d H:i:s');
+                    if ($dataKey >= $startKey && $dataKey <= $endKey) {
+                        $result[] = $data;
+                    }
+                }
+                return collect($result);
+            }
+            return collect([]);
+        }
+        
+        // For longer periods (12h), use date-based logic
+        $startDate = $start->format('Y-m-d');
+        $endDate = $end->format('Y-m-d');
+        
         $result = [];
-        foreach ($this->allNoiseData as $data) {
-            $dataKey = $data->received_at->format('Y-m-d H:i:s');
+        $currentDate = new DateTime($startDate);
+        $endDateTime = new DateTime($endDate);
+        
+        while ($currentDate <= $endDateTime) {
+            $dateKey = $currentDate->format('Y-m-d');
             
-            // Skip until we reach the start time
-            if ($dataKey < $startKey) continue;
+            if (isset($this->noiseDataByDate[$dateKey])) {
+                foreach ($this->noiseDataByDate[$dateKey] as $data) {
+                    $dataKey = $data->received_at->format('Y-m-d H:i:s');
+                    if ($dataKey >= $startKey && $dataKey <= $endKey) {
+                        $result[] = $data;
+                    }
+                }
+            }
             
-            // Stop once we pass the end time (early termination)
-            if ($dataKey > $endKey) break;
-            
-            $result[] = $data;
+            $currentDate->modify('+1 day');
         }
 
         return collect($result);
