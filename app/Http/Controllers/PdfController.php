@@ -37,7 +37,7 @@ class PdfController extends Controller
             $start_date = Carbon::createFromFormat('d-m-Y', $request->route('start_date'));
             $end_date = Carbon::createFromFormat('d-m-Y', $request->route('end_date'));
             
-            // // Invalidate cache for the date range (to refresh with new extended data format)
+            // Invalidate cache for the date range (to refresh with new extended data format)
             // $cacheDate = $start_date->copy();
             // while ($cacheDate->lte($end_date)) {
             //     $dateKey = $cacheDate->format('Ymd');

@@ -237,7 +237,7 @@ class PdfDataPreparationService
         $limit = $this->measurementPoint->soundLimit->leq1h_limit($time);
 
         return [
-            'leq_data' => $leq > 0 ? number_format(round($leq, 1), 1) : '-',
+            'leq_data' => $leq > 0 ? number_format(round($leq, 1), 1) : '0.0',
             'should_alert' => round($leq, 1) > $limit,
             'num_blanks' => $num_blanks
         ];
@@ -257,7 +257,7 @@ class PdfDataPreparationService
         $limit = $this->measurementPoint->soundLimit->leq12h_limit($time);
 
         return [
-            'leq_data' => $leq > 0 ? number_format(round($leq, 1), 1) : '-',
+            'leq_data' => $leq > 0 ? number_format(round($leq, 1), 1) : '0.0',
             'should_alert' => round($leq, 1) > $limit,
             'num_blanks' => $num_blanks
         ];
@@ -306,11 +306,11 @@ class PdfDataPreparationService
             );
         }
 
-        // Return '-' if all data is missing (no real calculation possible)
+        // Return '0.00' if all data is missing (no real calculation possible)
         $maxBlanks = $decision == '12h' ? 144 : 12;
         if ($num_blanks >= $maxBlanks) {
             return [
-                'leq_data' => '-',
+                'leq_data' => '0.00',
                 'should_alert' => false,
                 'decision' => $decision
             ];
@@ -336,6 +336,12 @@ class PdfDataPreparationService
         }
 
         $doseData = $this->calculateDose($date);
+        
+        // Check if dose is '0.00' (no data) - return 'N.A.' for max
+        if ($doseData['leq_data'] === '0.00') {
+            return ['leq_data' => 'N.A.', 'should_alert' => false];
+        }
+        
         $calculated_dose_percentage = (float)str_replace(',', '', $doseData['leq_data']);
         $decision = $doseData['decision'];
         $num_blanks = $decision == '12h' ? 144 - $this->getDataBetween(
@@ -367,7 +373,7 @@ class PdfDataPreparationService
             ];
         }
 
-        return ['leq_data' => '-', 'should_alert' => false];
+        return ['leq_data' => 'N.A.', 'should_alert' => false];
     }
 
     /**
