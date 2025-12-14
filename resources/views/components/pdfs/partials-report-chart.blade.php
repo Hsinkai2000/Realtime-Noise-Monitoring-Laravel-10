@@ -1,11 +1,10 @@
 <div class="reportGraph">
-    <canvas id="canvas{{ $date->format('d-m-Y') }}"></canvas>
+    <canvas id="canvas{{ $date->format('d-m-Y') }}" width="700" height="350"></canvas>
 </div>
 
 <script>
     new Chart(
         document.getElementById("canvas{{ $date->format('d-m-Y') }}"), {
-            "responsive": false,
             "type": "line",
             "data": {
                 "datasets": [{
@@ -15,7 +14,7 @@
                     "pointRadius": 0,
                     "borderWidth": 2,
                     "fill": false,
-                    "steppedLine": true
+                    "steppedLine": "after"
                 }, {
                     "label": "LAeq 5min",
                     "data": @json($noiseData),
@@ -23,11 +22,13 @@
                     "borderWidth": 2,
                     "pointRadius": 0,
                     "spanGaps": true,
-                    "tension": 0,
+                    "lineTension": 0,
                     "fill": false
                 }]
             },
             "options": {
+                "responsive": false,
+                "maintainAspectRatio": false,
                 "scales": {
                     "xAxes": [{
                         "type": "time",
@@ -49,8 +50,7 @@
                         "ticks": {
                             "beginAtZero": true,
                             "max": 120,
-                            "stepSize": 10,
-
+                            "stepSize": 10
                         }
                     }]
                 },
@@ -63,3 +63,4 @@
             }
         });
 </script>
+
