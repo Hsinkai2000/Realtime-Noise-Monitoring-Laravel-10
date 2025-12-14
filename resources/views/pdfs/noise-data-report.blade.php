@@ -13,9 +13,10 @@
         @endif
     </title>
 
-    <link href="{{ public_path('css/base.css') }}" rel="stylesheet">
-    <link href="{{ public_path('css/pdf.css') }}" rel="stylesheet">
-    {{-- Removed app.js for PDF - not needed --}}
+    {{-- Use file:// protocol with absolute paths for local asset loading --}}
+    <link href="file://{{ public_path('css/base.css') }}" rel="stylesheet">
+    <link href="file://{{ public_path('css/pdf.css') }}" rel="stylesheet">
+    
     <style>
         .reportGraph {
             display: block;
@@ -26,8 +27,8 @@
     </style>
 
     {{-- Load from local files for faster PDF generation --}}
-    <script src="{{ public_path('vendor/moment/moment.min.js') }}"></script>
-    <script src="{{ public_path('vendor/chartjs/Chart.bundle.min.js') }}"></script>
+    <script src="file://{{ public_path('vendor/moment/moment.min.js') }}"></script>
+    <script src="file://{{ public_path('vendor/chartjs/Chart.bundle.min.js') }}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -67,7 +68,8 @@
 
     table td,
     th {
-        padding: 6px;
+        padding: 4px 2px; /* Reduced padding for more compact table */
+        font-size: 10px; /* Smaller font for table data */
     }
 
     .text-danger {
@@ -75,7 +77,15 @@
     }
 
     .time_col {
-        min-width: 50px;
+        min-width: 35px; /* Reduced from 50px */
+        font-size: 9px;
+    }
+    
+    /* Scale down table to fit page */
+    .table-bordered {
+        width: 100%;
+        max-width: 100%;
+        transform-origin: top left;
     }
 </style>
 
