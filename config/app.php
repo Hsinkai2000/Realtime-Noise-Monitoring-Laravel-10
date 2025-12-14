@@ -186,4 +186,16 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Parallel PDF Processing
+    |--------------------------------------------------------------------------
+    |
+    | Enable parallel processing of multi-day PDF reports using Symfony Process.
+    | This significantly speeds up report generation for multiple days.
+    |
+    */
+
+    'parallel_pdf_processing' => env('PARALLEL_PDF_PROCESSING', true),
+
 ];

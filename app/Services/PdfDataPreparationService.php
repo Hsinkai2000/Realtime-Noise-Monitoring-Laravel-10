@@ -8,6 +8,7 @@ use DateTime;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Process\Process;
 
 class PdfDataPreparationService
 {
@@ -68,7 +69,7 @@ class PdfDataPreparationService
     }
 
     /**
-     * Prepare all data for all days (sequential processing)
+     * Prepare all data for all days (parallel or sequential processing)
      */
     public function prepareAllDaysData(Carbon $startDate, Carbon $endDate): array
     {
@@ -77,8 +78,97 @@ class PdfDataPreparationService
             $dates[] = $date->copy();
         }
 
-        // Use sequential processing (multi-threading requires PHP 8.2+)
+        // Use parallel processing if:
+        // 1. Multiple days to process (>1)
+        // 2. Parallel processing is enabled (env PARALLEL_PDF_PROCESSING=true)
+        $useParallel = count($dates) > 1 && config('app.parallel_pdf_processing', true);
+        
+        if ($useParallel) {
+            return $this->prepareAllDaysDataParallel($dates);
+        }
+        
+        // Use sequential processing for single day or when parallel is disabled
         return $this->prepareAllDaysDataSequential($dates);
+    }
+
+    /**
+     * Prepare data using parallel processes (Symfony Process)
+     */
+    private function prepareAllDaysDataParallel(array $dates): array
+    {
+        $totalDays = count($dates);
+        Log::info("Processing {$totalDays} days in parallel using Symfony Process");
+        
+        $processes = [];
+        $allData = [];
+        
+        // Limit concurrent processes to avoid overwhelming the system
+        $maxConcurrent = min($totalDays, 4); // Max 4 parallel processes
+        $chunks = array_chunk($dates, $maxConcurrent);
+        
+        foreach ($chunks as $chunkIndex => $dateChunk) {
+            $chunkProcesses = [];
+            
+            // Start processes for this chunk
+            foreach ($dateChunk as $date) {
+                $dateString = $date->format('Y-m-d');
+                
+                // Create artisan command to process one day
+                $command = [
+                    'php',
+                    base_path('artisan'),
+                    'pdf:process-day',
+                    (string)$this->measurementPoint->id,
+                    $dateString
+                ];
+                
+                $process = new Process($command);
+                $process->setTimeout(120); // 2 minutes per day
+                $process->setWorkingDirectory(base_path());
+                
+                $chunkProcesses[$dateString] = $process;
+                
+                // Start the process
+                $process->start();
+                Log::info("Started process for day {$dateString} (chunk " . ($chunkIndex + 1) . ")");
+            }
+            
+            // Wait for all processes in this chunk to complete
+            foreach ($chunkProcesses as $dateString => $process) {
+                $process->wait();
+                
+                if ($process->isSuccessful()) {
+                    // Parse the JSON output from the artisan command
+                    $output = trim($process->getOutput());
+                    
+                    // Remove any debug output before JSON
+                    $jsonStart = strpos($output, '{');
+                    if ($jsonStart !== false) {
+                        $output = substr($output, $jsonStart);
+                    }
+                    
+                    $dayData = json_decode($output, true);
+                    
+                    if ($dayData && is_array($dayData)) {
+                        $allData[$dateString] = $dayData;
+                        Log::info("✓ Completed process for day {$dateString}");
+                    } else {
+                        Log::warning("Failed to parse JSON output for day {$dateString}, falling back to sequential");
+                        // Fallback to sequential processing for this day
+                        $allData[$dateString] = $this->prepareDayData(Carbon::parse($dateString));
+                    }
+                } else {
+                    $errorOutput = $process->getErrorOutput();
+                    Log::error("Process failed for day {$dateString}: {$errorOutput}");
+                    Log::warning("Falling back to sequential processing for day {$dateString}");
+                    // Fallback to sequential processing for this day
+                    $allData[$dateString] = $this->prepareDayData(Carbon::parse($dateString));
+                }
+            }
+        }
+        
+        Log::info("Parallel processing completed for {$totalDays} days");
+        return $allData;
     }
 
 
@@ -100,9 +190,18 @@ class PdfDataPreparationService
     /**
      * Prepare data for a single day (all time slots)
      * A "day" runs from 7am to 6:55am next day, so we need slots from current day + next day until 6:55am
+     * 
+     * Can be called standalone (will load its own data) or after loadNoiseData has been called
      */
     public function prepareDayData(Carbon $date): array
     {
+        // If data hasn't been loaded yet, load it for this day
+        if (empty($this->noiseDataByTimestamp)) {
+            $startDate = $date->copy()->subDay();
+            $endDate = $date->copy()->addDays(2);
+            $this->loadNoiseData($startDate, $endDate);
+        }
+        
         $startTime = microtime(true);
         
         $dayData = [
