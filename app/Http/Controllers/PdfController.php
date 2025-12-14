@@ -38,12 +38,12 @@ class PdfController extends Controller
             $end_date = Carbon::createFromFormat('d-m-Y', $request->route('end_date'));
             
             // Invalidate cache for the date range (to refresh with corrected dose calculations)
-            $cacheDate = $start_date->copy();
-            while ($cacheDate->lte($end_date)) {
-                $dateKey = $cacheDate->format('Ymd');
-                Cache::forget("pdf_data_{$measurmentPointId}_{$dateKey}");
-                $cacheDate->addDay();
-            }
+            // $cacheDate = $start_date->copy();
+            // while ($cacheDate->lte($end_date)) {
+            //     $dateKey = $cacheDate->format('Ymd');
+            //     Cache::forget("pdf_data_{$measurmentPointId}_{$dateKey}");
+            //     $cacheDate->addDay();
+            // }
             
             // Fetch contacts once
             $contacts = Contact::where('project_id', $measurementPoint->project->id)->get();
