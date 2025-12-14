@@ -13,9 +13,9 @@
         @endif
     </title>
 
-    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/pdf.css') }}" rel="stylesheet">
-    <script src="{{ asset('js/app.js') }}"></script>
+    <link href="{{ public_path('css/base.css') }}" rel="stylesheet">
+    <link href="{{ public_path('css/pdf.css') }}" rel="stylesheet">
+    {{-- Removed app.js for PDF - not needed --}}
     <style>
         .reportGraph {
             display: block;
@@ -25,16 +25,9 @@
         }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css"
-        integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
-        integrity="sha512-mf78KukU/a8rjr7aBRvCa2Vwg/q0tUjJhLtcK53PHEbFwCEqQ5durlzvVTgQgKpv+fyNMT6ZQT1Aq6tpNqf1mg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- Load from local files for faster PDF generation --}}
+    <script src="{{ public_path('vendor/moment/moment.min.js') }}"></script>
+    <script src="{{ public_path('vendor/chartjs/Chart.bundle.min.js') }}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -134,8 +127,6 @@
         </div>
     @endfor
 
-
-    <script src="{{ asset('js/pdf.js') }}" async defer></script>
     <script type="text/javascript">
         'use strict';
         (function(setLineDash) {

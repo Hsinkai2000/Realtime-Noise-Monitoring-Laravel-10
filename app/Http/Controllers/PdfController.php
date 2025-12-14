@@ -144,7 +144,12 @@ class PdfController extends Controller
                 'footer-spacing' => 0,
                 'footer-html' => $footerHtml,
                 'no-stop-slow-scripts' => true,
-                'javascript-delay' => 500,
+                'javascript-delay' => 800, // Reduced from 1000ms
+                'disable-smart-shrinking' => true, // Faster rendering
+                'print-media-type' => true, // Use print CSS
+                'enable-javascript' => true,
+                'no-background' => false,
+                'dpi' => 96, // Lower DPI for faster rendering (default is 96)
             ]);
 
             Log::info("PDF generation completed in " . round(microtime(true) - $startTime, 2) . " seconds");
