@@ -172,6 +172,7 @@ class PdfDataPreparationService
         // Dose for next day hours (0-6)
         for ($hour = 0; $hour < 7; $hour++) {
             $hourTime = new DateTime($nextDay->format('Y-m-d') . sprintf(' %02d:55:00', $hour));
+            Log::info("About to calculate dose for next day hour: {$hourTime->format('Y-m-d H:i')}");
             $dayData['dose'][24 + $hour] = $this->calculateDose($hourTime);
         }
         Log::info("  - Dose: " . round((microtime(true) - $doseStart) * 1000, 2) . "ms");
@@ -269,7 +270,25 @@ class PdfDataPreparationService
      */
     private function calculateDose(DateTime $time): array
     {
-        [$decision, $last_data_datetime] = $this->measurementPoint->soundLimit->check_12_1_hour_limit_type($time);
+        $timeStr = $time->format('Y-m-d H:i');
+        $hour = (int)$time->format('H');
+        
+        if ($hour >= 0 && $hour < 7) {
+            Log::info("calculateDose ENTRY: time={$timeStr}, hour={$hour}");
+        }
+        
+        // Clone $time before passing to check_12_1_hour_limit_type to avoid modification
+        $timeClone = clone $time;
+        [$decision, $last_data_datetime] = $this->measurementPoint->soundLimit->check_12_1_hour_limit_type($timeClone);
+        
+        if ($hour >= 0 && $hour < 7) {
+            Log::info("  -> After check_12_1_hour_limit_type: original time still={$time->format('Y-m-d H:i')}");
+        }
+        
+        // Debug logging for early morning hours
+        if ($hour >= 0 && $hour < 7) {
+            Log::info("  -> Early morning hour detected, decision={$decision}");
+        }
         
         // Use pre-fetched data instead of querying database
         if ($decision == '12h') {
@@ -280,23 +299,44 @@ class PdfDataPreparationService
             $calculatedLeq = $this->calculateLeq($timeslotData);
             $limit = $this->measurementPoint->soundLimit->leq12h_limit($last_data_datetime);
             
+            // Debug logging for early morning hours
+            if ($hour >= 0 && $hour < 7) {
+                Log::info("  -> 12h range={$startDateTime->format('Y-m-d H:i')} to {$endDateTime->format('Y-m-d H:i')}, found=" . count($timeslotData) . " records, blanks={$num_blanks}, Leq={$calculatedLeq}, limit={$limit}");
+            }
+            
             $calculated_dose_percentage = $this->measurementPoint->soundLimit->calculate_dose_perc(
                 $calculatedLeq, 
                 $limit, 
                 $num_blanks, 
                 144
             );
+            
+            // Log the final dose percentage
+            if ($hour >= 0 && $hour < 7) {
+                Log::info("  -> Dose percentage: {$calculated_dose_percentage}%");
+            }
         } else {
             // Calculate 1-hour Leq using pre-fetched data
-            $startTime = clone $time;
-            $startTime->setTime((int)$startTime->format("H"), 0, 0);
-            $endTime = clone $startTime;
-            $endTime->modify('+1 hour')->modify('-1 minute');
+            // Create new DateTime object to avoid modifying the original
+            $dateStr = $time->format('Y-m-d H:i:s');
+            $hourFromTime = (int)$time->format('H');
+            
+            $startTime = DateTime::createFromFormat('Y-m-d H:i:s', substr($dateStr, 0, 10) . sprintf(' %02d:00:00', $hourFromTime));
+            $endTime = DateTime::createFromFormat('Y-m-d H:i:s', substr($dateStr, 0, 10) . sprintf(' %02d:59:00', $hourFromTime));
+            
+            if ($hour >= 0 && $hour < 7) {
+                Log::info("  -> 1h range for hour {$hourFromTime}: startTime={$startTime->format('Y-m-d H:i')}, endTime={$endTime->format('Y-m-d H:i')}");
+            }
             
             $hourData = $this->getDataBetween($startTime, $endTime);
             $num_blanks = 12 - count($hourData);
             $calculatedLeq = $this->calculateLeq($hourData);
             $limit = $this->measurementPoint->soundLimit->leq1h_limit($last_data_datetime);
+            
+            // Debug logging for early morning hours
+            if ($hour >= 0 && $hour < 7) {
+                Log::info("  -> 1h range={$startTime->format('Y-m-d H:i')} to {$endTime->format('Y-m-d H:i')}, found=" . count($hourData) . " records, blanks={$num_blanks}, Leq={$calculatedLeq}, limit={$limit}");
+            }
             
             $calculated_dose_percentage = $this->measurementPoint->soundLimit->calculate_dose_perc(
                 $calculatedLeq, 
@@ -304,6 +344,11 @@ class PdfDataPreparationService
                 $num_blanks, 
                 12
             );
+            
+            // Log the final dose percentage
+            if ($hour >= 0 && $hour < 7) {
+                Log::info("  -> Dose percentage: {$calculated_dose_percentage}%");
+            }
         }
 
         // Return '0.00' if all data is missing (no real calculation possible)
@@ -464,8 +509,16 @@ class PdfDataPreparationService
         ];
 
         if (in_array($time_range, ['7pm_10pm', '10pm_12am', '12am_7am'])) {
-            $last_noise_data_start_date = $last_noise_data_date;
-            $last_noise_data_end_date = (new DateTime($last_noise_data_date))->modify('+1 day')->format('Y-m-d');
+            // For evening/night periods, the 12h window spans two calendar days
+            // For 12am-7am, we need the PREVIOUS day's evening (e.g., Dec 13 19:00 to Dec 14 06:59)
+            if ($time_range === '12am_7am') {
+                $last_noise_data_start_date = (new DateTime($last_noise_data_date))->modify('-1 day')->format('Y-m-d');
+                $last_noise_data_end_date = $last_noise_data_date;
+            } else {
+                // For 7pm-10pm and 10pm-12am, use current day evening to next day morning
+                $last_noise_data_start_date = $last_noise_data_date;
+                $last_noise_data_end_date = (new DateTime($last_noise_data_date))->modify('+1 day')->format('Y-m-d');
+            }
         } else {
             $last_noise_data_start_date = $last_noise_data_date;
             $last_noise_data_end_date = $last_noise_data_date;

@@ -37,13 +37,13 @@ class PdfController extends Controller
             $start_date = Carbon::createFromFormat('d-m-Y', $request->route('start_date'));
             $end_date = Carbon::createFromFormat('d-m-Y', $request->route('end_date'));
             
-            // Invalidate cache for the date range (to refresh with new extended data format)
-            // $cacheDate = $start_date->copy();
-            // while ($cacheDate->lte($end_date)) {
-            //     $dateKey = $cacheDate->format('Ymd');
-            //     Cache::forget("pdf_data_{$measurmentPointId}_{$dateKey}");
-            //     $cacheDate->addDay();
-            // }
+            // Invalidate cache for the date range (to refresh with corrected dose calculations)
+            $cacheDate = $start_date->copy();
+            while ($cacheDate->lte($end_date)) {
+                $dateKey = $cacheDate->format('Ymd');
+                Cache::forget("pdf_data_{$measurmentPointId}_{$dateKey}");
+                $cacheDate->addDay();
+            }
             
             // Fetch contacts once
             $contacts = Contact::where('project_id', $measurementPoint->project->id)->get();
@@ -82,9 +82,12 @@ class PdfController extends Controller
             // Handle uncached data - load all at once, prepare all at once
             if (!empty($uncachedDates)) {
                 // Load all noise data for the entire range in one query
-                // Extend by 2 days to ensure we get data for days that span past midnight
-                $queryStartDate = $uncachedDates[0];
+                // Extend by -1 day backward (for 12am-6:55am dose calculations) 
+                // and +2 days forward (for next-day morning slots)
+                $queryStartDate = $uncachedDates[0]->copy()->subDay();
                 $queryEndDate = $uncachedDates[count($uncachedDates)-1]->copy()->addDays(2);
+                
+                Log::info("Loading data from {$queryStartDate->format('Y-m-d')} to {$queryEndDate->format('Y-m-d')} for uncached dates: " . implode(', ', array_map(fn($d) => $d->format('Y-m-d'), $uncachedDates)));
                 
                 $dataService = new PdfDataPreparationService($measurementPoint);
                 $dataService->loadNoiseData($queryStartDate, $queryEndDate);
