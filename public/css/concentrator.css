@@ -1,0 +1,61 @@
+#concentrator_table {
+  margin-bottom: 20px;
+  background-color: #fdfcfa;
+  border-color: #bd6747;
+  height: 75vh;
+  padding: 10px;
+  border-radius: 10px 10px 10px 10px;
+}
+#concentrator_table .tabulator-header {
+  background-color: #fdfcfa;
+  color: #2b1710;
+  border-bottom: 3px solid #bd6747;
+  margin-bottom: 5px;
+}
+#concentrator_table .tabulator-header .tabulator-col,
+#concentrator_table .tabulator-header .tabulator-row-handle {
+  white-space: normal;
+  background-color: #fdfcfa;
+}
+#concentrator_table .tabulator-header .tabulator-col .tabulator-col-content,
+#concentrator_table .tabulator-header .tabulator-row-handle .tabulator-col-content {
+  text-overflow: clip;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row {
+  background-color: #fdfcfa;
+  margin-bottom: 2px;
+  padding: 10px 0;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
+  background-color: #e9e2dc;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
+  white-space: normal;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
+  background-color: #f5f1ef;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
+  background-color: #e9e2dc;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd) .tabulator-responsive-collapse table tr {
+  background-color: #fdfcfa;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-selected {
+  background-color: #fcdb00 !important; /* Replace $selected with your desired color */
+}
+#concentrator_table .tabulator-footer-contents {
+  background-color: #fdfcfa;
+}
+
+@media only screen and (min-width: 768px) {
+  #concentrator_table {
+    height: 80vh;
+  }
+}

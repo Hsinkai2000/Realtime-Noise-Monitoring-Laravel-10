@@ -1,0 +1,110 @@
+#noise_meter_table,
+#concentrator_table,
+#concentrator_list_table,
+#noiseMeter_list_table {
+  background-color: #fdfcfa;
+  border-color: #bd6747;
+  padding: 10px;
+  border-radius: 10px 10px 10px 10px;
+}
+#noise_meter_table .tabulator-header,
+#concentrator_table .tabulator-header,
+#concentrator_list_table .tabulator-header,
+#noiseMeter_list_table .tabulator-header {
+  color: #2b1710;
+  border-bottom: 3px solid #bd6747;
+  margin-bottom: 5px;
+}
+#noise_meter_table .tabulator-header .tabulator-col,
+#noise_meter_table .tabulator-header .tabulator-row-handle,
+#concentrator_table .tabulator-header .tabulator-col,
+#concentrator_table .tabulator-header .tabulator-row-handle,
+#concentrator_list_table .tabulator-header .tabulator-col,
+#concentrator_list_table .tabulator-header .tabulator-row-handle,
+#noiseMeter_list_table .tabulator-header .tabulator-col,
+#noiseMeter_list_table .tabulator-header .tabulator-row-handle {
+  white-space: normal;
+  background-color: #fdfcfa;
+}
+#noise_meter_table .tabulator-header .tabulator-col .tabulator-col-content,
+#noise_meter_table .tabulator-header .tabulator-row-handle .tabulator-col-content,
+#concentrator_table .tabulator-header .tabulator-col .tabulator-col-content,
+#concentrator_table .tabulator-header .tabulator-row-handle .tabulator-col-content,
+#concentrator_list_table .tabulator-header .tabulator-col .tabulator-col-content,
+#concentrator_list_table .tabulator-header .tabulator-row-handle .tabulator-col-content,
+#noiseMeter_list_table .tabulator-header .tabulator-col .tabulator-col-content,
+#noiseMeter_list_table .tabulator-header .tabulator-row-handle .tabulator-col-content {
+  text-overflow: clip;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row,
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-row,
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-row {
+  background-color: #fdfcfa;
+  margin-bottom: 2px;
+  padding: 10px 0;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:hover,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:hover,
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-row:hover,
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
+  background-color: #e9e2dc;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell,
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell,
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
+  white-space: normal;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even),
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even),
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even),
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
+  background-color: #f5f1ef;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover,
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover,
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
+  background-color: #e9e2dc;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover .tabulator-responsive-collapse table tr,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover .tabulator-responsive-collapse table tr,
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover .tabulator-responsive-collapse table tr,
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd) .tabulator-responsive-collapse table tr,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd) .tabulator-responsive-collapse table tr,
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd) .tabulator-responsive-collapse table tr,
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd) .tabulator-responsive-collapse table tr {
+  background-color: #fdfcfa;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr,
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr,
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#noise_meter_table .tabulator-tableholder .tabulator-table .tabulator-selected,
+#concentrator_table .tabulator-tableholder .tabulator-table .tabulator-selected,
+#concentrator_list_table .tabulator-tableholder .tabulator-table .tabulator-selected,
+#noiseMeter_list_table .tabulator-tableholder .tabulator-table .tabulator-selected {
+  background-color: #fcdb00 !important; /* Replace $selected with your desired color */
+}
+#noise_meter_table .tabulator-footer-contents,
+#concentrator_table .tabulator-footer-contents,
+#concentrator_list_table .tabulator-footer-contents,
+#noiseMeter_list_table .tabulator-footer-contents {
+  background-color: #fdfcfa;
+}
+
+.box,
+.datepicker {
+  z-index: 9999;
+}
+
+table th,
+table td {
+  padding: 5px 5px;
+}

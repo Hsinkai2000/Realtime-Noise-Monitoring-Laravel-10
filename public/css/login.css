@@ -1,0 +1,23 @@
+label,
+h2 {
+  color: #2b1710;
+}
+
+#geoscan_logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 40px;
+}
+
+#maincard {
+  background: #fdfcfa;
+}
+
+.gradient-custom {
+  /* fallback for old browsers */
+  background: #7b422d;
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to top, #7b422d, #fcdb00);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to top, #7b422d, #fcdb00);
+}

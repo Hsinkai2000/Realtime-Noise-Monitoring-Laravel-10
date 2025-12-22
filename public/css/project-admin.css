@@ -1,0 +1,91 @@
+#deleteButton:hover {
+  color: #f5f1ef !important;
+  background-color: #cc2e0e;
+}
+
+#example-table {
+  height: 75vh;
+  background-color: #fdfcfa;
+  border-color: #bd6747;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 10px 10px 10px 10px;
+}
+#example-table .tabulator-header {
+  background-color: #fdfcfa;
+  border-bottom: 3px solid #bd6747;
+  margin-bottom: 5px;
+}
+#example-table .tabulator-header .tabulator-col,
+#example-table .tabulator-header .tabulator-row-handle {
+  white-space: normal;
+  background-color: #fdfcfa;
+}
+#example-table .tabulator-header .tabulator-col .tabulator-col-content,
+#example-table .tabulator-header .tabulator-row-handle .tabulator-col-content {
+  text-overflow: clip;
+}
+#example-table .tabulator-tableholder .tabulator-table .tabulator-row {
+  background-color: #fdfcfa;
+  margin-bottom: 2px;
+  padding: 10px 0;
+}
+#example-table .tabulator-tableholder .tabulator-table .tabulator-row:hover {
+  background-color: #e9e2dc;
+}
+#example-table .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
+  white-space: normal;
+}
+#example-table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
+  background-color: #f5f1ef;
+}
+#example-table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover {
+  background-color: #e9e2dc;
+}
+#example-table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#example-table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd) .tabulator-responsive-collapse table tr {
+  background-color: #fdfcfa;
+}
+#example-table .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(odd):hover .tabulator-responsive-collapse table tr {
+  background-color: #e9e2dc;
+}
+#example-table .tabulator-footer-contents {
+  background-color: #fdfcfa;
+}
+
+/* Basic styling for the list container */
+#userUpdateSelectList {
+  max-height: 300px;
+  padding: 0;
+  list-style: none; /* Ensure no default list styling */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Basic styling for each list item */
+.list-item {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+/* Styling for the selected item */
+.list-item.selected {
+  background-color: #e9e2dc;
+}
+
+.tabulator-tree-level-0 {
+  background-color: #c4ada4 !important;
+}
+
+.tabulator-data-tree-control {
+  visibility: hidden;
+}
+
+@media only screen and (min-width: 992px) {
+  #example-table {
+    height: 78vh;
+  }
+}

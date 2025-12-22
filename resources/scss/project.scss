@@ -1,0 +1,186 @@
+@import "./colors.scss";
+
+#contacts_table,
+#concentrator_list_table,
+#noiseMeter_list_table {
+    background-color: $light;
+    border-color: $primary;
+    padding: 10px;
+    border-radius: 10px 10px 10px 10px;
+    .tabulator-header {
+        color: $text;
+        border-bottom: 3px solid $primary;
+        margin-bottom: 5px;
+        .tabulator-col,
+        .tabulator-row-handle {
+            white-space: normal;
+            background-color: $light;
+            .tabulator-col-content {
+                text-overflow: clip;
+            }
+        }
+    }
+
+    .tabulator-tableholder {
+        .tabulator-table {
+            .tabulator-row {
+                background-color: $light;
+                margin-bottom: 2px;
+                padding: 10px 0;
+                &:hover {
+                    background-color: $hover;
+                }
+
+                .tabulator-cell {
+                    white-space: normal;
+                }
+
+                &:nth-child(even) {
+                    background-color: $white;
+                    &:hover {
+                        background-color: $hover;
+
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .tabulator-responsive-collapse {
+                        table tr {
+                            background-color: $light;
+                        }
+                    }
+
+                    &:hover {
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+            }
+            .tabulator-selected {
+                background-color: $secondary !important; /* Replace $selected with your desired color */
+            }
+        }
+    }
+
+    .tabulator-footer-contents {
+        background-color: $light;
+    }
+}
+
+#measurement_point_table {
+    background-color: $light;
+    height: 80vh;
+    border-color: $primary;
+    padding: 10px;
+    border-radius: 10px 10px 10px 10px;
+    .tabulator-header {
+        color: $text;
+        border-bottom: 3px solid $primary;
+        margin-bottom: 5px;
+        .tabulator-col,
+        .tabulator-row-handle {
+            white-space: normal;
+            background-color: $light;
+            .tabulator-col-content {
+                text-overflow: clip;
+            }
+        }
+    }
+
+    .tabulator-tableholder {
+        .tabulator-table {
+            .tabulator-row {
+                background-color: $light;
+                margin-bottom: 2px;
+                padding: 10px 0;
+                &:hover {
+                    background-color: $hover;
+                }
+
+                .tabulator-cell {
+                    white-space: normal;
+                }
+
+                &:nth-child(even) {
+                    background-color: $white;
+                    &:hover {
+                        background-color: $hover;
+
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .tabulator-responsive-collapse {
+                        table tr {
+                            background-color: $light;
+                        }
+                    }
+
+                    &:hover {
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .tabulator-footer-contents {
+        background-color: $light;
+    }
+}
+
+/* Basic styling for the list container */
+#userUpdateSelectList {
+    max-height: 300px;
+    padding: 0;
+    list-style: none; /* Ensure no default list styling */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Basic styling for each list item */
+.list-item {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+/* Styling for the selected item */
+.list-item.selected {
+    background-color: $hover;
+}
+
+.modal:nth-of-type(even) {
+    z-index: 1052 !important;
+}
+.modal-backdrop.show:nth-of-type(even) {
+    z-index: 1051 !important;
+}
+span {
+    text-decoration: underline;
+    color: $primary;
+    cursor: pointer;
+}
+
+@media only screen and (min-width: 992px) {
+    #measurement_point_table {
+        height: 40vh;
+    }
+}

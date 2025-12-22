@@ -1,0 +1,14 @@
+@import "./colors.scss";
+
+$font-size-base: 1rem * 0.6;
+
+body {
+    background-color: white !important;
+}
+
+.table {
+    td,
+    th {
+        background-color: white !important;
+    }
+}

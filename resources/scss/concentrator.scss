@@ -1,0 +1,83 @@
+@import "./colors.scss";
+
+#concentrator_table {
+    margin-bottom: 20px;
+    background-color: $light;
+    border-color: $primary;
+    height: 75vh;
+    padding: 10px;
+    border-radius: 10px 10px 10px 10px;
+    .tabulator-header {
+        background-color: $light;
+        color: $text;
+        border-bottom: 3px solid $primary;
+        margin-bottom: 5px;
+        .tabulator-col,
+        .tabulator-row-handle {
+            white-space: normal;
+            background-color: $light;
+            .tabulator-col-content {
+                text-overflow: clip;
+            }
+        }
+    }
+
+    .tabulator-tableholder {
+        .tabulator-table {
+            .tabulator-row {
+                background-color: $light;
+                margin-bottom: 2px;
+                padding: 10px 0;
+                &:hover {
+                    background-color: $hover;
+                }
+
+                .tabulator-cell {
+                    white-space: normal;
+                }
+
+                &:nth-child(even) {
+                    background-color: $white;
+                    &:hover {
+                        background-color: $hover;
+
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .tabulator-responsive-collapse {
+                        table tr {
+                            background-color: $light;
+                        }
+                    }
+
+                    &:hover {
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+            }
+            .tabulator-selected {
+                background-color: $secondary !important; /* Replace $selected with your desired color */
+            }
+        }
+    }
+
+    .tabulator-footer-contents {
+        background-color: $light;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    #concentrator_table {
+        height: 80vh;
+    }
+}

@@ -1,0 +1,89 @@
+@import "./colors.scss";
+
+#noise_meter_table,
+#concentrator_table,
+#concentrator_list_table,
+#noiseMeter_list_table {
+    background-color: $light;
+    border-color: $primary;
+    padding: 10px;
+    border-radius: 10px 10px 10px 10px;
+    .tabulator-header {
+        color: $text;
+        border-bottom: 3px solid $primary;
+        margin-bottom: 5px;
+        .tabulator-col,
+        .tabulator-row-handle {
+            white-space: normal;
+            background-color: $light;
+            .tabulator-col-content {
+                text-overflow: clip;
+            }
+        }
+    }
+
+    .tabulator-tableholder {
+        .tabulator-table {
+            .tabulator-row {
+                background-color: $light;
+                margin-bottom: 2px;
+                padding: 10px 0;
+                &:hover {
+                    background-color: $hover;
+                }
+
+                .tabulator-cell {
+                    white-space: normal;
+                }
+
+                &:nth-child(even) {
+                    background-color: $white;
+                    &:hover {
+                        background-color: $hover;
+
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .tabulator-responsive-collapse {
+                        table tr {
+                            background-color: $light;
+                        }
+                    }
+
+                    &:hover {
+                        .tabulator-responsive-collapse {
+                            table tr {
+                                background-color: $hover;
+                            }
+                        }
+                    }
+                }
+            }
+            .tabulator-selected {
+                background-color: $secondary !important; /* Replace $selected with your desired color */
+            }
+        }
+    }
+
+    .tabulator-footer-contents {
+        background-color: $light;
+    }
+}
+
+.box,
+.datepicker {
+    z-index: 9999;
+}
+
+table {
+    th,
+    td {
+        padding: 5px 5px;
+    }
+}
