@@ -6,12 +6,14 @@ use App\Models\MeasurementPoint;
 use App\Services\PdfDataPreparationService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 
 class ProcessPdfDay extends Command
 {
     /**
      * The name and signature of the console command.
+     * Note: Arguments are encrypted strings for security
      *
      * @var string
      */
@@ -22,17 +24,27 @@ class ProcessPdfDay extends Command
      *
      * @var string
      */
-    protected $description = 'Process PDF data for a single day';
+    protected $description = 'Process PDF data for a single day (accepts encrypted arguments)';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $measurementPointId = $this->argument('measurement_point_id');
-        $dateString = $this->argument('date');
+        $encryptedMeasurementPointId = $this->argument('measurement_point_id');
+        $encryptedDate = $this->argument('date');
         
         try {
+            // Decrypt the encrypted data passed from the parent process
+            $measurementPointId = Crypt::decryptString($encryptedMeasurementPointId);
+            $dateString = Crypt::decryptString($encryptedDate);
+            
+            // Validate decrypted measurement point ID is a valid integer
+            $measurementPointId = filter_var($measurementPointId, FILTER_VALIDATE_INT);
+            if ($measurementPointId === false) {
+                throw new \InvalidArgumentException("Invalid measurement point ID after decryption");
+            }
+            
             // Load measurement point with relationships
             $measurementPoint = MeasurementPoint::with([
                 'noiseMeter',
@@ -41,7 +53,11 @@ class ProcessPdfDay extends Command
                 'concentrator'
             ])->findOrFail($measurementPointId);
             
-            $date = Carbon::parse($dateString);
+            // Parse and validate date
+            $date = Carbon::createFromFormat('Y-m-d', $dateString);
+            if ($date === false) {
+                throw new \InvalidArgumentException("Invalid date format after decryption: {$dateString}");
+            }
             
             // Create service and load data for this day (extended range)
             $dataService = new PdfDataPreparationService($measurementPoint);
@@ -60,6 +76,7 @@ class ProcessPdfDay extends Command
             return 0;
             
         } catch (\Exception $e) {
+            $dateString = isset($dateString) ? $dateString : 'unknown';
             Log::error("Error processing day {$dateString}: " . $e->getMessage());
             $this->error("Error: " . $e->getMessage());
             return 1;

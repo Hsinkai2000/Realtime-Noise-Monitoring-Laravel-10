@@ -7,6 +7,7 @@ use App\Models\NoiseData;
 use DateTime;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
 
@@ -113,13 +114,18 @@ class PdfDataPreparationService
             foreach ($dateChunk as $date) {
                 $dateString = $date->format('Y-m-d');
                 
+                // Encrypt sensitive data before passing to command to prevent injection
+                $encryptedMeasurementPointId = Crypt::encryptString((string)$this->measurementPoint->id);
+                $encryptedDate = Crypt::encryptString($dateString);
+                
                 // Create artisan command to process one day
+                // Data is encrypted to prevent command injection attacks
                 $command = [
                     'php',
                     base_path('artisan'),
                     'pdf:process-day',
-                    (string)$this->measurementPoint->id,
-                    $dateString
+                    $encryptedMeasurementPointId,
+                    $encryptedDate
                 ];
                 
                 $process = new Process($command);

@@ -9,7 +9,6 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Spatie\Browsershot\Browsershot;
@@ -39,68 +38,19 @@ class PdfController extends Controller
             
             $contacts = Contact::where('project_id', $measurementPoint->project->id)->get();
 
-            $now = Carbon::now();
-
-            $preparedData = [];
-            $uncachedDates = [];
-            $currentDate = $start_date->copy();
-
-            // First pass: check cache and collect uncached dates
-            while ($currentDate->lte($end_date)) {
-                $dateKey = $currentDate->format('Ymd');
-                $dayStart = $currentDate->copy()->setTime(7, 0, 0);
-                $dayEnd = $currentDate->copy()->addDay()->setTime(6, 55, 0);
-                $isCurrentDay = $now->between($dayStart, $dayEnd);
-
-                if ($isCurrentDay) {
-                    $uncachedDates[] = $currentDate->copy();
-                } else if ($dayEnd < $now){
-                    $cacheKey = "pdf_data_{$measurmentPointId}_{$dateKey}";
-                    $dayData = Cache::get($cacheKey, null);
-                    
-                    if ($dayData == null) {
-                        $uncachedDates[] = $currentDate->copy();
-                    } else {
-                        $preparedData = array_merge($preparedData, $dayData);
-                    }
-                }
-                $currentDate->addDay();
-            }
-
-            if (!empty($uncachedDates)) {
-                $queryStartDate = $uncachedDates[0]->copy()->subDay();
-                $queryEndDate = $uncachedDates[count($uncachedDates)-1]->copy()->addDay();
-                
-                Log::info("Loading data from {$queryStartDate->format('Y-m-d')} to {$queryEndDate->format('Y-m-d')} for uncached dates: " . implode(', ', array_map(fn($d) => $d->format('Y-m-d'), $uncachedDates)));
-                
-                $dataService = new PdfDataPreparationService($measurementPoint);
-                $dataService->loadNoiseData($queryStartDate, $queryEndDate);
-                
-                $actualStartDate = $uncachedDates[0];
-                $actualEndDate = $uncachedDates[count($uncachedDates)-1];
-                $allDaysData = $dataService->prepareAllDaysData($actualStartDate, $actualEndDate);
-                
-                // Extract and cache each day's data
-                foreach ($uncachedDates as $date) {
-                    $dateKey = $date->format('Ymd');
-                    $dateString = $date->format('Y-m-d');
-                    
-                    $singleDayData = [
-                        $dateString => $allDaysData[$dateString] ?? []
-                    ];
-                    
-                    $dayStart = $date->copy()->setTime(7, 0, 0);
-                    $dayEnd = $date->copy()->addDay()->setTime(6, 55, 0);
-                    $isCurrentDay = $now->between($dayStart, $dayEnd);
-                    
-                    if (!$isCurrentDay) {
-                        $cacheKey = "pdf_data_{$measurmentPointId}_{$dateKey}";
-                        Cache::put($cacheKey, $singleDayData, 60*5); // cache for 5 min
-                    }
-                    
-                    $preparedData = array_merge($preparedData, $singleDayData);
-                }
-            }
+            // Load all data directly without caching
+            // Extend range by -1 day backward (for 12am-6:55am dose calculations) 
+            // and +1 day forward (for next-day morning slots)
+            $queryStartDate = $start_date->copy()->subDay();
+            $queryEndDate = $end_date->copy()->addDay();
+            
+            Log::info("Loading data from {$queryStartDate->format('Y-m-d')} to {$queryEndDate->format('Y-m-d')} for date range: {$start_date->format('Y-m-d')} to {$end_date->format('Y-m-d')}");
+            
+            $dataService = new PdfDataPreparationService($measurementPoint);
+            $dataService->loadNoiseData($queryStartDate, $queryEndDate);
+            
+            // Prepare all days in the requested range
+            $preparedData = $dataService->prepareAllDaysData($start_date, $end_date);
 
             Log::info("PDF data preparation completed in " . round(microtime(true) - $startTime, 2) . " seconds");
 
