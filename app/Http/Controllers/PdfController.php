@@ -9,8 +9,10 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Spatie\Browsershot\Browsershot;
 
 class PdfController extends Controller
 {
@@ -37,14 +39,59 @@ class PdfController extends Controller
             
             $contacts = Contact::where('project_id', $measurementPoint->project->id)->get();
 
+            $now = Carbon::now();
+            $preparedData = [];
+            $uncachedDates = [];
+            $cachedDates = [];
+            
             Log::info("=== PDF Generation Started ===");
             Log::info("Measurement Point: {$measurementPoint->point_name} (ID: {$measurmentPointId})");
             Log::info("Date Range: {$start_date->format('Y-m-d')} to {$end_date->format('Y-m-d')}");
             
-            // Fetch all data from database in one query
-            $dataService = new PdfDataPreparationService($measurementPoint);
-            $dataService->loadNoiseData($start_date, $end_date);
-            $preparedData = $dataService->prepareAllDaysData($start_date, $end_date);
+            // First pass: check cache for each day
+            $currentDate = $start_date->copy();
+            while ($currentDate->lte($end_date)) {
+                $dateKey = $currentDate->format('Ymd');
+                $dayStart = $currentDate->copy()->setTime(7, 0, 0);
+                $dayEnd = $currentDate->copy()->addDay()->setTime(6, 55, 0);
+                $isCurrentDay = $now->between($dayStart, $dayEnd);
+                
+                // Only use cache for completed days (not the current day)
+                if (!$isCurrentDay && $dayEnd < $now) {
+                    $cacheKey = "pdf_data_{$measurementPoint->project_id}_{$measurmentPointId}_{$dateKey}";
+                    $dayData = Cache::get($cacheKey);
+                    
+                    if ($dayData) {
+                        // Found cached data
+Log::info("cache hit for ". $cacheKey);
+                        $preparedData = array_merge($preparedData, $dayData);
+                    } else {
+                        // Not in cache, need to fetch
+Log::info("cache miss for ". $cacheKey);           
+             $uncachedDates[] = $currentDate->copy();
+                    }
+                } else {
+                    // Current day or future - always fetch fresh
+                    $uncachedDates[] = $currentDate->copy();
+                }
+                
+                $currentDate->addDay();
+            }
+            
+            // Second pass: fetch uncached dates
+            if (!empty($uncachedDates)) {
+                // Find min and max dates that need to be fetched
+                $minDate = min($uncachedDates);
+                $maxDate = max($uncachedDates);
+                
+                // loadNoiseData will automatically extend the range for dose calculations
+                $dataService = new PdfDataPreparationService($measurementPoint);
+                $dataService->loadNoiseData($minDate, $maxDate);
+                
+                $freshData = $dataService->prepareAllDaysData($minDate, $maxDate);
+                
+                $preparedData = array_merge($preparedData, $freshData);
+            }
 
             Log::info("PDF data preparation completed in " . round(microtime(true) - $startTime, 2) . " seconds");
             Log::info("=== Starting PDF Rendering ===");
