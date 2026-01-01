@@ -123,7 +123,7 @@ class Kernel extends ConsoleKernel
 
         // Cache PDF data for all measurement points at 7am daily
         // This caches only yesterday's data (which ended at 6:55am today)
-        $schedule->command('pdf:cache-daily-data --days=7')
+        $schedule->command('pdf:cache-daily-data --days=1')
             ->dailyAt('07:00')
             ->withoutOverlapping()
             ->runInBackground();
