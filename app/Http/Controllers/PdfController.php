@@ -137,9 +137,16 @@ class PdfController extends Controller
                 'disable-forms' => true,     
             ]);
 
+            $pdfOutput = $pdf->output();
+            $pdfSize = strlen($pdfOutput);
+            $pdfSizeMB = round($pdfSize / 1024 / 1024, 2);
+            
             Log::info("PDF generation completed in " . round(microtime(true) - $startTime, 2) . " seconds");
+            Log::info("PDF file size: {$pdfSizeMB}MB");
 
-            return $pdf->inline();
+            return response($pdfOutput, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="noise-report.pdf"');
             // return view('pdfs.noise-data-report', $data);
         }
     }
