@@ -139,16 +139,19 @@ Log::info("cache miss for ". $cacheKey);
                 'disable-forms' => true,     
             ]);
 
-            $pdfOutput = $pdf->output();
-            $pdfSize = strlen($pdfOutput);
-            $pdfSizeMB = round($pdfSize / 1024 / 1024, 2);
-            
-            Log::info("PDF generation completed in " . round(microtime(true) - $startTime, 2) . " seconds");
-            Log::info("PDF file size: {$pdfSizeMB}MB");
+            $generationTime = round(microtime(true) - $startTime, 2);
+            Log::info("PDF generation completed in {$generationTime} seconds");
 
-            return response($pdfOutput, 200)
-                ->header('Content-Type', 'application/pdf')
-                ->header('Content-Disposition', 'inline; filename="noise-report.pdf"');
+            // Stream PDF directly without loading into memory
+            $response = $pdf->inline();
+            
+            // Log estimated size if response has content
+            if ($response instanceof \Illuminate\Http\Response && $response->getContent()) {
+                $pdfSizeMB = round(strlen($response->getContent()) / 1024 / 1024, 2);
+                Log::info("PDF file size: {$pdfSizeMB}MB");
+            }
+            
+            return $response;
             // return view('pdfs.noise-data-report', $data);
         }
     }
