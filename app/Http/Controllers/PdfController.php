@@ -63,12 +63,10 @@ class PdfController extends Controller
                     
                     if ($dayData) {
                         // Found cached data
-Log::info("cache hit for ". $cacheKey);
                         $preparedData = array_merge($preparedData, $dayData);
                     } else {
                         // Not in cache, need to fetch
-Log::info("cache miss for ". $cacheKey);           
-             $uncachedDates[] = $currentDate->copy();
+                        $uncachedDates[] = $currentDate->copy();
                     }
                 } else {
                     // Current day or future - always fetch fresh
@@ -82,10 +80,7 @@ Log::info("cache miss for ". $cacheKey);
             if (!empty($uncachedDates)) {
                 // Query once for all uncached dates (most efficient for database)
                 $minDate = min($uncachedDates);
-                $maxDate = max($uncachedDates);
-                
-                Log::info("Querying database from {$minDate->format('Y-m-d')} to {$maxDate->format('Y-m-d')} for uncached data");
-                
+                $maxDate = max($uncachedDates);                
                 // loadNoiseData will automatically extend the range for dose calculations
                 $dataService = new PdfDataPreparationService($measurementPoint);
                 $dataService->loadNoiseData($minDate, $maxDate);
@@ -154,7 +149,6 @@ Log::info("cache miss for ". $cacheKey);
             Log::info("PDF generation completed in {$generationTime} seconds");
 
             return $pdf->inline();
-            // return view('pdfs.noise-data-report', $data);
         }
     }
 }
