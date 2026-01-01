@@ -142,16 +142,7 @@ Log::info("cache miss for ". $cacheKey);
             $generationTime = round(microtime(true) - $startTime, 2);
             Log::info("PDF generation completed in {$generationTime} seconds");
 
-            // Stream PDF directly without loading into memory
-            $response = $pdf->inline();
-            
-            // Log estimated size if response has content
-            if ($response instanceof \Illuminate\Http\Response && $response->getContent()) {
-                $pdfSizeMB = round(strlen($response->getContent()) / 1024 / 1024, 2);
-                Log::info("PDF file size: {$pdfSizeMB}MB");
-            }
-            
-            return $response;
+            return $pdf->inline();
             // return view('pdfs.noise-data-report', $data);
         }
     }
