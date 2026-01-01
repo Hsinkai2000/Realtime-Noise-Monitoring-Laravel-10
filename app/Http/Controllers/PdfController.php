@@ -78,19 +78,45 @@ Log::info("cache miss for ". $cacheKey);
                 $currentDate->addDay();
             }
             
-            // Second pass: fetch uncached dates
+            // Second pass: fetch uncached dates in consecutive ranges
             if (!empty($uncachedDates)) {
-                // Find min and max dates that need to be fetched
-                $minDate = min($uncachedDates);
-                $maxDate = max($uncachedDates);
+                // Group consecutive dates into ranges to minimize queries
+                sort($uncachedDates);
+                $ranges = [];
+                $rangeStart = $uncachedDates[0];
+                $rangeEnd = $uncachedDates[0];
                 
-                // loadNoiseData will automatically extend the range for dose calculations
+                for ($i = 1; $i < count($uncachedDates); $i++) {
+                    $current = $uncachedDates[$i];
+                    $previous = $uncachedDates[$i - 1];
+                    
+                    // If consecutive days, extend the range
+                    if ($current->diffInDays($previous) === 1) {
+                        $rangeEnd = $current;
+                    } else {
+                        // Gap found, save current range and start a new one
+                        $ranges[] = ['start' => $rangeStart->copy(), 'end' => $rangeEnd->copy()];
+                        $rangeStart = $current;
+                        $rangeEnd = $current;
+                    }
+                }
+                // Don't forget the last range
+                $ranges[] = ['start' => $rangeStart->copy(), 'end' => $rangeEnd->copy()];
+                
+                Log::info("Querying " . count($ranges) . " date range(s) for uncached data");
+                
+                // Query each range separately
                 $dataService = new PdfDataPreparationService($measurementPoint);
-                $dataService->loadNoiseData($minDate, $maxDate);
                 
-                $freshData = $dataService->prepareAllDaysData($minDate, $maxDate);
-                
-                $preparedData = array_merge($preparedData, $freshData);
+                foreach ($ranges as $range) {
+                    Log::info("  Range: {$range['start']->format('Y-m-d')} to {$range['end']->format('Y-m-d')}");
+                    
+                    // loadNoiseData will automatically extend the range for dose calculations
+                    $dataService->loadNoiseData($range['start'], $range['end']);
+                    $freshData = $dataService->prepareAllDaysData($range['start'], $range['end']);
+                    
+                    $preparedData = array_merge($preparedData, $freshData);
+                }
             }
 
             Log::info("PDF data preparation completed in " . round(microtime(true) - $startTime, 2) . " seconds");
