@@ -63,10 +63,12 @@ class PdfController extends Controller
                     
                     if ($dayData) {
                         // Found cached data
+Log::info("cache hit for ". $cacheKey);
                         $preparedData = array_merge($preparedData, $dayData);
                     } else {
                         // Not in cache, need to fetch
-                        $uncachedDates[] = $currentDate->copy();
+Log::info("cache miss for ". $cacheKey);           
+             $uncachedDates[] = $currentDate->copy();
                     }
                 } else {
                     // Current day or future - always fetch fresh
