@@ -13,7 +13,7 @@ class CachePdfData extends Command
 {
     // # USAGE EXAMPLES
     // # ----------------------------------------------------------------------
-    // # Initial setup: Cache the past 7 days (default)
+    // # Initial setup: Cache the past 14 days (default)
     // php artisan pdf:cache-daily-data
     
     // # Initial setup: Cache the past 30 days
@@ -32,7 +32,7 @@ class CachePdfData extends Command
      */
     protected $signature = 'pdf:cache-daily-data 
                             {--date= : The date to cache (YYYY-MM-DD format, defaults to yesterday)}
-                            {--days=7 : Number of days to cache (for initial setup, defaults to 7)}';
+                            {--days=14 : Number of days to cache (for initial setup, defaults to 14)}';
 
     /**
      * The console command description.
@@ -99,8 +99,8 @@ class CachePdfData extends Command
                     // Cache key format: pdf_data_{project_id}_{measurement_point_id}_{YYYYMMDD}
                     $cacheKey = "pdf_data_{$mp->project_id}_{$mp->id}_{$currentDate->format('Ymd')}";
                     
-                    // Cache for 30 days (this is historical data that won't change)
-                    Cache::put($cacheKey, $preparedData, 60 * 24 * 30);
+                    // Cache for 14 days (this is historical data that won't change)
+                    Cache::put($cacheKey, $preparedData, 60 * 24 * 14);
                     
                     $totalCachedCount++;
                     
