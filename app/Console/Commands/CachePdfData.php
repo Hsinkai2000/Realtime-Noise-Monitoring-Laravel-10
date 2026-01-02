@@ -100,7 +100,7 @@ class CachePdfData extends Command
                     $cacheKey = "pdf_data_{$mp->project_id}_{$mp->id}_{$currentDate->format('Ymd')}";
                     
                     // Cache for 30 days (this is historical data that won't change)
-                    Cache::put($cacheKey, $preparedData, 60 * 24 * 7);
+                    Cache::put($cacheKey, $preparedData, 60 * 24 * 30);
                     
                     $totalCachedCount++;
                     
@@ -108,6 +108,15 @@ class CachePdfData extends Command
                     $totalErrorCount++;
                     // Store first occurrence of each error type to avoid spam
                     $errorType = get_class($e);
+                    
+                    if (!isset($errorDetails[$errorType])) {
+                        $errorDetails[$errorType] = [
+                            'count' => 0,
+                            'message' => $e->getMessage(),
+                            'example_key' => $cacheKey ?? 'unknown'
+                        ];
+                    }
+                    
                     $errorDetails[$errorType]['count']++;
                 }
                 
@@ -125,6 +134,16 @@ class CachePdfData extends Command
         $this->info("Caching completed in {$duration} seconds");
         $this->info("Successfully cached: {$totalCachedCount} data");
         
+        if ($totalErrorCount > 0) {
+            $this->newLine();
+            $this->error("Encountered {$totalErrorCount} errors:");
+            
+            foreach ($errorDetails as $errorType => $details) {
+                $this->error("  [{$errorType}] x{$details['count']}");
+                $this->error("    Message: {$details['message']}");
+                $this->error("    Example: {$details['example_key']}");
+            }
+        }
         
         $this->info(str_repeat('=', 50));
         
