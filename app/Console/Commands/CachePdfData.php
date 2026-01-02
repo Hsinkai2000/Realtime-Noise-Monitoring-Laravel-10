@@ -100,7 +100,7 @@ class CachePdfData extends Command
                     $cacheKey = "pdf_data_{$mp->project_id}_{$mp->id}_{$currentDate->format('Ymd')}";
                     
                     // Cache for 30 days (this is historical data that won't change)
-                    Cache::put($cacheKey, $preparedData, 60 * 24 * 30);
+                    Cache::put($cacheKey, $preparedData, 60 * 24 * 7);
                     
                     $totalCachedCount++;
                     
